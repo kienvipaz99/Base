@@ -8,7 +8,6 @@ import {persistStore} from 'redux-persist';
 import store from './src/redux/store/store';
 const persistor = persistStore(store);
 const App = () => {
-  //aaa
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
