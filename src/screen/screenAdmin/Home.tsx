@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const Screeen2 = () => {
+const Home = () => {
   return (
-    <View style={{flex: 1, backgroundColor: 'blue'}}>
-      <Text>Screeen1</Text>
+    <View>
+      <Text>Home</Text>
     </View>
   );
 };
 
-export default Screeen2;
+export default Home;
 
 const styles = StyleSheet.create({});

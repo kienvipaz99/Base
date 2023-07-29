@@ -1,27 +1,23 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Screeen1 from '../screen/Screeen1';
-import Screeen2 from '../screen/Screeen2';
 import {navigationRef} from '../../RootNavigation';
-
+import Login from '../screen/login/Login';
+import ButtomTabAdmin from './ButtomTabAdmin';
 const Container = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
-        initialRouteName={'Screeen1'}
+        initialRouteName={'Login'}
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Screeen1" component={Screeen1} />
-        <Stack.Screen name="Screeen2" component={Screeen2} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="ButtomTabAdmin" component={ButtomTabAdmin} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default Container;
-
-const styles = StyleSheet.create({});
