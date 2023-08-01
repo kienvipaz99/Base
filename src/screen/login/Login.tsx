@@ -35,7 +35,10 @@ export default function Login({
         />
       </View>
       <View style={styles.btn}>
-        <BTNLogin onPress={() => navigation.navigate('ButtomTabAdmin')} />
+        <BTNLogin
+          onPress={() => navigation.navigate('ButtomTabAdmin')}
+          title="Đăng nhập"
+        />
       </View>
     </View>
   );

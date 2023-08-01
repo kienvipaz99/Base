@@ -21,6 +21,15 @@ const stylesCustom = StyleSheet.create({
   },
   row1: {alignItems: 'center', flexDirection: 'row'},
   txtTitle: {fontSize: sizes.width * 0.05, fontFamily: fonts.Medium},
+  txtTitle1: {fontSize: sizes.width * 0.06, fontFamily: fonts.bold},
+
   txt: {fontSize: sizes.width * 0.04, fontFamily: fonts.Regula},
+  view1: {
+    flex: 1,
+    backgroundColor: 'rgb(242,242,242)',
+    marginTop: sizes.height * 0.11,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
 });
 export default stylesCustom;

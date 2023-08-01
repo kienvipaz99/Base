@@ -30,4 +30,22 @@ export const style = StyleSheet.create({
     elevation: 12,
     zIndex: 12,
   },
+  focusedButton1: {
+    position: 'absolute',
+    height: 60,
+    width: 60,
+    zIndex: -1,
+    borderRadius: 32,
+    elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    shadowColor: '#AC125B',
+  },
 });

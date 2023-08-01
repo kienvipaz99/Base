@@ -1,20 +1,25 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, ViewStyle} from 'react-native';
 import React from 'react';
 import {colors} from '../../res/colors';
 import sizes from '../../res/sizes';
-import fonts from '../../res/fonts';
 import stylesCustom from '../../res/stylesCustom';
+import {StyleProp} from 'react-native';
 
-export default function BTNLogin({onPress}: {onPress: () => void}) {
+export default function BTNLogin({
+  onPress,
+  title,
+  styleProps,
+}: {
+  onPress: () => void;
+  title: string;
+  styleProps?: StyleProp<ViewStyle>;
+}) {
   return (
-    <TouchableOpacity style={styles.btn} onPress={onPress}>
-      <Text style={styles.txt}>ĐĂNG NHẬP</Text>
+    <TouchableOpacity
+      style={[styles.btn, styleProps]}
+      onPress={onPress}
+      activeOpacity={0.5}>
+      <Text style={styles.txt}>{title}</Text>
     </TouchableOpacity>
   );
 }

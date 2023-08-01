@@ -2,13 +2,15 @@ import {Image, ImageURISource, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from '../res/colors';
-import Home from '../screen/screenAdmin/Home';
-import List_Key from '../screen/screenAdmin/List_Key';
-import Add_Key from '../screen/screenAdmin/Add_Key';
-import Dasboad from '../screen/screenAdmin/Dasboad';
+import Home from '../screen/screenAdmin/home/Home';
+import List_Key from '../screen/screenAdmin/list_key/List_Key';
+import Add_Key from '../screen/screenAdmin/newKey/Add_Key';
+import Dasboad from '../screen/screenAdmin/dasboard/Dasboad';
 import images from '../res/images';
 import {BottomFabBar} from '../common/rn-wave-bottom-bar-custom/src';
-import NotifiLog from '../screen/screenAdmin/NotifiLog';
+import NotifiLog from '../screen/screenAdmin/notification/NotifiLog';
+import fonts from '../res/fonts';
+import sizes from '../res/sizes';
 
 export default function ButtomTabAdmin() {
   const Tabs = createBottomTabNavigator();
@@ -21,6 +23,7 @@ export default function ButtomTabAdmin() {
             width: 24,
             height: 24,
             resizeMode: 'contain',
+            tintColor: focused ? 'white' : undefined,
           }}
           source={focused ? active : inactive}
         />
@@ -28,18 +31,16 @@ export default function ButtomTabAdmin() {
   return (
     <View
       style={{
-        height: '100%',
-        width: '100%',
+        height: sizes.height,
+        width: sizes.width,
       }}>
       <Tabs.Navigator
         backBehavior="none"
         initialRouteName={'SplashScreen'}
         screenOptions={{
           headerShown: false,
-          tabBarShowLabel: false,
-          tabBarActiveTintColor: 'red',
+
           tabBarActiveBackgroundColor: colors.gray1,
-          tabBarInactiveTintColor: colors.text,
         }}
         tabBar={props => <BottomFabBar {...props} mode="default" />}>
         <Tabs.Screen
@@ -79,12 +80,10 @@ export default function ButtomTabAdmin() {
           component={Dasboad}
           options={{
             tabBarIcon: tabBarIcon(images.icondasboad, images.icondasboad),
-            tabBarLabel: 'Danh mục',
+            tabBarLabel: 'Tổng quan',
           }}
         />
       </Tabs.Navigator>
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

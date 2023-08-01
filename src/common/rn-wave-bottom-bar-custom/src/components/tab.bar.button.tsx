@@ -10,7 +10,7 @@ import {
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 
 import { style } from '../styles/tab.bar.button.styles';
-
+import LinearGradient from 'react-native-linear-gradient';
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 interface Props {
   mode: 'default' | 'square';
@@ -75,12 +75,14 @@ export const BarButton: React.FC<Props> = memo(
                 <Text
                   style={[
                     {
-                      marginTop: isFocused ? 60 : 0,
-                      color: inactiveTintColor,
-                      fontWeight: 'bold',
+                      marginTop: isFocused ? 55 : 15,
+                      color: 'black',
+                      fontFamily: 'GoogleSans-Medium',
                     },
                   ]}
-                ></Text>
+                >
+                  {isFocused && options?.tabBarLabel.toString()}
+                </Text>
               )}
             </View>
           </View>
@@ -136,13 +138,20 @@ export const TabBarButton: React.FC<Props> = memo(
           ]}
           onLongPress={onLongPress}
         >
-          {options.tabBarIcon
-            ? options.tabBarIcon({
-                focused: isFocused,
-                color: 'white',
-                size: 28,
-              })
-            : null}
+          <LinearGradient
+            colors={['#FF9A03', '#AC125B']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={style.focusedButton1}
+          >
+            {options.tabBarIcon
+              ? options.tabBarIcon({
+                  focused: isFocused,
+                  color: 'white',
+                  size: 28,
+                })
+              : null}
+          </LinearGradient>
         </AnimatedTouchable>
       </View>
     );
