@@ -39,7 +39,7 @@ export const style = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     alignItems: 'center',
-
+    backgroundColor: '#AC125B',
     shadowOffset: {
       width: 0,
       height: 2,

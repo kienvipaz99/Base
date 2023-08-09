@@ -39,7 +39,6 @@ export default function ButtomTabAdmin() {
         initialRouteName={'SplashScreen'}
         screenOptions={{
           headerShown: false,
-
           tabBarActiveBackgroundColor: colors.gray1,
         }}
         tabBar={props => <BottomFabBar {...props} mode="default" />}>
