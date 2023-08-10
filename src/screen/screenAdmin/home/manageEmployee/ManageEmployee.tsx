@@ -1,31 +1,32 @@
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useRef} from 'react';
-import stylesCustom from '../../../../res/stylesCustom';
-import HeaderCustom from '../../../../component/header/HeaderCustom';
 import {NavigationProp} from '@react-navigation/native';
-import {dataEmployee} from '../../../../res/feckData/dataEmployee';
-import sizes from '../../../../res/sizes';
-import {colors} from '../../../../res/colors';
+import HeaderCustom from '../../../../component/header/HeaderCustom';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import RenderItemManage from './RenderItemManage';
-import BottomSheetClient from '../../../../component/bottomSheet/BottomSheetClient';
-export default function ManageClient({
+import stylesCustom from '../../../../res/stylesCustom';
+import {colors} from '../../../../res/colors';
+import sizes from '../../../../res/sizes';
+import {dataEmployeeSaleToday} from '../../../../res/feckData/dataEmployeeSaleToday';
+import RenderItemManageEmployee from './RenderItemManageEmployee';
+import BottomSheetEditEmployee from '../../../../component/bottomSheet/BottomSheetEditEmployee';
+
+export default function ManageEmployee({
   navigation,
 }: {
   navigation: NavigationProp<Record<string, any>>;
 }) {
-  const refRBSheet = useRef<any>();
+  const refRBSheet = useRef<any>(null);
   return (
     <View style={styles.container}>
       <HeaderCustom
-        title="Quản lý khách hàng"
+        title="Quản lý nhân viên"
         back
         onBackPress={() => navigation.goBack()}
         sharp
       />
       <View style={stylesCustom.view1}>
         <View style={styles.view}>
-          <Text style={styles.txt}>Danh sách khách hàng</Text>
+          <Text style={styles.txt}>Danh sách nhân viên</Text>
           <Ionicons
             name="person-add"
             color={colors.text}
@@ -34,12 +35,12 @@ export default function ManageClient({
           />
         </View>
         <FlatList
-          data={dataEmployee}
-          renderItem={({item}) => <RenderItemManage item={item} />}
+          data={dataEmployeeSaleToday}
+          renderItem={({item}) => <RenderItemManageEmployee item={item} />}
           contentContainerStyle={styles.fl}
         />
       </View>
-      <BottomSheetClient refRBSheet={refRBSheet} />
+      <BottomSheetEditEmployee refRBSheet={refRBSheet} />
     </View>
   );
 }

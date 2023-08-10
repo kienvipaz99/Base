@@ -5,16 +5,16 @@ import fonts from '../../../../res/fonts';
 import sizes from '../../../../res/sizes';
 import stylesCustom from '../../../../res/stylesCustom';
 import images from '../../../../res/images';
-import BottomSheetEditClient from '../../../../component/bottomSheet/BottomSheetEditClient';
 import ModalConfirm from '../../../../component/modal/ModalConfirm';
+import BottomSheetEditProduct from '../../../../component/bottomSheet/BottomSheetEditProduct';
 
-const RenderItemManage = ({item}: {item: itemManage}) => {
+const RenderManageProduct = ({item}: {item: itemManageProduct}) => {
   const refBootomSheet = useRef<any>(null);
   const [show, setShow] = useState(false);
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
-        <Text style={styles.txt1}>Tên KH: {item.name}</Text>
+        <Text style={styles.txt1}>Tên SP: {item.name}</Text>
         <View
           style={[
             styles.status,
@@ -24,11 +24,12 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
       </View>
       <View style={stylesCustom.row}>
         <View>
-          <Text style={styles.txt2}>Email: {item.email}</Text>
-          <Text style={styles.txt2}>Số điện thoại: {item.phone}</Text>
-          <Text style={styles.txt2}>Ngày tạo: {item.created_at}</Text>
+          <Text style={styles.txt2}>Mã SP: {item.msp}</Text>
+          <Text style={styles.txt2}>Ngày tạo: {item.ngaytao}</Text>
+          <Text style={styles.txt2}>Mã PB: {item.msp}</Text>
+          <Text style={styles.txt2}>Mô tả: {item.mota}</Text>
         </View>
-        <View>
+        <View style={{justifyContent: 'space-around', height: 70}}>
           <Pressable onPress={() => refBootomSheet.current.open()}>
             <Image source={images.pen} />
           </Pressable>
@@ -37,17 +38,17 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
           </Pressable>
         </View>
       </View>
-      <BottomSheetEditClient refRBSheet={refBootomSheet} />
+      <BottomSheetEditProduct refRBSheet={refBootomSheet} />
       <ModalConfirm
         isShow={show}
         toggleDate={() => setShow(false)}
-        title="Bạn có muốn xoá khách hàng"
+        title="Bạn có muốn xoá sản phẩm"
       />
     </View>
   );
 };
 
-export default RenderItemManage;
+export default RenderManageProduct;
 
 const styles = StyleSheet.create({
   fl: {marginBottom: 20, paddingBottom: 40},

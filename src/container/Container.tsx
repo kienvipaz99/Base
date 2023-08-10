@@ -5,6 +5,9 @@ import {navigationRef} from '../../RootNavigation';
 import Login from '../screen/login/Login';
 import ButtomTabAdmin from './ButtomTabAdmin';
 import ManageClient from '../screen/screenAdmin/home/manageclient/ManageClient';
+import ManageEmployee from '../screen/screenAdmin/home/manageEmployee/ManageEmployee';
+import MageProduct from '../screen/screenAdmin/home/manageProduct/MageProduct';
+import ManageService from '../screen/screenAdmin/home/manageService/ManageService';
 const Container = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -17,6 +20,9 @@ const Container = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ButtomTabAdmin" component={ButtomTabAdmin} />
         <Stack.Screen name="ManageClient" component={ManageClient} />
+        <Stack.Screen name="ManageEmployee" component={ManageEmployee} />
+        <Stack.Screen name="MageProduct" component={MageProduct} />
+        <Stack.Screen name="ManageService" component={ManageService} />
       </Stack.Navigator>
     </NavigationContainer>
   );

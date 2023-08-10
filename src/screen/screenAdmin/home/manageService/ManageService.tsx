@@ -1,48 +1,52 @@
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useRef} from 'react';
-import stylesCustom from '../../../../res/stylesCustom';
 import HeaderCustom from '../../../../component/header/HeaderCustom';
 import {NavigationProp} from '@react-navigation/native';
-import {dataEmployee} from '../../../../res/feckData/dataEmployee';
-import sizes from '../../../../res/sizes';
+import stylesCustom from '../../../../res/stylesCustom';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../../../../res/colors';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import RenderItemManage from './RenderItemManage';
-import BottomSheetClient from '../../../../component/bottomSheet/BottomSheetClient';
-export default function ManageClient({
+import sizes from '../../../../res/sizes';
+import {dataService} from '../../../../res/feckData/dataService';
+import RenderItemManageServiec from './RenderItemManageService';
+import BottomSheetaddService from '../../../../component/bottomSheet/BottomSheetaddService';
+
+const ManageService = ({
   navigation,
 }: {
   navigation: NavigationProp<Record<string, any>>;
-}) {
-  const refRBSheet = useRef<any>();
+}) => {
+  const refRBSheet = useRef<any>(null);
+
   return (
     <View style={styles.container}>
       <HeaderCustom
-        title="Quản lý khách hàng"
+        title="Quản lý dịch vụ"
         back
-        onBackPress={() => navigation.goBack()}
         sharp
+        onBackPress={() => navigation.goBack()}
       />
       <View style={stylesCustom.view1}>
         <View style={styles.view}>
-          <Text style={styles.txt}>Danh sách khách hàng</Text>
-          <Ionicons
-            name="person-add"
+          <Text style={styles.txt}>Danh sách dịch vụ</Text>
+          <MaterialCommunityIcons
+            name="book-plus"
             color={colors.text}
             size={30}
             onPress={() => refRBSheet.current.open()}
           />
         </View>
         <FlatList
-          data={dataEmployee}
-          renderItem={({item}) => <RenderItemManage item={item} />}
+          data={dataService}
+          renderItem={({item}) => <RenderItemManageServiec item={item} />}
           contentContainerStyle={styles.fl}
         />
       </View>
-      <BottomSheetClient refRBSheet={refRBSheet} />
+      <BottomSheetaddService refRBSheet={refRBSheet} />
     </View>
   );
-}
+};
+
+export default ManageService;
 
 const styles = StyleSheet.create({
   container: {

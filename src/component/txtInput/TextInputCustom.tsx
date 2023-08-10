@@ -11,18 +11,24 @@ const TextInputCustom = ({
   add,
   nameIcon,
   onPressIcon,
+  editable,
+  numeric,
 }: {
   placeholder: string;
   add?: boolean;
   nameIcon?: string;
   onPressIcon?: () => void;
+  editable?: boolean;
+  numeric?: boolean;
 }) => {
   return (
     <View style={styles.view}>
       <TextInput
+        editable={!editable}
         style={styles.view1}
         placeholder={placeholder}
         cursorColor={colors.text}
+        keyboardType={numeric ? 'numeric' : 'default'}
       />
       {add && (
         <FontAwesome5

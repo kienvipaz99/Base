@@ -9,30 +9,25 @@ export const DataManage = [
     id: 2,
     name: 'Quản lý nhân viên',
     icon: 'users-cog',
-    navigation: 'ManageClient',
+    navigation: 'ManageEmployee',
   },
   {
     id: 3,
     name: 'Quản lý sản phầm',
     icon: 'book',
-    navigation: 'ManageClient',
+    navigation: 'MageProduct',
   },
   {
     id: 4,
     name: 'Quản lý dịch vụ',
     icon: 'clipboard-list',
-    navigation: 'ManageClient',
+    navigation: 'ManageService',
   },
+
   {
     id: 5,
-    name: 'Quản lý đại lý',
-    icon: 'city',
-    navigation: 'ManageClient',
-  },
-  {
-    id: 6,
     name: 'Đăng xuất',
     icon: 'sign-in-alt',
-    navigation: 'ManageClient',
+    navigation: 'Login',
   },
 ];

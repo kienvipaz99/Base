@@ -31,3 +31,43 @@ interface itemManage {
   updated_at: string;
   user_type: string;
 }
+interface itemManageEmployee {
+  id: number;
+  name: string;
+  team: string;
+  kpi: number;
+  doanhso: number;
+  daduyet: number;
+  thangtruoc: number;
+  email: string;
+  sdt: string;
+  chinhanh: string;
+  vaitro: string;
+  status: boolean;
+  created_at: string;
+}
+interface itemManageProduct {
+  id: number;
+  name: string;
+  msp: string;
+  mota: string;
+  ngaytao: string;
+  phienban: string;
+  status: boolean;
+}
+interface itemManageService {
+  id: number;
+  name: string;
+  gia: number;
+  time: string;
+  sanpham: string;
+  status: boolean;
+}
+interface itemManageAgency {
+  id: number;
+  name: string;
+  email: string;
+  sdt: string;
+  daily: string;
+  status: boolean;
+}

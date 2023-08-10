@@ -5,16 +5,16 @@ import fonts from '../../../../res/fonts';
 import sizes from '../../../../res/sizes';
 import stylesCustom from '../../../../res/stylesCustom';
 import images from '../../../../res/images';
-import BottomSheetEditClient from '../../../../component/bottomSheet/BottomSheetEditClient';
 import ModalConfirm from '../../../../component/modal/ModalConfirm';
+import BottomSheetEditService from '../../../../component/bottomSheet/BottomSheetEditService';
 
-const RenderItemManage = ({item}: {item: itemManage}) => {
+const RenderItemManageService = ({item}: {item: itemManageService}) => {
   const refBootomSheet = useRef<any>(null);
   const [show, setShow] = useState(false);
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
-        <Text style={styles.txt1}>Tên KH: {item.name}</Text>
+        <Text style={styles.txt1}>Tên gói: {item.name}</Text>
         <View
           style={[
             styles.status,
@@ -24,11 +24,11 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
       </View>
       <View style={stylesCustom.row}>
         <View>
-          <Text style={styles.txt2}>Email: {item.email}</Text>
-          <Text style={styles.txt2}>Số điện thoại: {item.phone}</Text>
-          <Text style={styles.txt2}>Ngày tạo: {item.created_at}</Text>
+          <Text style={styles.txt2}>Giá: {item.gia}</Text>
+          <Text style={styles.txt2}>Thời hạn: {item.time}</Text>
+          <Text style={styles.txt2}>Sản phẩm: {item.sanpham}</Text>
         </View>
-        <View>
+        <View style={{justifyContent: 'space-around', height: 70}}>
           <Pressable onPress={() => refBootomSheet.current.open()}>
             <Image source={images.pen} />
           </Pressable>
@@ -37,7 +37,7 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
           </Pressable>
         </View>
       </View>
-      <BottomSheetEditClient refRBSheet={refBootomSheet} />
+      <BottomSheetEditService refRBSheet={refBootomSheet} />
       <ModalConfirm
         isShow={show}
         toggleDate={() => setShow(false)}
@@ -47,7 +47,7 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
   );
 };
 
-export default RenderItemManage;
+export default RenderItemManageService;
 
 const styles = StyleSheet.create({
   fl: {marginBottom: 20, paddingBottom: 40},

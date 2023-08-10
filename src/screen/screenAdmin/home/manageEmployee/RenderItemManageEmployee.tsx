@@ -7,14 +7,15 @@ import stylesCustom from '../../../../res/stylesCustom';
 import images from '../../../../res/images';
 import BottomSheetEditClient from '../../../../component/bottomSheet/BottomSheetEditClient';
 import ModalConfirm from '../../../../component/modal/ModalConfirm';
+import BottomSheetEditEmployee from '../../../../component/bottomSheet/BottomSheetEditEmployee';
 
-const RenderItemManage = ({item}: {item: itemManage}) => {
+const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
   const refBootomSheet = useRef<any>(null);
   const [show, setShow] = useState(false);
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
-        <Text style={styles.txt1}>Tên KH: {item.name}</Text>
+        <Text style={styles.txt1}>Tên NV: {item.name}</Text>
         <View
           style={[
             styles.status,
@@ -25,10 +26,12 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
       <View style={stylesCustom.row}>
         <View>
           <Text style={styles.txt2}>Email: {item.email}</Text>
-          <Text style={styles.txt2}>Số điện thoại: {item.phone}</Text>
+          <Text style={styles.txt2}>Số điện thoại: {item.sdt}</Text>
+          <Text style={styles.txt2}>Team: {item.team}</Text>
+          <Text style={styles.txt2}>Vai trò: {item.vaitro}</Text>
           <Text style={styles.txt2}>Ngày tạo: {item.created_at}</Text>
         </View>
-        <View>
+        <View style={{justifyContent: 'space-around', height: 70}}>
           <Pressable onPress={() => refBootomSheet.current.open()}>
             <Image source={images.pen} />
           </Pressable>
@@ -37,17 +40,17 @@ const RenderItemManage = ({item}: {item: itemManage}) => {
           </Pressable>
         </View>
       </View>
-      <BottomSheetEditClient refRBSheet={refBootomSheet} />
+      <BottomSheetEditEmployee refRBSheet={refBootomSheet} />
       <ModalConfirm
         isShow={show}
         toggleDate={() => setShow(false)}
-        title="Bạn có muốn xoá khách hàng"
+        title="Bạn có muốn xoá nhân viên"
       />
     </View>
   );
 };
 
-export default RenderItemManage;
+export default RenderItemManageEmployee;
 
 const styles = StyleSheet.create({
   fl: {marginBottom: 20, paddingBottom: 40},
