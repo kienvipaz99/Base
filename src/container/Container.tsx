@@ -8,12 +8,13 @@ import ManageClient from '../screen/screenAdmin/home/manageclient/ManageClient';
 import ManageEmployee from '../screen/screenAdmin/home/manageEmployee/ManageEmployee';
 import MageProduct from '../screen/screenAdmin/home/manageProduct/MageProduct';
 import ManageService from '../screen/screenAdmin/home/manageService/ManageService';
+import ButtomTabUser from './ButtomTabUser';
 const Container = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
-        initialRouteName={'Login'}
+        initialRouteName={'ButtomTabUser'}
         screenOptions={{
           headerShown: false,
         }}>
@@ -23,6 +24,7 @@ const Container = () => {
         <Stack.Screen name="ManageEmployee" component={ManageEmployee} />
         <Stack.Screen name="MageProduct" component={MageProduct} />
         <Stack.Screen name="ManageService" component={ManageService} />
+        <Stack.Screen name="ButtomTabUser" component={ButtomTabUser} />
       </Stack.Navigator>
     </NavigationContainer>
   );
