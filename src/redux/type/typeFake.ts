@@ -71,3 +71,11 @@ interface itemManageAgency {
   daily: string;
   status: boolean;
 }
+interface Rank {
+  id: number;
+  name: string;
+  team: string;
+  key: number;
+  lastMonth: number;
+  img: number;
+}

@@ -55,6 +55,7 @@ export default function HomeUser({
           data={[]}
           renderItem={null}
           ListFooterComponent={() => <RenderFooter />}
+          ListFooterComponentStyle={{paddingBottom: 40}}
         />
       </View>
     </View>

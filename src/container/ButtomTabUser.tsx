@@ -10,6 +10,7 @@ import NotifiLog from '../screen/screenAdmin/notification/NotifiLog';
 import sizes from '../res/sizes';
 import DasboadUser from '../screen/screenUser/dasboadUser/DasboadUser';
 import HomeUser from '../screen/screenUser/home/HomeUser';
+import Rank from '../screen/screenUser/bxh/Rank';
 
 export default function ButtomTabUser() {
   const Tabs = createBottomTabNavigator();
@@ -74,11 +75,11 @@ export default function ButtomTabUser() {
           }}
         />
         <Tabs.Screen
-          name={'DasboadUser'}
-          component={DasboadUser}
+          name={'Rank'}
+          component={Rank}
           options={{
-            tabBarIcon: tabBarIcon(images.icondasboad, images.icondasboad),
-            tabBarLabel: 'Tổng quan',
+            tabBarIcon: tabBarIcon(images.rank, images.rank),
+            tabBarLabel: 'BXH',
           }}
         />
       </Tabs.Navigator>

@@ -4,8 +4,10 @@
   */
   
   const images = {
-      bin: require('../assets/images/bin.png'),
+      anh: require('../assets/images/anh.jpeg'),
+    bin: require('../assets/images/bin.png'),
     checkbox: require('../assets/images/checkbox.png'),
+    crown: require('../assets/images/crown.png'),
     cup1: require('../assets/images/cup1.png'),
     cup2: require('../assets/images/cup2.png'),
     cup3: require('../assets/images/cup3.png'),
@@ -21,6 +23,7 @@
     logomkt1: require('../assets/images/logomkt1.png'),
     logomkt2: require('../assets/images/logomkt2.png'),
     pen: require('../assets/images/pen.png'),
+    rank: require('../assets/images/rank.png'),
     unchek: require('../assets/images/unchek.png'),
     up: require('../assets/images/up.png'),
   }
