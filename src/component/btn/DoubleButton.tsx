@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
@@ -13,16 +14,22 @@ import {colors} from '../../res/colors';
 export default function DoubleButton({
   conFirm,
   cancel,
+  loading,
 }: {
   conFirm: () => void;
   cancel: () => void;
+  loading?: boolean;
 }) {
   return (
     <View style={styles.view}>
       <TouchableOpacity
         style={[styles.btn, {backgroundColor: colors.blue}]}
         onPress={conFirm}>
-        <Text style={[styles.txt, {color: colors.white}]}>Xác nhận</Text>
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={[styles.txt, {color: colors.white}]}>Xác nhận</Text>
+        )}
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.btn, {backgroundColor: colors.gray2}]}

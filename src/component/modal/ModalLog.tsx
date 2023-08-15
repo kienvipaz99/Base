@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import sizes from '../../res/sizes';
 import fonts from '../../res/fonts';
-import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../../res/colors';
 import stylesCustom from '../../res/stylesCustom';
 import {dataLogClient} from '../../res/feckData/feckLog';

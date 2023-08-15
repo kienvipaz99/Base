@@ -13,9 +13,12 @@ import {setupListeners} from '@reduxjs/toolkit/dist/query';
 import {useDispatch} from 'react-redux';
 import getAuth from '../state/authe.slice';
 import {authApi} from '../api/auth.api';
+import getLogin from '../state/login.slice';
+
 const reducers = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   getAuth: getAuth,
+  getLogin: getLogin,
 });
 const persistConfig = {
   key: 'root',

@@ -7,15 +7,16 @@ import {RootState} from '../store/store';
 import {Alert} from 'react-native';
 import {navigate} from '../../../RootNavigation';
 import {API} from './BASE_URL/API';
-export const axiosAuth = () => {
-  const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
+export const axiosAuth = (auths: string) => {
+  // const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
 
-  const auths = useAppSelect(data => data.getAuth.auth);
+  // const auths = useAppSelect(data => data.getAuth.auth);
+
   axios.interceptors.request.use(
     function (config: InternalAxiosRequestConfig) {
       // Do something before request is sent
       config.headers.Accept = 'application/json';
-      config.headers.Cookie = auths;
+      config.headers.Authorization = `Bearer ${auths}`;
       return config;
     },
     function (error: AxiosError) {

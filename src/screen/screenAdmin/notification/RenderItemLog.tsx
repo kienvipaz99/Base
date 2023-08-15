@@ -2,10 +2,10 @@ import {StyleSheet, Text, View, LayoutAnimation, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import sizes from '../../../res/sizes';
 import {colors} from '../../../res/colors';
-import {maxlengText} from '../../../res/convert';
+import {date, maxlengText} from '../../../res/convert';
 import fonts from '../../../res/fonts';
 
-export default function RenderItemLog({item}: {item: dataLog}) {
+export default function RenderItemLog({item}: {item: Logs}) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const toggle = () => {
@@ -20,11 +20,10 @@ export default function RenderItemLog({item}: {item: dataLog}) {
   const PressShow = () => setShow(!show);
   return (
     <Pressable style={styles.view} onPress={PressShow}>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.function}>Chức năng:{item.function}</Text>
-      <Text style={styles.function}>Thời gian:{item.time}</Text>
+      <Text style={styles.name}>Thời gian: {date(item?.updated_at)}</Text>
+      <Text style={styles.function}>Chức năng: {item?.version}</Text>
       <Text style={styles.function}>
-        Mô tả:{show ? item.describe : maxlengText(item.describe)}
+        Mô tả: {show ? item?.detail : maxlengText(item?.detail)}
       </Text>
     </Pressable>
   );

@@ -3,44 +3,16 @@ import React, {useState} from 'react';
 import stylesCustom from '../../../res/stylesCustom';
 import {colors} from '../../../res/colors';
 import sizes from '../../../res/sizes';
-import {
-  Circle,
-  VictoryContainer,
-  VictoryLabel,
-  VictoryPie,
-} from 'victory-native';
+import {Circle, VictoryLabel, VictoryPie} from 'victory-native';
 import fonts from '../../../res/fonts';
 import {Svg} from 'react-native-svg';
+import {
+  useGetDashboardRevenueQuery,
+  useGetTeamRevenueQuery,
+} from '../../../redux/api/auth.api';
+import {formatCurrency} from '../../../res/convert';
 export default function CuttomTab() {
   const [activeTab, setActiveTab] = useState(0);
-  const data = [
-    {
-      x: 1,
-      y: 20,
-      label: '20%',
-      thunhap: '500 Tr',
-      team: 'Team Hưng',
-      color: 'blue',
-    },
-    {
-      x: 2,
-
-      y: 40,
-      label: '30%',
-      thunhap: '700 Tr',
-      team: 'Team Khánh',
-      color: 'green',
-    },
-    {
-      x: 3,
-
-      y: 55,
-      label: '40%',
-      thunhap: '800 Tr',
-      team: 'Team Tuân',
-      color: 'red',
-    },
-  ];
   const data1 = [
     {
       x: 1,
@@ -69,6 +41,35 @@ export default function CuttomTab() {
       color: 'red',
     },
   ];
+  const {data} = useGetTeamRevenueQuery('');
+  const {data: total} = useGetDashboardRevenueQuery('') as any;
+
+  const colorList = [
+    '#FF5733',
+    '#2ECC71',
+    '#3498DB',
+    '#E74C3C',
+    '#9B59B6',
+    '#FF9900',
+    '#CC9999',
+    '#00DD00',
+    '#001100',
+    'black',
+  ];
+  const totalRevenue: any = data?.data.reduce(
+    (sum, item: RevenueTeam) => sum + item?.revenue,
+    0,
+  );
+  const modifiedData = data?.data.map((item: RevenueTeam, index) => {
+    return {
+      ...item,
+      x: item?.id,
+      y: item?.revenue,
+      label: formatCurrency(item?.revenue),
+      color: colorList[index % colorList.length],
+    };
+  });
+
   const RenderItem = ({item}: any) => {
     return (
       <View style={[stylesCustom.row1, {marginTop: 10}]}>
@@ -80,7 +81,7 @@ export default function CuttomTab() {
             borderRadius: 20,
           }}></View>
         <Text style={{marginLeft: 10, color: colors.text, ...stylesCustom.txt}}>
-          {item.team}
+          {item.name}
         </Text>
       </View>
     );
@@ -129,8 +130,8 @@ export default function CuttomTab() {
           />
           <VictoryPie
             animate={{
-              duration: 2000,
-              onLoad: {duration: 1000},
+              duration: 0,
+              onLoad: {duration: 0},
             }}
             standalone={false}
             cornerRadius={10}
@@ -138,8 +139,8 @@ export default function CuttomTab() {
             height={300}
             width={sizes.width * 0.8}
             labelPosition={'centroid'}
-            colorScale={['blue', 'green', 'red']}
-            data={activeTab === 0 ? data : data1}
+            colorScale={colorList}
+            data={activeTab === 0 ? modifiedData : data1}
             padAngle={2}
             events={[
               {
@@ -153,8 +154,15 @@ export default function CuttomTab() {
                         mutation: (data, {text}) => {
                           setClick(!click);
                           return !click
-                            ? {text: data.slice.data.thunhap}
-                            : {text: data.slice.data.label};
+                            ? {text: data?.slice?.data?.label}
+                            : {
+                                text:
+                                  (
+                                    (data?.slice?.data?.revenue /
+                                      totalRevenue) *
+                                    100
+                                  ).toFixed(1) + '%',
+                              };
                         },
                       },
                     ];
@@ -178,7 +186,7 @@ export default function CuttomTab() {
               fontFamily: fonts.Regula,
               fill: '#2FB77A',
             }}
-            text={`20\n Triệu`}
+            text={`${formatCurrency(totalRevenue)}\n Triệu`}
             verticalAnchor={'middle'}
             x={(sizes.width * 0.8) / 2}
             y={300 / 2}
@@ -186,7 +194,7 @@ export default function CuttomTab() {
         </Svg>
         <FlatList
           scrollEnabled={true}
-          data={activeTab === 0 ? data : data1}
+          data={modifiedData}
           renderItem={RenderItem}
           numColumns={2}
           columnWrapperStyle={{
@@ -195,11 +203,22 @@ export default function CuttomTab() {
             alignSelf: 'center',
           }}
         />
-        <Text style={styles.txt}>Hoàn thành: 20%</Text>
-        <Text style={styles.txt}>Thực hiện: 20/100 (Tr) </Text>
-        <Text style={styles.txt}>
-          Thiếu: <Text style={{color: 'orange'}}>80</Text> (Tr)
-        </Text>
+        <View style={{marginTop: 15}}>
+          <Text style={styles.txt}>Hoàn thành: 20%</Text>
+          <Text style={styles.txt}>
+            Thực hiện: {formatCurrency(totalRevenue)} /{' '}
+            {formatCurrency(total?.data?.totalKpiMonth)} (Tr){' '}
+          </Text>
+          <Text style={styles.txt}>
+            Thiếu:{' '}
+            <Text style={{color: 'orange'}}>
+              {total?.data?.totalKpiMonth <= totalRevenue
+                ? 0
+                : totalRevenue - total?.data?.totalKpiMonth}
+            </Text>{' '}
+            (Tr)
+          </Text>
+        </View>
       </View>
     </>
   );

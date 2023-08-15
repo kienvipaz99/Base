@@ -11,12 +11,8 @@ import {
 } from 'react-native';
 import sizes from '../../res/sizes';
 import fonts from '../../res/fonts';
-import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../../res/colors';
 import stylesCustom from '../../res/stylesCustom';
-import {dataLogClient} from '../../res/feckData/feckLog';
-import TextInputCustom from '../txtInput/TextInputCustom';
-import DoubleButton from '../btn/DoubleButton';
 interface Props {
   isShow?: boolean;
   toggleDate?: () => void;

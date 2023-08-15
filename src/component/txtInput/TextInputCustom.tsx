@@ -13,17 +13,23 @@ const TextInputCustom = ({
   onPressIcon,
   editable,
   numeric,
+  value,
+  setValue,
 }: {
-  placeholder: string;
+  placeholder?: string;
   add?: boolean;
   nameIcon?: string;
   onPressIcon?: () => void;
   editable?: boolean;
   numeric?: boolean;
+  value?: string;
+  setValue?: (val: string) => void;
 }) => {
   return (
     <View style={styles.view}>
       <TextInput
+        value={value}
+        onChangeText={setValue}
         editable={!editable}
         style={styles.view1}
         placeholder={placeholder}

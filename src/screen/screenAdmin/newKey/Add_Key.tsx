@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import stylesCustom from '../../../res/stylesCustom';
 import HeaderCustom from '../../../component/header/HeaderCustom';
 import {colors} from '../../../res/colors';
@@ -8,12 +8,22 @@ import SelectCustom from '../../../component/select/SelectCustom';
 import BTNLogin from '../../../component/btn/BTNLogin';
 import BottomSheetClient from '../../../component/bottomSheet/BottomSheetClient';
 import BottomSheetBank from '../../../component/bottomSheet/BottomSheetBank';
-import sizes from '../../../res/sizes';
+import {
+  useGetBankQuery,
+  useGetPlansQuery,
+  useGetProductQuery,
+} from '../../../redux/api/auth.api';
+import SelectItemBank from '../../../component/select/SelectItemBank';
+import SelectProduct from '../../../component/select/SelectProduct';
+import {money} from '../../../res/convert';
 
 const Add_Key = () => {
   const refRBSheet = useRef<any>();
   const refRBSheetBank = useRef<any>();
-
+  const {data: dataBank} = useGetBankQuery('');
+  const {data: dataProduct} = useGetProductQuery('');
+  const {data: dataPlans} = useGetPlansQuery('');
+  const [price, setPrice] = useState('');
   return (
     <View style={styles.view}>
       <HeaderCustom title="Thêm mới key" />
@@ -35,16 +45,27 @@ const Add_Key = () => {
             <TextInputCustom placeholder="Email khách hàng" />
             <TextInputCustom placeholder="Số điện thoại" />
             <Text style={styles.txt}>Nâng cao</Text>
-            <SelectCustom title="Chọn phần mềm" />
-            <SelectCustom title="Chọn gói bản quyền" />
+            <SelectProduct
+              title="Chọn phần mềm"
+              setSelect={val => console.log(val)}
+              data={dataProduct?.data}
+            />
+            <SelectProduct
+              title="Chọn gói bản quyền"
+              setSelect={val => setPrice(String(money(val?.price)))}
+              data={dataPlans?.data}
+            />
             <TextInputCustom placeholder="Mã máy" />
             <Text style={styles.txt}>Nội dung thanh toán</Text>
-            <SelectCustom title="Giá phần mềm" />
-            <TextInputCustom placeholder="Khuyễn mãi" />
-            <SelectCustom
-              title="Thanh toán"
-              add
-              nameIcon="logo-usd"
+            <TextInputCustom
+              placeholder="Giá phần mềm"
+              editable
+              value={price}
+            />
+            <TextInputCustom placeholder="Khuyễn mãi" numeric />
+            <SelectItemBank
+              data={dataBank?.data}
+              setSelect={val => console.log(val)}
               onPressIcon={() => refRBSheetBank.current.open()}
             />
             <TextInputCustom placeholder="Nội dung chuyển khoản" />
