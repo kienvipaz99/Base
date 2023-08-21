@@ -5,7 +5,7 @@ import {colors} from '../../../res/colors';
 import {date, maxlengText} from '../../../res/convert';
 import fonts from '../../../res/fonts';
 
-export default function RenderItemLog({item}: {item: Logs}) {
+export default function RenderItemLog({item}: {item: Activities}) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const toggle = () => {
@@ -20,10 +20,11 @@ export default function RenderItemLog({item}: {item: Logs}) {
   const PressShow = () => setShow(!show);
   return (
     <Pressable style={styles.view} onPress={PressShow}>
-      <Text style={styles.name}>Thời gian: {date(item?.updated_at)}</Text>
-      <Text style={styles.function}>Chức năng: {item?.version}</Text>
+      <Text style={styles.name}>{item?.subject_type}</Text>
+      <Text style={styles.function}>Hành động: {item?.event}</Text>
+      <Text style={styles.function}>Thời gian: {date(item?.created_at)}</Text>
       <Text style={styles.function}>
-        Mô tả: {show ? item?.detail : maxlengText(item?.detail)}
+        Mô tả: {show ? item?.description : maxlengText(item?.description)}
       </Text>
     </Pressable>
   );

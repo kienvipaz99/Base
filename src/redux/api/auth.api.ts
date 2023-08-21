@@ -142,9 +142,9 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
-    getPlans: build.query<ListApiResponse<Plans>, string>({
-      query: () => ({
-        url: `api/v1/plans`,
+    getPlans: build.query<ListApiResponse<Plans>, {option: string}>({
+      query: ({option}) => ({
+        url: `api/v1/plans${option}`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -214,20 +214,121 @@ export const authApi = createApi({
         method: 'GET',
       }),
       providesTags(result) {
-        // if (result?.data) {
-        //   const data = result.data;
-        //   return [
-        //     ...data.map(({id}) => ({
-        //       type: tagTypes,
-        //       id,
-        //     })),
-        //     {
-        //       type: tagTypes,
-        //       id: 'LIST',
-        //     },
-        //   ];
-        // }
         return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    getActivities: build.query<ListApiResponse<Activities>, {per_page: number}>(
+      {
+        query: ({per_page}) => ({
+          url: `api/v1/activities?per_page=${per_page}`,
+          method: 'GET',
+        }),
+        providesTags(result) {
+          if (result?.data) {
+            const data = result.data;
+            return [
+              ...data.map(({id}) => ({
+                type: tagTypes,
+                id,
+              })),
+              {
+                type: tagTypes,
+                id: 'LIST',
+              },
+            ];
+          }
+          return [{type: tagTypes, id: 'LIST'}];
+        },
+      },
+    ),
+    getDashboardChart: build.query<dasBoadChart, {month: string; year: string}>(
+      {
+        query: ({month, year}) => ({
+          url: `api/v1/invoices/getDashboardChart?month=${month}&year=${year}`,
+          method: 'GET',
+        }),
+        providesTags(result) {
+          return [{type: tagTypes, id: 'LIST'}];
+        },
+      },
+    ),
+    creatUser: build.mutation<User, CreateUser>({
+      query(data) {
+        return {
+          url: 'api/v1/banks',
+          method: 'POST',
+          data,
+        };
+      },
+    }),
+    getTypeUser: build.query<ListApiResponse<TypeUser>, string>({
+      query: () => ({
+        url: `api/v1/users/types`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    getUser: build.query<ListApiResponse<GetUser>, {option: string}>({
+      query: option => ({
+        url: `api/v1/users?per_page=-1&${option}`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    creatInvoices: build.mutation<Invoices, CreateInvoices>({
+      query(data) {
+        return {
+          url: 'api/v1/invoices',
+          method: 'POST',
+          data,
+        };
+      },
+    }),
+    changeStatus: build.mutation<{}, {id: number; status: string}>({
+      query({id, status}) {
+        return {
+          url: `api/v1/invoices/${id}?status=${status}`,
+          method: 'PATCH',
+        };
+      },
+    }),
+    changeInvoid: build.mutation<{}, ChangeInVoid>({
+      query({id, data}) {
+        return {
+          url: `api/v1/invoices/${id}`,
+          method: 'POST',
+          data,
+        };
       },
     }),
   }),
@@ -247,4 +348,12 @@ export const {
   useGetLogsQuery,
   useGetTeamRevenueQuery,
   useGetDashboardRevenueQuery,
+  useGetActivitiesQuery,
+  useGetDashboardChartQuery,
+  useCreatUserMutation,
+  useGetTypeUserQuery,
+  useGetUserQuery,
+  useCreatInvoicesMutation,
+  useChangeStatusMutation,
+  useChangeInvoidMutation,
 } = authApi;

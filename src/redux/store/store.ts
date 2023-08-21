@@ -14,16 +14,18 @@ import {useDispatch} from 'react-redux';
 import getAuth from '../state/authe.slice';
 import {authApi} from '../api/auth.api';
 import getLogin from '../state/login.slice';
+import getProfile from '../state/profile.slice';
 
 const reducers = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   getAuth: getAuth,
   getLogin: getLogin,
+  getProfile: getProfile,
 });
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: [authApi.reducerPath, 'getAuth'],
+  blacklist: [authApi.reducerPath, 'getAuth', 'getProfile'],
 };
 const persistedReducer = persistReducer(persistConfig, reducers);
 

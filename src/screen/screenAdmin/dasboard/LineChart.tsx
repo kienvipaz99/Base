@@ -12,111 +12,164 @@ import {
 import fonts from '../../../res/fonts';
 import {colors} from '../../../res/colors';
 import stylesCustom from '../../../res/stylesCustom';
-import {SevenDay, dataChart, dataMonth} from '../../../res/feckData/dataChart';
+import {dataChart} from '../../../res/feckData/dataChart';
 import {
-  DChart,
   DataSelectChart,
   MChart,
   YChart,
 } from '../../../res/data/DataSelectChart';
+import {useGetDashboardChartQuery} from '../../../redux/api/auth.api';
+import {getCurrentDate, getCurrentMonthDays} from '../../../res/convert';
 
 export default function LineChart() {
   const [select, setSelect] = useState(1);
+  const {data} = useGetDashboardChartQuery({
+    month: `${getCurrentDate().month}`,
+    year: `${getCurrentDate().year}`,
+  }) as any;
+  const today = new Date();
+  let numberdayMonth = getCurrentMonthDays();
+  const sevenDaysArray = [];
+
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(today);
+    day.setDate(today.getDate() - i);
+    sevenDaysArray.push(Number(day.getDate()));
+  }
+  let numberDay = sevenDaysArray.reverse();
+  const currentData = data?.data?.current || YChart;
+  const modifiedData = currentData?.map((item: number, index: number) => {
+    const cutValue = item / 1000000;
+    return {
+      x: index + 1,
+      y: cutValue,
+    };
+  });
+  const result = [];
+
+  for (let i = 0; i < numberDay?.length; i++) {
+    const day = numberDay[i];
+
+    result?.push(modifiedData[day - 1]);
+  }
 
   return (
     <>
-      {/*@ts-ignore */}
-      <Chart
-        style={styles.chart}
-        data={
-          select === 1
-            ? SevenDay
-            : select === 3
-            ? dataChart
-            : select === 2
-            ? dataMonth
-            : []
-        }
-        padding={styles.padding}
-        xDomain={{
-          min: select === 1 ? 2 : select === 2 ? 1 : select === 3 ? 1 : 1,
-          max:
-            select === 1
-              ? SevenDay.length + 1
-              : select === 3
-              ? dataChart.length
-              : select === 2
-              ? dataMonth.length
-              : 1,
-        }}
-        yDomain={{min: 0, max: 1000}}>
-        <VerticalAxis tickCount={6} />
-        <HorizontalAxis
-          includeOriginTick={false}
-          tickValues={
-            select === 1
-              ? DChart
-              : select === 2
-              ? MChart
-              : select === 3
-              ? YChart
-              : undefined
-          }
-          theme={{
-            axis: {
-              visible: true,
-              stroke: {
-                color: '#bbb',
-                width: 2,
-                opacity: 1,
-              },
-              dy: 0,
-            },
+      {data && (
+        <>
+          {/* @ts-ignore */}
+          <Chart
+            key={'1111'}
+            disableGestures
+            style={styles.chart}
+            data={
+              select === 1
+                ? result
+                : select === 3
+                ? dataChart
+                : select === 2
+                ? modifiedData
+                : undefined
+            }
+            padding={styles.padding}
+            xDomain={{
+              min:
+                select === 1
+                  ? Math?.min(...numberDay)
+                  : select === 2
+                  ? 1
+                  : select === 3
+                  ? 1
+                  : 1,
+              max:
+                select === 1
+                  ? Math?.max(...numberDay)
+                  : select === 3
+                  ? dataChart.length
+                  : select === 2
+                  ? numberdayMonth
+                  : 1,
+            }}
+            yDomain={{
+              min: 0,
+              max:
+                select === 1
+                  ? 200
+                  : select === 3
+                  ? 1200
+                  : select === 2
+                  ? 500
+                  : 1,
+            }}>
+            <VerticalAxis tickCount={6} />
+            <HorizontalAxis
+              includeOriginTick={true}
+              tickValues={
+                select === 1
+                  ? numberDay
+                  : select === 2
+                  ? MChart
+                  : select === 3
+                  ? YChart
+                  : undefined
+              }
+              theme={{
+                axis: {
+                  visible: false,
+                  stroke: {
+                    color: '#bbb',
+                    width: 2,
+                    opacity: 1,
+                  },
+                  dy: 0,
+                },
 
-            grid: {
-              visible: true,
-              stroke: {
-                color: '#ccc',
-                width: 1,
-                opacity: 1,
-              },
-            },
-            labels: {
-              visible: true,
-              label: {
-                color: colors.text,
-                fontSize: 14,
+                grid: {
+                  visible: true,
+                  stroke: {
+                    color: '#ccc',
+                    width: 1,
+                    opacity: 1,
+                  },
+                },
+                labels: {
+                  visible: true,
+                  label: {
+                    color: colors.text,
+                    fontSize: 14,
 
-                textAnchor: 'middle',
-                dx: 0,
-                dy: -15,
-                fontFamily: fonts.Regula,
-              },
-              formatter: (v: number) => String(v),
-            },
-          }}
-        />
-        <Area
-          theme={{
-            gradient: {
-              from: {color: '#ffa502'},
-              to: {color: '#ffa502', opacity: 0.4},
-            },
-          }}
-        />
-        <Line
-          theme={{
-            stroke: {color: '#ffa502', width: 5},
-            scatter: {default: {width: 4, height: 4, rx: 2}},
-          }}
-          smoothing="cubic-spline"
-          tooltipComponent={<Tooltip />}
-        />
-      </Chart>
+                    textAnchor: 'middle',
+                    dx: 0,
+                    dy: -15,
+                    fontFamily: fonts.Regula,
+                  },
+                  formatter: (v: number) => String(v),
+                },
+              }}
+            />
+            <Area
+              theme={{
+                gradient: {
+                  from: {color: '#ffa502'},
+                  to: {color: '#ffa502', opacity: 0.4},
+                },
+              }}
+            />
+            <Line
+              theme={{
+                stroke: {color: '#ffa502', width: 5},
+                scatter: {default: {width: 4, height: 4, rx: 2}},
+              }}
+              smoothing="cubic-spline"
+              tooltipComponent={<Tooltip />}
+            />
+          </Chart>
+        </>
+      )}
       <View style={styles.select}>
         {DataSelectChart.map(item => (
           <TouchableOpacity
-            key={item.id}
+            key={'dataselect' + item.id}
             style={[
               styles.btn,
               {backgroundColor: select === item.id ? '#00BDB0' : undefined},

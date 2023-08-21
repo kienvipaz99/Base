@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import React from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import sizes from '../../res/sizes';
@@ -7,49 +7,55 @@ import fonts from '../../res/fonts';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import stylesCustom from '../../res/stylesCustom';
-import {useGetBankingQuery} from '../../redux/api/auth.api';
-
 export default function SelectItemBank({
   data,
   select,
   setSelect,
   onPressIcon,
 }: {
-  data: string[] | undefined;
+  data: Banking[] | undefined;
   select?: string;
-  setSelect: (val: string) => void;
+  setSelect: (val: Banking) => void;
   onPressIcon?: () => void;
 }) {
   return (
-    <SelectDropdown
-      data={data || []}
-      onSelect={(selectedItem, index) => {
-        setSelect(selectedItem);
-      }}
-      buttonStyle={styles.view}
-      buttonTextAfterSelection={item => {
-        return `(${item.short_name}) ${item?.account_holder} ${item?.account_number}`;
-      }}
-      defaultValue={select}
-      defaultButtonText="Thanh toán"
-      buttonTextStyle={styles.txt}
-      rowTextStyle={styles.txt}
-      rowTextForSelection={item => {
-        return `(${item.short_name}) ${item?.account_holder} ${item?.account_number}`;
-      }}
-      dropdownStyle={{borderRadius: 10}}
-      renderDropdownIcon={() => (
-        <View style={stylesCustom.row1}>
-          <Ionicons
-            onPress={onPressIcon}
-            name={'logo-usd'}
-            size={25}
-            color={colors.text}
-          />
-          <Entypo name="chevron-down" color={colors.text} size={25} />
+    <>
+      {data?.length !== 0 ? (
+        <SelectDropdown
+          data={data || []}
+          onSelect={(selectedItem, index) => {
+            setSelect(selectedItem);
+          }}
+          buttonStyle={styles.view}
+          buttonTextAfterSelection={item => {
+            return `(${item.short_name}) ${item?.account_holder} ${item?.account_number}`;
+          }}
+          defaultValue={select}
+          defaultButtonText="Thanh toán"
+          buttonTextStyle={styles.txt}
+          rowTextStyle={styles.txt}
+          rowTextForSelection={item => {
+            return `(${item.short_name}) ${item?.account_holder} ${item?.account_number}`;
+          }}
+          dropdownStyle={{borderRadius: 10}}
+          renderDropdownIcon={() => (
+            <View style={stylesCustom.row1}>
+              <Ionicons
+                onPress={onPressIcon}
+                name={'logo-usd'}
+                size={25}
+                color={colors.text}
+              />
+              <Entypo name="chevron-down" color={colors.text} size={25} />
+            </View>
+          )}
+        />
+      ) : (
+        <View style={styles.view}>
+          <ActivityIndicator size={'large'} />
         </View>
       )}
-    />
+    </>
   );
 }
 

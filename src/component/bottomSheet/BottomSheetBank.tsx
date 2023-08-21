@@ -13,7 +13,6 @@ import {colors} from '../../res/colors';
 import TextInputCustom from '../txtInput/TextInputCustom';
 import sizes from '../../res/sizes';
 import DoubleButton from '../btn/DoubleButton';
-import SelectCustom from '../select/SelectCustom';
 import {
   useCreatBankMutation,
   useGetBankQuery,

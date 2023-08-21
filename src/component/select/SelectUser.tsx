@@ -1,5 +1,5 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import sizes from '../../res/sizes';
 import {colors} from '../../res/colors';
@@ -7,46 +7,43 @@ import fonts from '../../res/fonts';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import stylesCustom from '../../res/stylesCustom';
-
-export default function SelectProduct({
-  data,
+import {Text} from 'react-native-paper';
+import {useGetUserQuery} from '../../redux/api/auth.api';
+export default function SelectUser({
+  select,
   setSelect,
-  title,
-  search,
-  show,
+  onPressIcon,
 }: {
-  data: string[] | undefined;
-  setSelect: (val: Plans) => void;
-  title: string;
-  search?: boolean;
-  show?: boolean;
+  select?: string;
+  setSelect: (val: GetUser) => void;
+  onPressIcon?: () => void;
 }) {
+  const {data: user} = useGetUserQuery({
+    option: 'filter[customer]=CUSTOMER',
+  });
   return (
     <SelectDropdown
-      data={data || []}
-      onSelect={(item, index) => {
-        setSelect(item);
+      data={user?.data || []}
+      onSelect={(selectedItem, index) => {
+        setSelect(selectedItem);
       }}
       buttonStyle={styles.view}
       buttonTextAfterSelection={item => {
-        return item?.name;
+        return item.name;
       }}
-      defaultButtonText={title}
+      defaultValue={select}
+      defaultButtonText="Chọn khách hàng"
       buttonTextStyle={styles.txt}
+      rowTextStyle={styles.txt}
       rowTextForSelection={item => {
         return item?.name;
       }}
-      search={search}
-      disabled={show}
-      defaultValue={10}
+      search
       searchInputTxtColor={colors.text}
       searchPlaceHolder="Tìm kiếm..."
       searchInputTxtStyle={styles.txt}
-      dropdownIconPosition="right"
-      renderSearchInputLeftIcon={() => (
-        <Ionicons name="search" color={colors.text} size={25} />
-      )}
-      rowStyle={{padding: 10, height: 65}}
+      selectedRowStyle={{backgroundColor: colors.gray1}}
+      dropdownStyle={{borderRadius: 10}}
       renderCustomizedRowChild={item => {
         return (
           <View style={stylesCustom.row}>
@@ -54,9 +51,16 @@ export default function SelectProduct({
           </View>
         );
       }}
-      dropdownStyle={{borderRadius: 10}}
       renderDropdownIcon={() => (
-        <Entypo name="chevron-down" color={colors.text} size={25} />
+        <View style={stylesCustom.row1}>
+          <Ionicons
+            onPress={onPressIcon}
+            name={'person-add'}
+            size={25}
+            color={colors.text}
+          />
+          <Entypo name="chevron-down" color={colors.text} size={25} />
+        </View>
       )}
     />
   );
@@ -79,6 +83,6 @@ const styles = StyleSheet.create({
     fontSize: sizes.width * 0.04,
     color: colors.text,
     textAlign: 'left',
-    width: sizes.width * 0.65,
+    marginLeft: 15,
   },
 });

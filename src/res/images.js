@@ -26,5 +26,6 @@
     rank: require('../assets/images/rank.png'),
     unchek: require('../assets/images/unchek.png'),
     up: require('../assets/images/up.png'),
+    uploadImage: require('../assets/images/uploadImage.png'),
   }
   export default images

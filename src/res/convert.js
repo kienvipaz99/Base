@@ -9,7 +9,11 @@ export function money(val) {
   return Number(val).toLocaleString('vi-VN');
 }
 export function date(val) {
-  return new Date(val).toLocaleString('vi-VN');
+  if (val) {
+    return new Date(val).toLocaleString('vi-VN');
+  } else {
+    return 'Không xác định';
+  }
 }
 export function formatCurrency(val) {
   let value = Number(val);
@@ -28,4 +32,20 @@ export function formatCurrency(val) {
   } else if (val == 0) {
     return ' ';
   }
+}
+export function getCurrentMonthDays() {
+  // Lấy ngày hiện tại
+  const today = new Date();
+  // Lấy ngày cuối cùng của tháng hiện tại
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  // Lấy ngày trong tháng cuối cùng
+  return lastDayOfMonth.getDate();
+}
+export function getCurrentDate() {
+  const today = new Date();
+  const day = today.getDate().toString().padStart(2, '0');
+  const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Lưu ý: Tháng bắt đầu từ 0
+  const year = today.getFullYear();
+
+  return {day, month, year};
 }

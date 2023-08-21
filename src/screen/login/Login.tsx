@@ -17,6 +17,7 @@ import {axiosAuth} from '../../redux/api/axiosClient';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store/store';
 import {setDataUser} from '../../redux/state/login.slice';
+import {setProfile} from '../../redux/state/profile.slice';
 
 export default function Login({
   navigation,
@@ -47,7 +48,7 @@ export default function Login({
       const veRify = await verifyToken({
         token: a.apiToken,
       }).unwrap();
-
+      dispatch(setProfile(veRify));
       if (
         veRify?.data?.roles[0]?.id === 1 ||
         veRify?.data?.roles[0]?.id === 2

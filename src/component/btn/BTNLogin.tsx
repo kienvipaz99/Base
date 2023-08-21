@@ -10,7 +10,7 @@ export default function BTNLogin({
   title,
   styleProps,
 }: {
-  onPress: () => void;
+  onPress: () => void | undefined;
   title: string;
   styleProps?: StyleProp<ViewStyle>;
 }) {

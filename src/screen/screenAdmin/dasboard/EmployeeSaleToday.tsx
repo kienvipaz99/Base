@@ -25,7 +25,11 @@ export default function EmployeeSaleToday() {
         showsVerticalScrollIndicator={false}
         style={{marginTop: 20}}>
         {dataEmployeeSaleToday.map((item, index) => (
-          <RenderItemSale item={item} index={index} key={index.toString()} />
+          <RenderItemSale
+            item={item}
+            index={index}
+            key={index.toString() + 1}
+          />
         ))}
       </ScrollView>
     </View>

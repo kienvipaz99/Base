@@ -5,40 +5,71 @@ import {colors} from '../../../res/colors';
 import stylesCustom from '../../../res/stylesCustom';
 import {Image} from 'react-native';
 import fonts from '../../../res/fonts';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import images from '../../../res/images';
 import ModalLog from '../../../component/modal/ModalLog';
 import ModalEditKey from '../../../component/modal/ModalEditKey';
-export default function RenderListKey({item}: {item: TypeDataListKey}) {
-  const [check, setCheck] = useState(item.invoices[0]?.status);
+import {date, money} from '../../../res/convert';
+import {
+  useChangeInvoidMutation,
+  useChangeStatusMutation,
+} from '../../../redux/api/auth.api';
+export default function RenderListKey({
+  item,
+  onChange,
+}: {
+  item: TypeDataListKey;
+  onChange: ({id, status}: {id: number; status: string}) => void;
+}) {
   const [showModalLog, setShowModalLog] = useState(false);
   const [showEditKey, setShowEditKey] = useState(false);
+  const [idItem, setIdItem] = useState<number | undefined>();
 
-  const OnClick = () => {
-    setCheck(check === 'PAID' ? 'UNPAID' : check === 'UNPAID' ? 'PAID' : '');
-  };
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
         <View style={styles.view1}>
           <Image source={images.kien} style={styles.img} />
-          <Text style={styles.name}>{item?.name}</Text>
+          <View style={{marginLeft: 8}}>
+            <Text style={styles.name}>{item?.subscriber?.name}</Text>
+            <Text style={styles.txt}>Email: {item?.subscriber?.email}</Text>
+          </View>
         </View>
-        <Pressable onPress={OnClick}>
+        <Pressable
+          onPress={() => {
+            onChange({
+              id: item.invoices[0]?.id,
+              status: item.invoices[0]?.status,
+            });
+          }}>
           <Image
-            source={check === 'PAID' ? images.checkbox : images.unchek}
+            source={
+              item.invoices[0]?.status === 'PAID'
+                ? images.checkbox
+                : images.unchek
+            }
             style={styles.img1}
           />
         </Pressable>
       </View>
       <View style={stylesCustom.row}>
         <View style={{width: sizes.width * 0.65}}>
-          <Text style={styles.txt}>Họ tên KH:{item?.subscriber?.name}</Text>
-          <Text style={styles.txt}>Email: {item?.subscriber?.email}</Text>
-          <Text style={styles.txt}>Sđt: {item?.subscriber?.phone}</Text>
+          <Text style={styles.txt}>
+            Họ tên KH:{item?.invoices[0]?.user?.name}
+          </Text>
+          <Text style={styles.txt}>
+            Email: {item?.invoices[0]?.user?.email}
+          </Text>
+          <Text style={styles.txt}>
+            Sđt:{' '}
+            {item?.invoices[0]?.user?.phone
+              ? item?.invoices[0]?.user?.phone
+              : 'Không có'}
+          </Text>
           <Text style={styles.txt}>Gói: {item?.plan?.name}</Text>
-          <Text style={styles.txt}>Ngày bán: {item?.starts_at}</Text>
-          <Text style={styles.txt}>Giá tiền: {item?.price}</Text>
+          <Text style={styles.txt}>Ngày bán: {date(item?.starts_at)}</Text>
+          <Text style={styles.txt}>
+            Giá tiền: {money(item?.invoices[0]?.total)}
+          </Text>
         </View>
         <View style={{alignItems: 'flex-end', width: sizes.width * 0.2}}>
           <Text
@@ -50,7 +81,11 @@ export default function RenderListKey({item}: {item: TypeDataListKey}) {
             ]}>
             Còn lại: {item?.remaing_day}
           </Text>
-          <Pressable onPress={() => setShowEditKey(true)}>
+          <Pressable
+            onPress={() => {
+              setIdItem(item.invoices[0]?.id);
+              setShowEditKey(true);
+            }}>
             <Image source={images.pen} />
           </Pressable>
           <Pressable onPress={() => setShowModalLog(true)}>
@@ -70,6 +105,7 @@ export default function RenderListKey({item}: {item: TypeDataListKey}) {
       <ModalEditKey
         isShow={showEditKey}
         toggleDate={() => setShowEditKey(false)}
+        ids={idItem}
       />
     </View>
   );
@@ -101,7 +137,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Medium,
     fontSize: 17,
     color: colors.text,
-    marginLeft: 8,
   },
   txt: {
     fontFamily: fonts.Regula,

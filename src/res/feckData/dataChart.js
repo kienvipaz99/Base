@@ -100,36 +100,7 @@ export const dataChart = [
     color: 'red',
   },
 ];
-export const SevenDay = [
-  {
-    x: 2,
-    y: 200,
-  },
-  {
-    x: 3,
-    y: 600,
-  },
-  {
-    x: 4,
-    y: 400,
-  },
-  {
-    x: 5,
-    y: 450,
-  },
-  {
-    x: 6,
-    y: 260,
-  },
-  {
-    x: 7,
-    y: 200,
-  },
-  {
-    x: 8,
-    y: 800,
-  },
-];
+
 export const dataMonth = [
   {
     x: 1,
