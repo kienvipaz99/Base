@@ -34,17 +34,38 @@ interface itemManage {
 interface itemManageEmployee {
   id: number;
   name: string;
-  team: string;
-  kpi: number;
-  doanhso: number;
-  daduyet: number;
-  thangtruoc: number;
+  first_name: string;
+  last_name: string;
   email: string;
-  sdt: string;
-  chinhanh: string;
-  vaitro: string;
-  status: boolean;
+  user_type: string;
+  phone: string;
+  point: number;
+  team_id: number;
+  branch_id: number;
+  creator_id: number;
+  status: true;
+  referral: string;
+  code: string;
   created_at: string;
+  updated_at: string;
+  revenue: string;
+  revenue_approve: string;
+  revenue_last_month: number;
+  roles: [
+    {
+      id: number;
+      name: string;
+      guard_name: string;
+    },
+  ];
+  team: {
+    id: number;
+    name: string;
+    slug: string;
+    parent_id: number;
+    branch_id: number;
+    users_count: number;
+  };
 }
 interface itemManageProduct {
   id: number;

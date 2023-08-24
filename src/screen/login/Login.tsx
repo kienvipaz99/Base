@@ -49,6 +49,7 @@ export default function Login({
         token: a.apiToken,
       }).unwrap();
       dispatch(setProfile(veRify));
+      dispatch(setAuth(a.apiToken));
       if (
         veRify?.data?.roles[0]?.id === 1 ||
         veRify?.data?.roles[0]?.id === 2

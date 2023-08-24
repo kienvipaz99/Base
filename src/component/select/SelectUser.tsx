@@ -29,14 +29,14 @@ export default function SelectUser({
       }}
       buttonStyle={styles.view}
       buttonTextAfterSelection={item => {
-        return item.name;
+        return `${item?.name} (${item.email})`;
       }}
       defaultValue={select}
       defaultButtonText="Chọn khách hàng"
       buttonTextStyle={styles.txt}
       rowTextStyle={styles.txt}
       rowTextForSelection={item => {
-        return item?.name;
+        return item?.name + item.email;
       }}
       search
       searchInputTxtColor={colors.text}
@@ -44,10 +44,20 @@ export default function SelectUser({
       searchInputTxtStyle={styles.txt}
       selectedRowStyle={{backgroundColor: colors.gray1}}
       dropdownStyle={{borderRadius: 10}}
+      renderSearchInputLeftIcon={() => {
+        return (
+          <Ionicons
+            onPress={onPressIcon}
+            name={'search'}
+            size={25}
+            color={colors.text}
+          />
+        );
+      }}
       renderCustomizedRowChild={item => {
         return (
           <View style={stylesCustom.row}>
-            <Text style={styles.txt}>{item?.name}</Text>
+            <Text style={styles.txt}>{`${item?.name} (${item.email})`}</Text>
           </View>
         );
       }}

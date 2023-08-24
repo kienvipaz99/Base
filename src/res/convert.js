@@ -49,3 +49,12 @@ export function getCurrentDate() {
 
   return {day, month, year};
 }
+export function chuyenChuoi(str) {
+  // Chuyển toàn bộ ký tự thành chữ thường
+  const chuoiThap = str.toLowerCase();
+
+  // Thay thế dấu cách bằng dấu gạch ngang
+  const chuoiDaChuyen = chuoiThap.replace(/\s+/g, '-');
+
+  return chuoiDaChuyen;
+}

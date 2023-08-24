@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -6,30 +6,62 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  TextInput,
   ActivityIndicator,
 } from 'react-native';
 import sizes from '../../res/sizes';
 import fonts from '../../res/fonts';
 import {colors} from '../../res/colors';
 import stylesCustom from '../../res/stylesCustom';
+import ToastCustom from '../toastCustom/ToastCustom';
+import {useCreatBranchesMutation} from '../../redux/api/auth.api';
+import {chuyenChuoi} from '../../res/convert';
+
 interface Props {
   isShow?: boolean;
-  toggleDate?: () => void;
-  title?: string;
-  confirm?: () => void;
-  isLoading?: boolean;
+  toggleDate: () => void;
+  refetch: () => void;
 }
-const ModalConfirm = (props: Props) => {
+const ModalAddBarnches = (props: Props) => {
+  const [name, setName] = useState('');
+  const ToastRef = useRef<any>(null);
+  const [err, setErr] = useState('');
+  const [creatBranches, {isLoading}] = useCreatBranchesMutation();
+  const onClick = async () => {
+    try {
+      const aa = await creatBranches({
+        name: name,
+        slug: chuyenChuoi(name),
+      }).unwrap();
+
+      if (aa) {
+        setErr('Thêm thành công chi nhánh ');
+        ToastRef.current.toast();
+        props.refetch();
+      }
+    } catch (error) {
+      setErr('Thêm thất bại');
+      await ToastRef.current.toast();
+    }
+  };
+
   const renderContent = () => {
     return (
       <View style={styles.content}>
         <View style={{alignItems: 'center'}}>
-          <Text style={styles.title}>{props.title}</Text>
+          <Text style={styles.title}>Thêm mới chi nhánh</Text>
+          <TextInput
+            style={styles.view}
+            placeholder="Nhập tên chi nhánh"
+            value={name}
+            onChangeText={setName}
+          />
+
           <View style={styles.view1}>
             <TouchableOpacity
-              onPress={props.confirm}
+              onPress={onClick}
               style={[styles.btn, {backgroundColor: colors.blue}]}>
-              {props.isLoading ? (
+              {isLoading ? (
                 <ActivityIndicator />
               ) : (
                 <Text style={[styles.txt, {color: colors.white}]}>
@@ -38,12 +70,15 @@ const ModalConfirm = (props: Props) => {
               )}
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={props.toggleDate}
+              onPress={() => {
+                props.toggleDate();
+              }}
               style={[styles.btn, {backgroundColor: colors.gray2}]}>
               <Text style={[styles.txt, {color: colors.text}]}>Huỷ</Text>
             </TouchableOpacity>
           </View>
         </View>
+        <ToastCustom ref={ToastRef} val={err} />
       </View>
     );
   };
@@ -57,7 +92,7 @@ const ModalConfirm = (props: Props) => {
         statusBarTranslucent={true}>
         <View style={styles.container1}>
           <TouchableWithoutFeedback>
-            <View style={{zIndex: 0, flex: 1, height: '100%', width: '100%'}} />
+            <View style={styles.view3} />
           </TouchableWithoutFeedback>
           <View style={styles.content}>{renderContent()}</View>
         </View>
@@ -65,7 +100,7 @@ const ModalConfirm = (props: Props) => {
     </View>
   );
 };
-export default ModalConfirm;
+export default ModalAddBarnches;
 const styles = StyleSheet.create({
   container1: {
     flex: 1,
@@ -80,8 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     position: 'absolute',
     backgroundColor: colors.white,
-    padding: 10,
-    height: 150,
+    padding: 40,
   },
   title: {...stylesCustom.txtTitle1, color: colors.blue},
   view: {
@@ -113,5 +147,34 @@ const styles = StyleSheet.create({
   },
   txt: {
     ...stylesCustom.txtTitle,
+  },
+  view3: {zIndex: 0, flex: 1, height: '100%', width: '100%'},
+  viewImage: {
+    ...stylesCustom.row1,
+    justifyContent: 'flex-start',
+    width: sizes.width * 0.8,
+    marginTop: 15,
+  },
+  img: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 90,
+    width: 90,
+    borderRadius: 10,
+    borderColor: colors.gray3,
+    borderWidth: 1,
+  },
+  txt1: {
+    color: colors.gray3,
+    fontFamily: fonts.Regula,
+    fontSize: 15,
+    marginTop: 3,
+  },
+  icon: {position: 'absolute', right: -17, top: -5},
+  img1: {
+    height: 90,
+    width: 90,
+    borderRadius: 10,
+    marginLeft: 20,
   },
 });

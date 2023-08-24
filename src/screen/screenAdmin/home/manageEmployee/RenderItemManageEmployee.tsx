@@ -5,47 +5,74 @@ import fonts from '../../../../res/fonts';
 import sizes from '../../../../res/sizes';
 import stylesCustom from '../../../../res/stylesCustom';
 import images from '../../../../res/images';
-import BottomSheetEditClient from '../../../../component/bottomSheet/BottomSheetEditClient';
+
 import ModalConfirm from '../../../../component/modal/ModalConfirm';
 import BottomSheetEditEmployee from '../../../../component/bottomSheet/BottomSheetEditEmployee';
+import {useDeleteUserMutation} from '../../../../redux/api/auth.api';
+import ToastCustom from '../../../../component/toastCustom/ToastCustom';
 
 const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
   const refBootomSheet = useRef<any>(null);
+  const [err, setErr] = useState('');
+
   const [show, setShow] = useState(false);
+  const [id, setId] = useState<number>();
+  const [deleteUser, {isLoading}] = useDeleteUserMutation();
+  const ToastRef = useRef<any>(null);
+
+  const onDelete = async () => {
+    try {
+      const aa = await deleteUser({
+        id: id,
+      }).unwrap();
+      setErr('Xoá thành công ');
+      await ToastRef.current.toast();
+    } catch (error) {
+      setErr('Xoá thất bại');
+      await ToastRef.current.toast();
+    }
+  };
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
-        <Text style={styles.txt1}>Tên NV: {item.name}</Text>
+        <Text style={styles.txt1}>Tên NV: {item?.name}</Text>
         <View
           style={[
             styles.status,
-            {backgroundColor: item.status ? colors.green : colors.red},
+            {backgroundColor: item?.status ? colors.green : colors.red},
           ]}
         />
       </View>
       <View style={stylesCustom.row}>
         <View>
-          <Text style={styles.txt2}>Email: {item.email}</Text>
-          <Text style={styles.txt2}>Số điện thoại: {item.sdt}</Text>
-          <Text style={styles.txt2}>Team: {item.team}</Text>
-          <Text style={styles.txt2}>Vai trò: {item.vaitro}</Text>
-          <Text style={styles.txt2}>Ngày tạo: {item.created_at}</Text>
+          <Text style={styles.txt2}>Email: {item?.email}</Text>
+          <Text style={styles.txt2}>Số điện thoại: {item?.phone}</Text>
+          <Text style={styles.txt2}>Team: {item?.team?.name}</Text>
+          <Text style={styles.txt2}>Vai trò: {item?.roles[0]?.name}</Text>
+          <Text style={styles.txt2}>Ngày tạo: {item?.created_at}</Text>
         </View>
         <View style={{justifyContent: 'space-around', height: 70}}>
           <Pressable onPress={() => refBootomSheet.current.open()}>
             <Image source={images.pen} />
           </Pressable>
-          <Pressable onPress={() => setShow(true)}>
+          <Pressable
+            onPress={() => {
+              setShow(true);
+              setId(item?.id);
+            }}>
             <Image source={images.bin} />
           </Pressable>
         </View>
       </View>
       <BottomSheetEditEmployee refRBSheet={refBootomSheet} />
       <ModalConfirm
+        confirm={onDelete}
         isShow={show}
         toggleDate={() => setShow(false)}
         title="Bạn có muốn xoá nhân viên"
+        isLoading={isLoading}
       />
+      <ToastCustom ref={ToastRef} val={err} />
     </View>
   );
 };
@@ -76,7 +103,7 @@ const styles = StyleSheet.create({
     ...stylesCustom.shadowitem,
     backgroundColor: colors.white,
     alignSelf: 'center',
-    marginTop: 15,
+    marginBottom: 15,
     padding: 10,
     borderRadius: 10,
   },

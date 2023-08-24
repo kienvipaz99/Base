@@ -22,7 +22,13 @@ import SelectBank from '../select/SelectBank';
 import ToastCustom from '../toastCustom/ToastCustom';
 import ErrorText from '../err/ErrorCall';
 import {ErrorSubs} from '../../res/ErrorSub';
-export default function BottomSheetBank({refRBSheet}: {refRBSheet: any}) {
+export default function BottomSheetBank({
+  refRBSheet,
+  refetch,
+}: {
+  refRBSheet: any;
+  refetch: () => void;
+}) {
   const [nameAcount, setNameAcount] = useState('');
   const [numberBank, setNumberBank] = useState('');
   const [nameBank, setNameBank] = useState('');
@@ -35,7 +41,7 @@ export default function BottomSheetBank({refRBSheet}: {refRBSheet: any}) {
   const [errbranch, setErrBranch] = useState('');
   const [Bank, {isLoading}] = useCreatBankMutation();
   const {data: ListBank} = useGetBankingQuery('');
-  const {refetch} = useGetBankQuery('');
+
   const ToastRef = useRef<any>(null);
 
   const AddBank = async () => {

@@ -6,27 +6,37 @@ import {colors} from '../../res/colors';
 import TextInputCustom from '../txtInput/TextInputCustom';
 import sizes from '../../res/sizes';
 import DoubleButton from '../btn/DoubleButton';
-import {useCreatUserMutation, useGetUserQuery} from '../../redux/api/auth.api';
+import SelectCustom from '../select/SelectCustom';
+import {
+  useCreatUserMutation,
+  useGetBranchesQuery,
+  useGetRolesQuery,
+} from '../../redux/api/auth.api';
+import Select from '../select/Select';
 import ToastCustom from '../toastCustom/ToastCustom';
-import {ErrorSubs} from '../../res/ErrorSub';
-import ErrorText from '../err/ErrorCall';
-export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
+import ModalAddBarnches from '../modal/ModalAddBarnches';
+export default function BottomSheetCreatEmployee({
+  refRBSheet,
+}: {
+  refRBSheet: any;
+}) {
+  const {data: branches, refetch} = useGetBranchesQuery({
+    option: '?include=teams',
+  });
+  const {data: roles} = useGetRolesQuery('');
+  const [team, setTeam] = useState<Team[]>([]);
+  const [team_id, setTeamId] = useState<number>();
+  const [branche_id, setBranche_id] = useState<number>();
+  const [role, setRole] = useState('');
   const [last_name, setLast_name] = useState('');
   const [first_name, setFirst_name] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [password_confirmation, setPassword_confirmation] = useState('');
-  const [errlast_name, setErrLast_name] = useState('');
-  const [errfirst_name, setErrFirst_name] = useState('');
-  const [erremail, setErrEmail] = useState('');
-  const [errpassword, setErrPassword] = useState('');
   const [createUser, {isLoading}] = useCreatUserMutation();
-  const {refetch} = useGetUserQuery({
-    option: 'filter[customer]=CUSTOMER',
-  });
   const [err, setErr] = useState('');
   const ToastRef = useRef<any>(null);
+  const [showBarnch, setShowBarnch] = useState(false);
 
   const Summit = async () => {
     try {
@@ -36,21 +46,22 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
         email: email,
         phone: phone,
         password: password,
-        password_confirmation: password_confirmation,
-        user_type: 'CUSTOMER',
+        password_confirmation: password,
+        branch_id: branche_id,
+        roles: role,
+        team_id: team_id,
+        user_type: 'MEMBER',
       }).unwrap();
       if (dataUser) {
-        refetch();
+        console.log(dataUser);
+
         setErr('Thêm thành công ');
         await ToastRef.current.toast();
       }
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
       console.log(error);
-      setErrFirst_name(err?.first_name);
-      setErrLast_name(err?.last_name);
-      setErrEmail(err?.email);
-      setErrPassword(err?.password);
+
       setErr('Thêm thất bại');
       await ToastRef.current.toast();
     }
@@ -65,62 +76,82 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
       closeOnPressMask={false}
       dragFromTopOnly={true}
       customStyles={{
-        wrapper: styles.wrapper,
-        draggableIcon: styles.draggableIcon,
+        wrapper: {
+          backgroundColor: 'rgba(0,0,0,0.3)',
+        },
+        draggableIcon: {
+          backgroundColor: '#000',
+        },
         container: styles.container,
       }}>
-      <Text style={styles.title}>Thêm khách hàng</Text>
+      <Text style={styles.title}>Thêm mới nhân viên</Text>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
-        bounces={false}
         keyboardDismissMode="interactive"
         automaticallyAdjustKeyboardInsets>
         <View style={{paddingBottom: 30}}>
-          <TextInputCustom
-            placeholder="Nhập họ và tên đệm"
-            value={last_name}
-            setValue={setLast_name}
+          <Select
+            data={branches?.data}
+            setSelect={val => {
+              setTeam(val?.teams);
+              setBranche_id(val?.id);
+            }}
+            defaultButtonText="Chi nhánh"
+            icons="add-circle"
+            onPressIcon={() => setShowBarnch(true)}
           />
-          {errlast_name && <ErrorText err={ErrorSubs(errlast_name)} />}
+          <Select
+            data={team}
+            setSelect={val => setTeamId(val?.id)}
+            defaultButtonText="Đội nhóm"
+            disabled={team.length === 0 ? true : false}
+            icons="add-circle"
+          />
+          <Select
+            data={roles?.data}
+            setSelect={val => setRole(val?.name)}
+            defaultButtonText="Vai trò"
+          />
           <TextInputCustom
-            placeholder="Tên khách hàng"
+            placeholder="Họ và đệm"
             value={first_name}
             setValue={setFirst_name}
           />
-          {errfirst_name && <ErrorText err={ErrorSubs(errfirst_name)} />}
-
           <TextInputCustom
-            placeholder="Email khách hàng"
+            placeholder="Tên"
+            value={last_name}
+            setValue={setLast_name}
+          />
+          <TextInputCustom
+            placeholder="Email"
             value={email}
             setValue={setEmail}
           />
-          {erremail && <ErrorText err={ErrorSubs(erremail)} />}
-
           <TextInputCustom
             placeholder="Số điện thoại"
             value={phone}
             setValue={setPhone}
           />
           <TextInputCustom
-            placeholder="Mật khẩu"
+            placeholder="Mật khẩu mới"
             value={password}
             setValue={setPassword}
           />
-          {errpassword && <ErrorText err={ErrorSubs(errpassword)} />}
 
-          <TextInputCustom
-            placeholder="Xác nhận mật khẩu"
-            value={password_confirmation}
-            setValue={setPassword_confirmation}
-          />
           <DoubleButton
-            conFirm={Summit}
             loading={isLoading}
+            conFirm={Summit}
             cancel={() => refRBSheet.current.close()}
           />
         </View>
-        <ToastCustom ref={ToastRef} val={err} />
       </ScrollView>
+      <ToastCustom ref={ToastRef} val={err} />
+      <ModalAddBarnches
+        refetch={refetch}
+        isShow={showBarnch}
+        toggleDate={() => setShowBarnch(false)}
+      />
     </RBSheet>
   );
 }
@@ -132,15 +163,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   container: {
-    height: sizes.height * 0.7,
+    height: sizes.height * 0.6,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 20,
-  },
-  draggableIcon: {
-    backgroundColor: '#000',
-  },
-  wrapper: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
   },
 });

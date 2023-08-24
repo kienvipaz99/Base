@@ -1,21 +1,30 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import HeaderCustom from '../../../../component/header/HeaderCustom';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import stylesCustom from '../../../../res/stylesCustom';
 import {colors} from '../../../../res/colors';
 import sizes from '../../../../res/sizes';
-import {dataEmployeeSaleToday} from '../../../../res/feckData/dataEmployeeSaleToday';
 import RenderItemManageEmployee from './RenderItemManageEmployee';
-import BottomSheetEditEmployee from '../../../../component/bottomSheet/BottomSheetEditEmployee';
+import {useGetEmployeeQuery} from '../../../../redux/api/auth.api';
+import Loading from '../../../../component/loading/Loading';
+import BottomSheetCreatEmployee from '../../../../component/bottomSheet/BottomSheetCreatEmployee';
 
 export default function ManageEmployee({
   navigation,
 }: {
   navigation: NavigationProp<Record<string, any>>;
 }) {
+  const [perpage, setPerPage] = useState(20);
+  const handleEndReached = () => {
+    setPerPage(perpage + 20);
+    refetch();
+  };
   const refRBSheet = useRef<any>(null);
+  const {data, isLoading, refetch, isFetching} = useGetEmployeeQuery({
+    per_page: perpage,
+  });
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -24,6 +33,7 @@ export default function ManageEmployee({
         onBackPress={() => navigation.goBack()}
         sharp
       />
+
       <View style={stylesCustom.view1}>
         <View style={styles.view}>
           <Text style={styles.txt}>Danh sách nhân viên</Text>
@@ -35,12 +45,19 @@ export default function ManageEmployee({
           />
         </View>
         <FlatList
-          data={dataEmployeeSaleToday}
+          data={data?.data}
           renderItem={({item}) => <RenderItemManageEmployee item={item} />}
           contentContainerStyle={styles.fl}
+          style={{marginTop: 15}}
+          onRefresh={refetch}
+          scrollEventThrottle={16}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.7}
+          refreshing={isFetching}
         />
       </View>
-      <BottomSheetEditEmployee refRBSheet={refRBSheet} />
+      <BottomSheetCreatEmployee refRBSheet={refRBSheet} />
+      {isLoading && <Loading />}
     </View>
   );
 }

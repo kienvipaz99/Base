@@ -78,7 +78,7 @@ export const authApi = createApi({
     }),
     getBank: build.query<ListApiResponse<Bank>, string>({
       query: () => ({
-        url: `api/v1/banks`,
+        url: `api/v1/banks?per_page=1000`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -255,7 +255,7 @@ export const authApi = createApi({
     creatUser: build.mutation<User, CreateUser>({
       query(data) {
         return {
-          url: 'api/v1/banks',
+          url: 'api/v1/users',
           method: 'POST',
           data,
         };
@@ -305,6 +305,28 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
+    getEmployee: build.query<ListApiResponse<GetUser>, {per_page: number}>({
+      query: ({per_page}) => ({
+        url: `api/v1/users?per_page=${per_page}&filter[member]=MEMBER&include=roles,team&append=revenue_last_month,revenue_approve,revenue&filter[is_sales]=1`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
     creatInvoices: build.mutation<Invoices, CreateInvoices>({
       query(data) {
         return {
@@ -314,18 +336,92 @@ export const authApi = createApi({
         };
       },
     }),
-    changeStatus: build.mutation<{}, {id: number; status: string}>({
-      query({id, status}) {
-        return {
-          url: `api/v1/invoices/${id}?status=${status}`,
-          method: 'PATCH',
-        };
-      },
-    }),
+
     changeInvoid: build.mutation<{}, ChangeInVoid>({
       query({id, data}) {
         return {
           url: `api/v1/invoices/${id}`,
+          method: 'POST',
+          data,
+        };
+      },
+    }),
+    deleteInvoid: build.mutation<{}, {id: number | undefined}>({
+      query({id}) {
+        return {
+          url: `api/v1/invoices/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes}],
+    }),
+    deleteUser: build.mutation<{}, {id: number | undefined}>({
+      query({id}) {
+        return {
+          url: `api/v1/users/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes}],
+    }),
+    changeUser: build.mutation<ChangeUser, ChangeUser>({
+      query({id, data}) {
+        return {
+          url: `api/v1/users/${id}`,
+          method: 'PATCH',
+          data,
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes, id: result?.id}],
+    }),
+    getBranches: build.query<ListApiResponse<Branches>, {option: string}>({
+      query: ({option}) => ({
+        url: `api/v1/branches${option}`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    getRoles: build.query<ListApiResponse<Roles>, string>({
+      query: () => ({
+        url: `api/v1/roles`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    creatBranches: build.mutation<{}, {name: string; slug: string}>({
+      query(data) {
+        return {
+          url: 'api/v1/branches',
           method: 'POST',
           data,
         };
@@ -354,6 +450,12 @@ export const {
   useGetTypeUserQuery,
   useGetUserQuery,
   useCreatInvoicesMutation,
-  useChangeStatusMutation,
   useChangeInvoidMutation,
+  useDeleteInvoidMutation,
+  useChangeUserMutation,
+  useGetEmployeeQuery,
+  useGetBranchesQuery,
+  useGetRolesQuery,
+  useDeleteUserMutation,
+  useCreatBranchesMutation,
 } = authApi;

@@ -39,7 +39,12 @@
 	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) yêu cầu truy thư viện ảnh để tải lên hoá đơn của bạn</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) yêu cầu truy cập máy ảnh để tải lên hoá đơn của bạn</string>
 	<key>UIRequiredDeviceCapabilities</key>
+	
 	<array>
 		<string>armv7</string>
 	</array>

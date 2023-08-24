@@ -42,7 +42,7 @@ const Add_Key = () => {
   const [content_bank, setContent_Bank] = useState('');
   const [bank_id, setbank_id] = useState<number>();
   const [note, setNote] = useState('');
-  const {data: dataBank} = useGetBankQuery('');
+  const {data: dataBank, refetch} = useGetBankQuery('');
   const {data: dataProduct} = useGetProductQuery('');
   const {data: dataPlans} = useGetPlansQuery({
     option: `?filter[product.name]=${nameProduct}`,
@@ -80,7 +80,6 @@ const Add_Key = () => {
       }
     } catch (error: any) {
       let err = error;
-      console.log(err);
 
       setToast('Tạo key thất bại');
       await ToastRef.current.toast();
@@ -189,7 +188,7 @@ const Add_Key = () => {
         </ScrollView>
       </View>
       <BottomSheetClient refRBSheet={refRBSheet} />
-      <BottomSheetBank refRBSheet={refRBSheetBank} />
+      <BottomSheetBank refRBSheet={refRBSheetBank} refetch={refetch} />
       {isLoading && <Loading />}
       <ToastCustom ref={ToastRef} val={toast} />
     </View>

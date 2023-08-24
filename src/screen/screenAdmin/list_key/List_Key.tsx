@@ -1,15 +1,17 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import stylesCustom from '../../../res/stylesCustom';
 import HeaderCustom from '../../../component/header/HeaderCustom';
 import {colors} from '../../../res/colors';
 import RenderListKey from './RenderListKey';
 import sizes from '../../../res/sizes';
 import {
-  useChangeStatusMutation,
+  useChangeInvoidMutation,
+  useDeleteInvoidMutation,
   useGetDataKeyQuery,
 } from '../../../redux/api/auth.api';
 import Loading from '../../../component/loading/Loading';
+import ToastCustom from '../../../component/toastCustom/ToastCustom';
 
 export default function List_Key() {
   const [perpage, setPerPage] = useState(10);
@@ -17,24 +19,37 @@ export default function List_Key() {
     setPerPage(perpage + 10);
     refetch();
   };
-  const {data, refetch, isLoading} = useGetDataKeyQuery({
+  const {data, refetch, isLoading, isFetching} = useGetDataKeyQuery({
     per_page: perpage,
   });
+  const RefToast = useRef<any>(null);
   const [fetching, setFetching] = useState(false);
-  const [onChangeStatus] = useChangeStatusMutation();
+  const [onChangeStatus, {isLoading: onLoadStatus}] = useChangeInvoidMutation();
+  const [deleteItem, {isLoading: loadingDelete}] = useDeleteInvoidMutation();
+  const DeleteInvoid = async (id: number) => {
+    try {
+      const aa = await deleteItem({
+        id: id,
+      }).unwrap();
+      if (aa) {
+        await RefToast.current.toast();
+      }
+    } catch (error) {}
+  };
   const OnClick = async ({id, status}: {id: number; status: string}) => {
     try {
       const select = await onChangeStatus({
         id: id,
-        status:
-          status === 'PAID' ? 'UNPAID' : status === 'UNPAID' ? 'PAID' : '',
+        data: {
+          status:
+            status === 'PAID' ? 'UNPAID' : status === 'UNPAID' ? 'PAID' : '',
+          _method: 'PATCH',
+        },
       }).unwrap();
       if (select) {
         await refetch();
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <View style={styles.container}>
@@ -47,7 +62,12 @@ export default function List_Key() {
         <FlatList
           data={data?.data}
           renderItem={({item}) => (
-            <RenderListKey item={item} onChange={OnClick} />
+            <RenderListKey
+              item={item}
+              onChange={OnClick}
+              deletes={DeleteInvoid}
+              refetch={refetch}
+            />
           )}
           contentContainerStyle={{paddingBottom: 50}}
           onRefresh={async () => {
@@ -62,6 +82,10 @@ export default function List_Key() {
         />
       </View>
       {isLoading && <Loading />}
+      {loadingDelete && <Loading />}
+
+      {(onLoadStatus || isFetching) && <Loading />}
+      <ToastCustom val="Xoá thành công " ref={RefToast} />
     </View>
   );
 }

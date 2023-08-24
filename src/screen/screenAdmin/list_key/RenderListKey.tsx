@@ -9,21 +9,23 @@ import images from '../../../res/images';
 import ModalLog from '../../../component/modal/ModalLog';
 import ModalEditKey from '../../../component/modal/ModalEditKey';
 import {date, money} from '../../../res/convert';
-import {
-  useChangeInvoidMutation,
-  useChangeStatusMutation,
-} from '../../../redux/api/auth.api';
+import ViewImage from './ViewImage';
+
 export default function RenderListKey({
   item,
   onChange,
+  deletes,
+  refetch,
 }: {
   item: TypeDataListKey;
   onChange: ({id, status}: {id: number; status: string}) => void;
+  deletes: (id: number) => void;
+  refetch: () => void;
 }) {
   const [showModalLog, setShowModalLog] = useState(false);
   const [showEditKey, setShowEditKey] = useState(false);
   const [idItem, setIdItem] = useState<number | undefined>();
-
+  const [showImage, setShowImage] = useState(false);
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
@@ -91,8 +93,21 @@ export default function RenderListKey({
           <Pressable onPress={() => setShowModalLog(true)}>
             <Image source={images.log} />
           </Pressable>
-          <Image source={images.image} />
-          <Image source={images.bin} />
+          <Pressable
+            onPress={() => {
+              if (item?.invoices[0]?.files.length === 0) {
+              } else {
+                setShowImage(true);
+              }
+            }}>
+            <Image source={images.image} />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              deletes(item?.invoices[0]?.id);
+            }}>
+            <Image source={images.bin} />
+          </Pressable>
         </View>
       </View>
       <Text style={styles.txt}>Nội dung: {item?.description}</Text>
@@ -106,6 +121,15 @@ export default function RenderListKey({
         isShow={showEditKey}
         toggleDate={() => setShowEditKey(false)}
         ids={idItem}
+        his={item?.invoices[0]?.his}
+        note={item?.invoices[0]?.note}
+        imageKey={item?.invoices[0]?.files}
+        refetch={refetch}
+      />
+      <ViewImage
+        isShow={showImage}
+        toggleDate={() => setShowImage(false)}
+        image={item?.invoices[0]?.files}
       />
     </View>
   );

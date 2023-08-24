@@ -133,10 +133,11 @@ interface CreateUser {
   password_confirmation: string;
   first_name: string;
   last_name: string;
-  user_type: string;
+  user_type?: string;
   team_id?: number;
   phone?: string;
   branch_id?: number;
+  roles?: string;
 }
 interface User {
   id: number;
@@ -252,10 +253,58 @@ interface CreateInvoices {
 }
 interface ChangeInVoid {
   id: number | undefined;
+  data:
+    | {
+        his?: string;
+        _method: string;
+        upload_invoice?: string;
+        note?: string;
+        status?: string;
+      }
+    | any;
+}
+interface ChangeUser {
+  id?: number;
   data: {
-    his?: string;
-    _method: string;
-    upload_invoice?: string;
-    note?: string;
+    first_name?: string;
+    status?: boolean;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    password?: string;
+    password_confirmation?: string;
+    _method?: string;
   };
+}
+interface Status {
+  id: number;
+  status: boolean;
+}
+interface Team {
+  id: number;
+  name: string;
+  slug: string;
+  parent_id: number;
+  branch_id: number;
+  users_count: number;
+}
+interface Branches {
+  id: number;
+  name: string;
+  slug: string;
+  team: Team[];
+  revenue: number;
+  revenue_approve: number;
+  revenue_today: number;
+  ranges: [];
+}
+interface Roles {
+  id: number;
+  name: string;
+  guard_name: string;
+}
+interface SelectCustom {
+  id: number;
+  name: string;
+  teams: Team[];
 }

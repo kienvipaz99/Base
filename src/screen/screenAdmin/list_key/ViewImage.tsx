@@ -6,43 +6,35 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
-import sizes from '../../res/sizes';
-import fonts from '../../res/fonts';
-import {colors} from '../../res/colors';
-import stylesCustom from '../../res/stylesCustom';
+import {colors} from '../../../res/colors';
+import sizes from '../../../res/sizes';
+import stylesCustom from '../../../res/stylesCustom';
+import fonts from '../../../res/fonts';
+import {Image} from 'react-native';
+import images from '../../../res/images';
+
 interface Props {
   isShow?: boolean;
   toggleDate?: () => void;
   title?: string;
-  confirm?: () => void;
-  isLoading?: boolean;
+  image: string[];
 }
-const ModalConfirm = (props: Props) => {
+const ViewImage = (props: Props) => {
   const renderContent = () => {
     return (
       <View style={styles.content}>
-        <View style={{alignItems: 'center'}}>
-          <Text style={styles.title}>{props.title}</Text>
-          <View style={styles.view1}>
-            <TouchableOpacity
-              onPress={props.confirm}
-              style={[styles.btn, {backgroundColor: colors.blue}]}>
-              {props.isLoading ? (
-                <ActivityIndicator />
-              ) : (
-                <Text style={[styles.txt, {color: colors.white}]}>
-                  Xác nhận
-                </Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={props.toggleDate}
-              style={[styles.btn, {backgroundColor: colors.gray2}]}>
-              <Text style={[styles.txt, {color: colors.text}]}>Huỷ</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={{flexDirection: 'row'}}>
+          {props.image?.map((item: any, index: number) => {
+            return (
+              <Image
+                key={index}
+                source={{uri: item?.full_url}}
+                resizeMode="cover"
+                style={styles.img}
+              />
+            );
+          })}
         </View>
       </View>
     );
@@ -56,7 +48,7 @@ const ModalConfirm = (props: Props) => {
         transparent={true}
         statusBarTranslucent={true}>
         <View style={styles.container1}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={props.toggleDate}>
             <View style={{zIndex: 0, flex: 1, height: '100%', width: '100%'}} />
           </TouchableWithoutFeedback>
           <View style={styles.content}>{renderContent()}</View>
@@ -65,7 +57,7 @@ const ModalConfirm = (props: Props) => {
     </View>
   );
 };
-export default ModalConfirm;
+export default ViewImage;
 const styles = StyleSheet.create({
   container1: {
     flex: 1,
@@ -79,9 +71,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     position: 'absolute',
-    backgroundColor: colors.white,
+
     padding: 10,
-    height: 150,
+    height: sizes.height * 0.7,
   },
   title: {...stylesCustom.txtTitle1, color: colors.blue},
   view: {
@@ -98,20 +90,9 @@ const styles = StyleSheet.create({
     fontSize: sizes.width * 0.04,
     color: colors.text,
   },
-  view1: {
-    alignSelf: 'center',
-    ...stylesCustom.row,
-    width: sizes.width * 0.8,
-    marginTop: 30,
-  },
-  btn: {
-    height: 45,
-    width: sizes.width * 0.35,
-    borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  txt: {
-    ...stylesCustom.txtTitle,
+  img: {
+    height: sizes.height * 0.7,
+    width: sizes.width * 0.9,
+    borderRadius: 10,
   },
 });

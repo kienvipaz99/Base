@@ -24,6 +24,8 @@
     logomkt2: require('../assets/images/logomkt2.png'),
     pen: require('../assets/images/pen.png'),
     rank: require('../assets/images/rank.png'),
+    selectPhoto: require('../assets/images/selectPhoto.png'),
+    takePhoto: require('../assets/images/takePhoto.png'),
     unchek: require('../assets/images/unchek.png'),
     up: require('../assets/images/up.png'),
     uploadImage: require('../assets/images/uploadImage.png'),

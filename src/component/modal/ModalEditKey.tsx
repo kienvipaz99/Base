@@ -13,41 +13,61 @@ import sizes from '../../res/sizes';
 import fonts from '../../res/fonts';
 import {colors} from '../../res/colors';
 import stylesCustom from '../../res/stylesCustom';
-import {useChangeInvoidMutation} from '../../redux/api/auth.api';
+import {
+  useChangeInvoidMutation,
+  useGetDataKeyQuery,
+} from '../../redux/api/auth.api';
 import ToastCustom from '../toastCustom/ToastCustom';
 import {Image} from 'react-native';
 import images from '../../res/images';
+import Icon from 'react-native-vector-icons/AntDesign';
+import BottomSheetUploadImage from '../bottomSheet/BottomSheetUploadImage';
 interface Props {
   isShow?: boolean;
   toggleDate: () => void;
   ids: number | undefined;
+  his: string;
+  note: string;
+  imageKey: string[];
+  refetch: () => void;
 }
 const ModalEditKey = (props: Props) => {
-  const [editKey, setEditKey] = useState('');
+  const [editKey, setEditKey] = useState(props.his);
+
   const [ChangInvoid, {isLoading}] = useChangeInvoidMutation();
   const [err, setErr] = useState('');
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(props.note);
 
   const ToastRef = useRef<any>(null);
+  const bootomsheetRef = useRef<any>(null);
+  const [image, setImage] = useState('');
+
   const ChangeKey = async () => {
-    if (editKey) {
-      try {
-        const change = await ChangInvoid({
-          id: props?.ids,
-          data: {
-            _method: 'patch',
-            his: editKey,
-            note: note,
-          },
-        }).unwrap();
-        if (change) {
-          setErr('Chỉnh sửa thành công');
-          await ToastRef.current.toast();
-        }
-      } catch (error) {
-        setErr('Chỉnh sửa thất bại');
+    try {
+      const formData = new FormData();
+      image &&
+        formData.append('upload_invoice', {
+          uri: image,
+          type: 'image/jpeg',
+          name: 'photo.jpg',
+        });
+      editKey && formData.append('his', editKey);
+      note && formData.append('note', note);
+      formData.append('_method', 'patch');
+
+      const change = await ChangInvoid({
+        id: props?.ids,
+        data: formData,
+      }).unwrap();
+      if (change) {
+        setErr('Chỉnh sửa thành công');
+        await props.refetch();
+        setImage('');
         await ToastRef.current.toast();
       }
+    } catch (error) {
+      setErr('Chỉnh thất bại');
+      await ToastRef.current.toast();
     }
   };
   const renderContent = () => {
@@ -68,9 +88,33 @@ const ModalEditKey = (props: Props) => {
             onChangeText={setNote}
           />
           <View style={styles.viewImage}>
-            <TouchableOpacity style={styles.img}>
+            <TouchableOpacity
+              style={styles.img}
+              onPress={() => bootomsheetRef.current.open()}>
               <Image source={images.uploadImage} />
+              <Text style={styles.txt1}>Thêm ảnh </Text>
             </TouchableOpacity>
+            {image && (
+              <View>
+                <Image source={{uri: image}} style={styles.img1} />
+                <Icon
+                  onPress={() => setImage('')}
+                  name="closecircle"
+                  color={colors.text}
+                  size={15}
+                  style={styles.icon}
+                />
+              </View>
+            )}
+            {props.imageKey?.map((item: any, index) => {
+              return (
+                <Image
+                  source={{uri: item?.full_url}}
+                  style={styles.img1}
+                  key={index}
+                />
+              );
+            })}
           </View>
           <View style={styles.view1}>
             <TouchableOpacity
@@ -87,13 +131,19 @@ const ModalEditKey = (props: Props) => {
               )}
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={props.toggleDate}
+              onPress={() => {
+                props.toggleDate();
+              }}
               style={[styles.btn, {backgroundColor: colors.gray2}]}>
               <Text style={[styles.txt, {color: colors.text}]}>Huỷ</Text>
             </TouchableOpacity>
           </View>
         </View>
         <ToastCustom ref={ToastRef} val={err} />
+        <BottomSheetUploadImage
+          refRBSheet={bootomsheetRef}
+          urlImage={setImage}
+        />
       </View>
     );
   };
@@ -173,10 +223,23 @@ const styles = StyleSheet.create({
   img: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 80,
-    width: 80,
+    height: 90,
+    width: 90,
     borderRadius: 10,
     borderColor: colors.gray3,
     borderWidth: 1,
+  },
+  txt1: {
+    color: colors.gray3,
+    fontFamily: fonts.Regula,
+    fontSize: 15,
+    marginTop: 3,
+  },
+  icon: {position: 'absolute', right: -17, top: -5},
+  img1: {
+    height: 90,
+    width: 90,
+    borderRadius: 10,
+    marginLeft: 20,
   },
 });

@@ -16,13 +16,15 @@ const NotifiLog = () => {
   const {data, isLoading, refetch, isFetching} = useGetActivitiesQuery({
     per_page: perpage,
   });
+
   return (
     <View style={styles.container}>
       <HeaderCustom title="Thông báo log" sharp />
       <View style={stylesCustom.view1}>
         <Text style={styles.txt}>
-          Thông báo ({data?.payload?.pagination?.total})
+          Thông báo ({data?.payload?.pagination?.total || 0})
         </Text>
+
         <FlatList
           data={data?.data}
           renderItem={({item}: {item: Activities}) => (
