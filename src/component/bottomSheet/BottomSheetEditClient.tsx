@@ -10,7 +10,6 @@ import {useChangeUserMutation} from '../../redux/api/auth.api';
 import SelectStatusUser from '../select/SelectStatusUser';
 export default function BottomSheetEditClient({
   refRBSheet,
-
   item,
 }: {
   refRBSheet: any;
@@ -45,6 +44,7 @@ export default function BottomSheetEditClient({
           email: email,
           first_name: first_name,
           last_name: last_name,
+          user_type: 'CUSTOMER',
         },
       }).unwrap();
       console.log(datas);

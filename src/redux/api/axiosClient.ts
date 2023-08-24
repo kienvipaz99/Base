@@ -9,7 +9,7 @@ export const axiosAuth = (auths: string) => {
     function (config: InternalAxiosRequestConfig) {
       config.headers.Accept = 'application/json';
       config.headers.Authorization = `Bearer ${auths}`;
-      config.headers['Content-Type'] = 'multipart/form-data';
+
       return config;
     },
     function (error: AxiosError) {

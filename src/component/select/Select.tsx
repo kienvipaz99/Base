@@ -1,4 +1,10 @@
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import sizes from '../../res/sizes';
@@ -15,14 +21,18 @@ export default function Select({
   defaultButtonText,
   icons,
   disabled,
+  styleItem,
+  defaultValueByIndex,
 }: {
-  data?: Team[];
+  data?: Team[] | Branches[];
   select?: string;
   setSelect: (val: SelectCustom) => void;
   onPressIcon?: () => void;
   defaultButtonText?: string;
   icons?: string;
   disabled?: boolean;
+  styleItem?: StyleProp<ViewStyle>;
+  defaultValueByIndex?: number;
 }) {
   return (
     <>
@@ -31,10 +41,11 @@ export default function Select({
         onSelect={(selectedItem, index) => {
           setSelect(selectedItem);
         }}
-        buttonStyle={styles.view}
+        buttonStyle={[styles.view, styleItem]}
         buttonTextAfterSelection={item => {
           return item?.name;
         }}
+        defaultValueByIndex={defaultValueByIndex}
         defaultValue={select}
         defaultButtonText={defaultButtonText}
         buttonTextStyle={styles.txt}

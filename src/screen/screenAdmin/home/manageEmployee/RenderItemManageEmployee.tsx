@@ -14,6 +14,7 @@ import ToastCustom from '../../../../component/toastCustom/ToastCustom';
 const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
   const refBootomSheet = useRef<any>(null);
   const [err, setErr] = useState('');
+  const [data, setData] = useState<itemManageEmployee>();
 
   const [show, setShow] = useState(false);
   const [id, setId] = useState<number>();
@@ -52,7 +53,11 @@ const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
           <Text style={styles.txt2}>Ngày tạo: {item?.created_at}</Text>
         </View>
         <View style={{justifyContent: 'space-around', height: 70}}>
-          <Pressable onPress={() => refBootomSheet.current.open()}>
+          <Pressable
+            onPress={() => {
+              setData(item);
+              refBootomSheet.current.open();
+            }}>
             <Image source={images.pen} />
           </Pressable>
           <Pressable
@@ -64,7 +69,7 @@ const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
           </Pressable>
         </View>
       </View>
-      <BottomSheetEditEmployee refRBSheet={refBootomSheet} />
+      <BottomSheetEditEmployee refRBSheet={refBootomSheet} data={data} />
       <ModalConfirm
         confirm={onDelete}
         isShow={show}

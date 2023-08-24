@@ -13,116 +13,69 @@ import sizes from '../../res/sizes';
 import fonts from '../../res/fonts';
 import {colors} from '../../res/colors';
 import stylesCustom from '../../res/stylesCustom';
-import {
-  useChangeInvoidMutation,
-  useGetDataKeyQuery,
-} from '../../redux/api/auth.api';
 import ToastCustom from '../toastCustom/ToastCustom';
-import {Image} from 'react-native';
-import images from '../../res/images';
-import Icon from 'react-native-vector-icons/AntDesign';
-import BottomSheetUploadImage from '../bottomSheet/BottomSheetUploadImage';
+import {
+  useCreatBranchesMutation,
+  useCreatTeamMutation,
+} from '../../redux/api/auth.api';
+import {chuyenChuoi} from '../../res/convert';
+import Select from '../select/Select';
+
 interface Props {
   isShow?: boolean;
   toggleDate: () => void;
-  ids: number | undefined;
-  his: string;
-  note: string;
-  imageKey: string[];
   refetch: () => void;
+  branches?: Branches[];
 }
-const ModalEditKey = (props: Props) => {
-  const [editKey, setEditKey] = useState(props.his);
-
-  const [ChangInvoid, {isLoading}] = useChangeInvoidMutation();
-  const [err, setErr] = useState('');
-  const [note, setNote] = useState(props.note);
-
+const ModalAddTeam = (props: Props) => {
+  const [name, setName] = useState('');
+  const [branches_id, setBranchesId] = useState<number>();
   const ToastRef = useRef<any>(null);
-  const bootomsheetRef = useRef<any>(null);
-  const [image, setImage] = useState('');
-
-  const ChangeKey = async () => {
+  const [err, setErr] = useState('');
+  const [creatTeams, {isLoading}] = useCreatTeamMutation();
+  const onClick = async () => {
     try {
-      const formData = new FormData();
-      image &&
-        formData.append('upload_invoice', {
-          uri: image,
-          type: 'image/jpeg',
-          name: 'photo.jpg',
-        });
-      editKey && formData.append('his', editKey);
-      note && formData.append('note', note);
-      formData.append('_method', 'patch');
-
-      const change = await ChangInvoid({
-        id: props?.ids,
-        data: formData,
+      const aa = await creatTeams({
+        name: name,
+        slug: chuyenChuoi(name),
+        branch_id: branches_id,
       }).unwrap();
-      if (change) {
-        setErr('Chỉnh sửa thành công');
-        await props.refetch();
-        setImage('');
-        await ToastRef.current.toast();
+
+      if (aa) {
+        setErr('Thêm thành công đội nhóm ');
+        ToastRef.current.toast();
+        props.refetch();
       }
     } catch (error) {
-      console.log(error);
-
-      setErr('Chỉnh thất bại');
+      setErr('Thêm thất bại');
       await ToastRef.current.toast();
     }
   };
+
   const renderContent = () => {
     return (
       <View style={styles.content}>
         <View style={{alignItems: 'center'}}>
-          <Text style={styles.title}>Chỉnh sửa hoá đơn</Text>
-          <TextInput
-            style={styles.view}
-            placeholder="Nhập mã máy"
-            value={editKey}
-            onChangeText={setEditKey}
+          <Text style={styles.title}>Thêm mới đội nhóm</Text>
+          <Select
+            data={props?.branches || []}
+            setSelect={val => {
+              setBranchesId(val?.id);
+            }}
+            defaultButtonText="Chi nhánh"
+            styleItem={{width: sizes.width * 0.8}}
           />
           <TextInput
+            editable={branches_id ? true : false}
             style={styles.view}
-            placeholder="Ghi chú"
-            value={note}
-            onChangeText={setNote}
+            placeholder="Nhập tên đội nhóm"
+            value={name}
+            onChangeText={setName}
           />
-          <View style={styles.viewImage}>
-            <TouchableOpacity
-              style={styles.img}
-              onPress={() => bootomsheetRef.current.open()}>
-              <Image source={images.uploadImage} />
-              <Text style={styles.txt1}>Thêm ảnh </Text>
-            </TouchableOpacity>
-            {image && (
-              <View>
-                <Image source={{uri: image}} style={styles.img1} />
-                <Icon
-                  onPress={() => setImage('')}
-                  name="closecircle"
-                  color={colors.text}
-                  size={15}
-                  style={styles.icon}
-                />
-              </View>
-            )}
-            {props.imageKey?.map((item: any, index) => {
-              return (
-                <Image
-                  source={{uri: item?.full_url}}
-                  style={styles.img1}
-                  key={index}
-                />
-              );
-            })}
-          </View>
+
           <View style={styles.view1}>
             <TouchableOpacity
-              onPress={async () => {
-                await ChangeKey();
-              }}
+              onPress={onClick}
               style={[styles.btn, {backgroundColor: colors.blue}]}>
               {isLoading ? (
                 <ActivityIndicator />
@@ -142,10 +95,6 @@ const ModalEditKey = (props: Props) => {
           </View>
         </View>
         <ToastCustom ref={ToastRef} val={err} />
-        <BottomSheetUploadImage
-          refRBSheet={bootomsheetRef}
-          urlImage={setImage}
-        />
       </View>
     );
   };
@@ -167,7 +116,7 @@ const ModalEditKey = (props: Props) => {
     </View>
   );
 };
-export default ModalEditKey;
+export default ModalAddTeam;
 const styles = StyleSheet.create({
   container1: {
     flex: 1,
@@ -186,7 +135,7 @@ const styles = StyleSheet.create({
   },
   title: {...stylesCustom.txtTitle1, color: colors.blue},
   view: {
-    height: 45,
+    height: 50,
     width: sizes.width * 0.8,
     alignSelf: 'center',
     marginTop: 25,

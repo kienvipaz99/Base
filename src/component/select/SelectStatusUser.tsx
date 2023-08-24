@@ -1,9 +1,11 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import sizes from '../../res/sizes';
 import {colors} from '../../res/colors';
 import fonts from '../../res/fonts';
+import stylesCustom from '../../res/stylesCustom';
+import Entypo from 'react-native-vector-icons/Entypo';
 export default function SelectStatusUser({
   select,
   setSelect,
@@ -36,6 +38,11 @@ export default function SelectStatusUser({
           return item.name;
         }}
         dropdownStyle={{borderRadius: 10}}
+        renderDropdownIcon={() => (
+          <View style={stylesCustom.row1}>
+            <Entypo name="chevron-down" color={colors.text} size={25} />
+          </View>
+        )}
       />
     </>
   );

@@ -2,6 +2,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from './axiosClient';
 import {API} from './BASE_URL/API';
 import {ListApiResponse} from '../type/Common';
+import {AxiosHeaders} from 'axios';
 const tagTypes = 'Auth' as const;
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -122,7 +123,7 @@ export const authApi = createApi({
     }),
     getProduct: build.query<ListApiResponse<Product>, string>({
       query: () => ({
-        url: `api/v1/products`,
+        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=5&years=2023`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -141,6 +142,15 @@ export const authApi = createApi({
         }
         return [{type: tagTypes, id: 'LIST'}];
       },
+    }),
+    deleteProduct: build.mutation<{}, {id?: number}>({
+      query({id}) {
+        return {
+          url: `api/v1/products/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes}],
     }),
     getPlans: build.query<ListApiResponse<Plans>, {option: string}>({
       query: ({option}) => ({
@@ -186,28 +196,30 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
-    getTeamRevenue: build.query<ListApiResponse<RevenueTeam>, string>({
-      query: () => ({
-        url: `api/v1/teams?append=revenue,revenue_approve,ranges&month=5&years=2023`,
-        method: 'GET',
-      }),
-      providesTags(result) {
-        if (result?.data) {
-          const data = result.data;
-          return [
-            ...data.map(({id}) => ({
-              type: tagTypes,
-              id,
-            })),
-            {
-              type: tagTypes,
-              id: 'LIST',
-            },
-          ];
-        }
-        return [{type: tagTypes, id: 'LIST'}];
+    getTeamRevenue: build.query<ListApiResponse<RevenueTeam>, {option: string}>(
+      {
+        query: ({option}) => ({
+          url: `api/v1/teams${option}`,
+          method: 'GET',
+        }),
+        providesTags(result) {
+          if (result?.data) {
+            const data = result.data;
+            return [
+              ...data.map(({id}) => ({
+                type: tagTypes,
+                id,
+              })),
+              {
+                type: tagTypes,
+                id: 'LIST',
+              },
+            ];
+          }
+          return [{type: tagTypes, id: 'LIST'}];
+        },
       },
-    }),
+    ),
     getDashboardRevenue: build.query<DashboardRevenue, string>({
       query: () => ({
         url: `api/v1/invoices/getDashboardRevenue`,
@@ -307,7 +319,7 @@ export const authApi = createApi({
     }),
     getEmployee: build.query<ListApiResponse<GetUser>, {per_page: number}>({
       query: ({per_page}) => ({
-        url: `api/v1/users?per_page=${per_page}&filter[member]=MEMBER&include=roles,team&append=revenue_last_month,revenue_approve,revenue&filter[is_sales]=1`,
+        url: `api/v1/users?per_page=${per_page}&filter[member]=MEMBER&include=roles,team&append=revenue_last_month,revenue_approve,revenue`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -343,6 +355,9 @@ export const authApi = createApi({
           url: `api/v1/invoices/${id}`,
           method: 'POST',
           data,
+          headers: {
+            'Content-Type': 'multipart/form-data', // Đúng cú pháp của header
+          },
         };
       },
     }),
@@ -372,7 +387,7 @@ export const authApi = createApi({
           data,
         };
       },
-      invalidatesTags: result => [{type: tagTypes, id: result?.id}],
+      invalidatesTags: result => [{type: tagTypes, id: 'LIST'}],
     }),
     getBranches: build.query<ListApiResponse<Branches>, {option: string}>({
       query: ({option}) => ({
@@ -427,6 +442,15 @@ export const authApi = createApi({
         };
       },
     }),
+    creatTeam: build.mutation<Team, CreatTeam>({
+      query(data) {
+        return {
+          url: `api/v1/teams`,
+          method: 'POST',
+          data,
+        };
+      },
+    }),
   }),
 });
 
@@ -440,6 +464,7 @@ export const {
   useCreatBankMutation,
   useGetBankingQuery,
   useGetProductQuery,
+  useDeleteProductMutation,
   useGetPlansQuery,
   useGetLogsQuery,
   useGetTeamRevenueQuery,
@@ -458,4 +483,5 @@ export const {
   useGetRolesQuery,
   useDeleteUserMutation,
   useCreatBranchesMutation,
+  useCreatTeamMutation,
 } = authApi;

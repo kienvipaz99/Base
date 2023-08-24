@@ -1,5 +1,12 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {
+  Image,
+  LayoutAnimation,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {colors} from '../../../../res/colors';
 import fonts from '../../../../res/fonts';
 import sizes from '../../../../res/sizes';
@@ -7,12 +14,35 @@ import stylesCustom from '../../../../res/stylesCustom';
 import images from '../../../../res/images';
 import ModalConfirm from '../../../../component/modal/ModalConfirm';
 import BottomSheetEditProduct from '../../../../component/bottomSheet/BottomSheetEditProduct';
+import {maxlengText} from '../../../../res/convert';
+import {useDeleteProductMutation} from '../../../../redux/api/auth.api';
 
-const RenderManageProduct = ({item}: {item: itemManageProduct}) => {
-  const refBootomSheet = useRef<any>(null);
+const RenderManageProduct = ({item}: {item: Product}) => {
+  const [showView, setShowView] = useState(false);
   const [show, setShow] = useState(false);
+  const [deleteProduct] = useDeleteProductMutation();
+  const OnDelete = async (id: number) => {
+    try {
+      deleteProduct({
+        id: id,
+      });
+    } catch (error) {}
+  };
+  const PressShow = () => setShowView(!showView);
+  useEffect(() => {
+    const toggle = () => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    };
+    toggle();
+  }, [showView]);
+  let headerStyle = Object.assign({}, styles.view);
+  if (!showView) {
+    headerStyle;
+  }
+  const refBootomSheet = useRef<any>(null);
+
   return (
-    <View style={styles.view}>
+    <Pressable style={styles.view} onPress={PressShow}>
       <View style={stylesCustom.row}>
         <Text style={styles.txt1}>Tên SP: {item.name}</Text>
         <View
@@ -24,13 +54,20 @@ const RenderManageProduct = ({item}: {item: itemManageProduct}) => {
       </View>
       <View style={stylesCustom.row}>
         <View>
-          <Text style={styles.txt2}>Mã SP: {item.msp}</Text>
-          <Text style={styles.txt2}>Ngày tạo: {item.ngaytao}</Text>
-          <Text style={styles.txt2}>Mã PB: {item.msp}</Text>
-          <Text style={styles.txt2}>Mô tả: {item.mota}</Text>
+          <Text style={styles.txt2}>Mã SP: {item?.slug}</Text>
+          <Text style={styles.txt2}>Ngày tạo: {item?.created_at}</Text>
+          <Text style={styles.txt2}>Mã PB: {item?.version}</Text>
+          <Text style={styles.txt2}>
+            Mô tả:{' '}
+            {showView ? item?.description : maxlengText(item?.description)}
+          </Text>
         </View>
         <View style={{justifyContent: 'space-around', height: 70}}>
-          <Pressable onPress={() => refBootomSheet.current.open()}>
+          <Pressable
+            onPress={() => {
+              OnDelete(item?.id);
+              refBootomSheet.current.open();
+            }}>
             <Image source={images.pen} />
           </Pressable>
           <Pressable onPress={() => setShow(true)}>
@@ -44,7 +81,7 @@ const RenderManageProduct = ({item}: {item: itemManageProduct}) => {
         toggleDate={() => setShow(false)}
         title="Bạn có muốn xoá sản phẩm"
       />
-    </View>
+    </Pressable>
   );
 };
 

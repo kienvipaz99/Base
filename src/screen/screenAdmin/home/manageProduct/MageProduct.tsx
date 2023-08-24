@@ -6,9 +6,10 @@ import stylesCustom from '../../../../res/stylesCustom';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../../../../res/colors';
 import sizes from '../../../../res/sizes';
-import {dataProduct} from '../../../../res/feckData/dataProduct';
 import RenderManageProduct from './RenderManageProduct';
 import BottomSheetaddProduct from '../../../../component/bottomSheet/BottomSheetaddProduct';
+import {useGetProductQuery} from '../../../../redux/api/auth.api';
+import Loading from '../../../../component/loading/Loading';
 
 const MageProduct = ({
   navigation,
@@ -16,7 +17,7 @@ const MageProduct = ({
   navigation: NavigationProp<Record<string, any>>;
 }) => {
   const refRBSheet = useRef<any>(null);
-
+  const {data, isLoading, refetch, isFetching} = useGetProductQuery('');
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -36,12 +37,16 @@ const MageProduct = ({
           />
         </View>
         <FlatList
-          data={dataProduct}
+          data={data?.data}
           renderItem={({item}) => <RenderManageProduct item={item} />}
           contentContainerStyle={styles.fl}
+          onRefresh={refetch}
+          scrollEventThrottle={16}
+          refreshing={isFetching}
         />
       </View>
       <BottomSheetaddProduct refRBSheet={refRBSheet} />
+      {isLoading && <Loading />}
     </View>
   );
 };

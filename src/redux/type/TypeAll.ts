@@ -21,18 +21,7 @@ interface Banking {
   isTransfer: number;
   swift_code: string;
 }
-interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  prefix_key: string;
-  status: number;
-  version: string;
-  url: string;
-  created_at: string;
-  revenue: number;
-}
+
 interface Plans {
   id: number;
   tag: string;
@@ -274,6 +263,10 @@ interface ChangeUser {
     password?: string;
     password_confirmation?: string;
     _method?: string;
+    team_id?: number;
+    branch_id?: number;
+    roles?: string;
+    user_type: string;
   };
 }
 interface Status {
@@ -307,4 +300,23 @@ interface SelectCustom {
   id: number;
   name: string;
   teams: Team[];
+}
+interface CreatTeam {
+  name: string;
+  branch_id?: number;
+  slug: string;
+}
+interface Product {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  prefix_key: string;
+  status: number;
+  version: string;
+  url: string;
+  created_at: string;
+  ranges: [];
+  revenue: number;
+  revenue_approve: number;
 }

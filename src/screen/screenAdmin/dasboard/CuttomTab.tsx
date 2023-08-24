@@ -49,7 +49,9 @@ export default function CuttomTab() {
       color: 'red',
     },
   ];
-  const {data, isLoading} = useGetTeamRevenueQuery('');
+  const {data, isLoading} = useGetTeamRevenueQuery({
+    option: `?append=revenue,revenue_approve,ranges&month=5&years=2023`,
+  });
   const {data: total} = useGetDashboardRevenueQuery('') as any;
 
   const colorList = [

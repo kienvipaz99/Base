@@ -56,7 +56,7 @@ export default function ManageEmployee({
           refreshing={isFetching}
         />
       </View>
-      <BottomSheetCreatEmployee refRBSheet={refRBSheet} />
+      <BottomSheetCreatEmployee refRBSheet={refRBSheet} refetchs={refetch} />
       {isLoading && <Loading />}
     </View>
   );

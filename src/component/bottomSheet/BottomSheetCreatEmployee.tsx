@@ -6,7 +6,6 @@ import {colors} from '../../res/colors';
 import TextInputCustom from '../txtInput/TextInputCustom';
 import sizes from '../../res/sizes';
 import DoubleButton from '../btn/DoubleButton';
-import SelectCustom from '../select/SelectCustom';
 import {
   useCreatUserMutation,
   useGetBranchesQuery,
@@ -15,10 +14,13 @@ import {
 import Select from '../select/Select';
 import ToastCustom from '../toastCustom/ToastCustom';
 import ModalAddBarnches from '../modal/ModalAddBarnches';
+import ModalAddTeam from '../modal/ModalAddTeam';
 export default function BottomSheetCreatEmployee({
   refRBSheet,
+  refetchs,
 }: {
   refRBSheet: any;
+  refetchs: () => void;
 }) {
   const {data: branches, refetch} = useGetBranchesQuery({
     option: '?include=teams',
@@ -37,6 +39,7 @@ export default function BottomSheetCreatEmployee({
   const [err, setErr] = useState('');
   const ToastRef = useRef<any>(null);
   const [showBarnch, setShowBarnch] = useState(false);
+  const [showTeam, setShowTeam] = useState(false);
 
   const Summit = async () => {
     try {
@@ -53,14 +56,14 @@ export default function BottomSheetCreatEmployee({
         user_type: 'MEMBER',
       }).unwrap();
       if (dataUser) {
-        console.log(dataUser);
+        refetchs();
 
         setErr('Thêm thành công ');
         await ToastRef.current.toast();
       }
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
-      console.log(error);
+      console.log(err);
 
       setErr('Thêm thất bại');
       await ToastRef.current.toast();
@@ -107,6 +110,7 @@ export default function BottomSheetCreatEmployee({
             defaultButtonText="Đội nhóm"
             disabled={team.length === 0 ? true : false}
             icons="add-circle"
+            onPressIcon={() => setShowTeam(true)}
           />
           <Select
             data={roles?.data}
@@ -151,6 +155,12 @@ export default function BottomSheetCreatEmployee({
         refetch={refetch}
         isShow={showBarnch}
         toggleDate={() => setShowBarnch(false)}
+      />
+      <ModalAddTeam
+        isShow={showTeam}
+        toggleDate={() => setShowTeam(false)}
+        refetch={refetch}
+        branches={branches?.data}
       />
     </RBSheet>
   );
