@@ -1,4 +1,11 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
 import sizes from '../../res/sizes';
 import {colors} from '../../res/colors';
@@ -15,6 +22,8 @@ const TextInputCustom = ({
   numeric,
   value,
   setValue,
+  multiline,
+  styleView,
 }: {
   placeholder?: string;
   add?: boolean;
@@ -24,16 +33,25 @@ const TextInputCustom = ({
   numeric?: boolean;
   value?: string;
   setValue?: (val: string) => void;
+  multiline?: boolean;
+  styleView?: StyleProp<ViewStyle>;
 }) => {
   return (
-    <View style={styles.view}>
+    <View style={[styles.view, styleView]}>
       <TextInput
         value={value}
         onChangeText={setValue}
         editable={!editable}
-        style={styles.view1}
+        style={[
+          styles.view1,
+          styleView,
+          {
+            height: multiline ? 80 : undefined,
+          },
+        ]}
         placeholder={placeholder}
         cursorColor={colors.text}
+        multiline={multiline}
         keyboardType={numeric ? 'numeric' : 'default'}
       />
       {add && (
@@ -48,8 +66,7 @@ const TextInputCustom = ({
     </View>
   );
 };
-{
-}
+
 export default TextInputCustom;
 
 const styles = StyleSheet.create({

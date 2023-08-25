@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import HeaderCustom from '../../../../component/header/HeaderCustom';
 import {NavigationProp} from '@react-navigation/native';
 import stylesCustom from '../../../../res/stylesCustom';
@@ -9,6 +9,8 @@ import sizes from '../../../../res/sizes';
 import {dataService} from '../../../../res/feckData/dataService';
 import RenderItemManageServiec from './RenderItemManageService';
 import BottomSheetaddService from '../../../../component/bottomSheet/BottomSheetaddService';
+import {useGetPlansQuery} from '../../../../redux/api/auth.api';
+import Loading from '../../../../component/loading/Loading';
 
 const ManageService = ({
   navigation,
@@ -16,7 +18,15 @@ const ManageService = ({
   navigation: NavigationProp<Record<string, any>>;
 }) => {
   const refRBSheet = useRef<any>(null);
+  const [perpage, setPerPage] = useState(20);
 
+  const {data, isLoading, refetch, isFetching} = useGetPlansQuery({
+    option: `?include=product&per_page=${perpage}`,
+  });
+  const handleEndReached = () => {
+    setPerPage(perpage + 20);
+    refetch();
+  };
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -36,12 +46,19 @@ const ManageService = ({
           />
         </View>
         <FlatList
-          data={dataService}
+          data={data?.data}
+          keyExtractor={(item: Plans) => item.id.toString()}
           renderItem={({item}) => <RenderItemManageServiec item={item} />}
           contentContainerStyle={styles.fl}
+          onRefresh={refetch}
+          scrollEventThrottle={16}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.7}
+          refreshing={isFetching}
         />
       </View>
       <BottomSheetaddService refRBSheet={refRBSheet} />
+      {isLoading && <Loading />}
     </View>
   );
 };

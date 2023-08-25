@@ -39,12 +39,15 @@ interface Plans {
   invoice_period: number;
   invoice_interval: string;
   tier: number;
+  product: Product;
 }
 interface Logs {
   id: number;
   version: string;
   detail: string;
   updated_at: string;
+  product_id: number;
+  created_at: string;
 }
 interface RevenueTeam {
   id: number;
@@ -319,4 +322,30 @@ interface Product {
   ranges: [];
   revenue: number;
   revenue_approve: number;
+}
+interface CreatProduct {
+  name?: string;
+  slug?: string;
+  prefix_key?: string;
+  description?: string;
+  status?: number;
+  version?: string;
+  url?: string;
+}
+interface EditProduct {
+  id?: number;
+  data: {
+    name?: string;
+    slug?: string;
+    prefix_key?: string;
+    description?: string;
+    status?: number;
+    version?: string;
+    url?: string;
+  };
+}
+interface CreatLog {
+  product_id?: number;
+  version?: string;
+  detail?: string;
 }

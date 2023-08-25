@@ -16,6 +16,10 @@ const ErrorSub = {
   'The password confirmation does not match.':
     'Xác nhận mật khẩu không trùng khớp',
   'The his field is required.': 'Trường mã máy là bắt buộc',
+  'The name field is required.': 'Tên là bắt buộc',
+  'The slug has already been taken.': 'Tên đã tồn tại',
+  'The prefix key has already been taken.': 'Khoá đã tồn tại',
+  'The prefix key field is required.': 'Mã sản phẩm là bắt buộc',
 };
 export function ErrorSubs(val) {
   return ErrorSub[val] || '';

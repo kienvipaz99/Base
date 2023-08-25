@@ -43,9 +43,10 @@ const MageProduct = ({
           onRefresh={refetch}
           scrollEventThrottle={16}
           refreshing={isFetching}
+          style={{marginTop: 20}}
         />
       </View>
-      <BottomSheetaddProduct refRBSheet={refRBSheet} />
+      <BottomSheetaddProduct refRBSheet={refRBSheet} reload={refetch} />
       {isLoading && <Loading />}
     </View>
   );

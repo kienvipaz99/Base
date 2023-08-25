@@ -123,7 +123,7 @@ export const authApi = createApi({
     }),
     getProduct: build.query<ListApiResponse<Product>, string>({
       query: () => ({
-        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=5&years=2023`,
+        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=5&years=2023&per_page=100`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -142,6 +142,25 @@ export const authApi = createApi({
         }
         return [{type: tagTypes, id: 'LIST'}];
       },
+    }),
+    creatProduct: build.mutation<ListApiResponse<CreatProduct>, CreatProduct>({
+      query(data) {
+        return {
+          url: 'api/v1/products',
+          method: 'POST',
+          data,
+        };
+      },
+    }),
+    editProduct: build.mutation<EditProduct, EditProduct>({
+      query({id, data}) {
+        return {
+          url: `api/v1/products/${id}`,
+          method: 'PATCH',
+          data,
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes, id: 'LIST'}],
     }),
     deleteProduct: build.mutation<{}, {id?: number}>({
       query({id}) {
@@ -196,6 +215,17 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
+
+    creatLog: build.mutation<Logs, CreatLog>({
+      query(data) {
+        return {
+          url: 'api/v1/changelogs',
+          method: 'POST',
+          data,
+        };
+      },
+    }),
+
     getTeamRevenue: build.query<ListApiResponse<RevenueTeam>, {option: string}>(
       {
         query: ({option}) => ({
@@ -484,4 +514,7 @@ export const {
   useDeleteUserMutation,
   useCreatBranchesMutation,
   useCreatTeamMutation,
+  useCreatProductMutation,
+  useEditProductMutation,
+  useCreatLogMutation,
 } = authApi;

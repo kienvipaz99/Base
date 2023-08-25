@@ -8,25 +8,25 @@ import images from '../../../../res/images';
 import ModalConfirm from '../../../../component/modal/ModalConfirm';
 import BottomSheetEditService from '../../../../component/bottomSheet/BottomSheetEditService';
 
-const RenderItemManageService = ({item}: {item: itemManageService}) => {
+const RenderItemManageService = ({item}: {item: Plans}) => {
   const refBootomSheet = useRef<any>(null);
   const [show, setShow] = useState(false);
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
-        <Text style={styles.txt1}>Tên gói: {item.name}</Text>
+        <Text style={styles.txt1}>Tên gói: {item?.name}</Text>
         <View
           style={[
             styles.status,
-            {backgroundColor: item.status ? colors.green : colors.red},
+            {backgroundColor: item?.is_active ? colors.green : colors.red},
           ]}
         />
       </View>
       <View style={stylesCustom.row}>
         <View>
-          <Text style={styles.txt2}>Giá: {item.gia}</Text>
-          <Text style={styles.txt2}>Thời hạn: {item.time}</Text>
-          <Text style={styles.txt2}>Sản phẩm: {item.sanpham}</Text>
+          <Text style={styles.txt2}>Giá: {item?.price}</Text>
+          <Text style={styles.txt2}>Thời hạn: {item?.invoice_period} Ngày</Text>
+          <Text style={styles.txt2}>Sản phẩm: {item?.product?.name}</Text>
         </View>
         <View style={{justifyContent: 'space-around', height: 70}}>
           <Pressable onPress={() => refBootomSheet.current.open()}>
