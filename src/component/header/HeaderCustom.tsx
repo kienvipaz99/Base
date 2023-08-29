@@ -11,11 +11,13 @@ export default function HeaderCustom({
   sharp,
   back,
   onBackPress,
+  OnPressSharp,
 }: {
   title: string;
   sharp?: boolean;
   back?: boolean;
   onBackPress?: () => void;
+  OnPressSharp?: () => void;
 }) {
   const isAdroid = Platform.OS === 'android';
   return (
@@ -39,6 +41,7 @@ export default function HeaderCustom({
             <Text style={styles.txt}>{title}</Text>
             {sharp && (
               <Ionicons
+                onPress={OnPressSharp}
                 name="funnel-sharp"
                 color={colors.white}
                 size={29}

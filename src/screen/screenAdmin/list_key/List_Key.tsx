@@ -12,6 +12,7 @@ import {
 } from '../../../redux/api/auth.api';
 import Loading from '../../../component/loading/Loading';
 import ToastCustom from '../../../component/toastCustom/ToastCustom';
+import BottomSheetFillterkey from '../../../component/bottomSheet/BottomSheetFillterkey';
 
 export default function List_Key() {
   const [perpage, setPerPage] = useState(10);
@@ -19,8 +20,11 @@ export default function List_Key() {
     setPerPage(perpage + 10);
     refetch();
   };
+  const refBootomSheet = useRef<any>(null);
+  const [params, setParams] = useState('');
   const {data, refetch, isLoading, isFetching} = useGetDataKeyQuery({
     per_page: perpage,
+    params: params,
   });
   const RefToast = useRef<any>(null);
   const [fetching, setFetching] = useState(false);
@@ -53,7 +57,11 @@ export default function List_Key() {
   };
   return (
     <View style={styles.container}>
-      <HeaderCustom title="Danh sách Key" sharp />
+      <HeaderCustom
+        title="Danh sách Key"
+        sharp
+        OnPressSharp={() => refBootomSheet.current.open()}
+      />
       <View style={stylesCustom.view1}>
         <Text style={styles.txt}>
           Báo cáo danh sách ({data?.payload?.pagination?.total})
@@ -86,6 +94,11 @@ export default function List_Key() {
 
       {(onLoadStatus || isFetching) && <Loading />}
       <ToastCustom val="Xoá thành công " ref={RefToast} />
+      <BottomSheetFillterkey
+        refRBSheet={refBootomSheet}
+        params={val => setParams(val)}
+        isLoading={isFetching}
+      />
     </View>
   );
 }

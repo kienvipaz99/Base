@@ -146,7 +146,7 @@ export default function BottomSheetCreatEmployee({
           <DoubleButton
             loading={isLoading}
             conFirm={Summit}
-            cancel={() => refRBSheet.current.close()}
+            cancel={async () => await refRBSheet.current.close()}
           />
         </View>
       </ScrollView>

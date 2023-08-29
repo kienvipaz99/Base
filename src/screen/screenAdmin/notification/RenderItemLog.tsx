@@ -4,6 +4,7 @@ import sizes from '../../../res/sizes';
 import {colors} from '../../../res/colors';
 import {date, maxlengText} from '../../../res/convert';
 import fonts from '../../../res/fonts';
+import stylesCustom from '../../../res/stylesCustom';
 
 export default function RenderItemLog({item}: {item: Activities}) {
   const [show, setShow] = useState(false);
@@ -21,6 +22,8 @@ export default function RenderItemLog({item}: {item: Activities}) {
   return (
     <Pressable style={styles.view} onPress={PressShow}>
       <Text style={styles.name}>{item?.subject_type}</Text>
+      <Text style={styles.function}>Người thực hiện: {item?.causer?.name}</Text>
+
       <Text style={styles.function}>Hành động: {item?.event}</Text>
       <Text style={styles.function}>Thời gian: {date(item?.created_at)}</Text>
       <Text style={styles.function}>
@@ -34,11 +37,11 @@ const styles = StyleSheet.create({
   view: {
     width: sizes.width * 0.9,
     alignSelf: 'center',
-    marginTop: 22,
-    elevation: 1,
+    marginBottom: 15,
     backgroundColor: colors.white,
     borderRadius: 15,
     padding: 10,
+    ...stylesCustom.shadowitem,
   },
   name: {
     fontFamily: fonts.bold,

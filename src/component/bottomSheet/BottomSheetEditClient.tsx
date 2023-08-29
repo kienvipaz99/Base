@@ -118,7 +118,7 @@ export default function BottomSheetEditClient({
           <DoubleButton
             loading={isLoading}
             conFirm={Submit}
-            cancel={() => refRBSheet.current.close()}
+            cancel={async () => await refRBSheet.current.close()}
           />
         </View>
       </ScrollView>

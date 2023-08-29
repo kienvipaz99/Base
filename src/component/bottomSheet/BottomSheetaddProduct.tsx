@@ -43,7 +43,7 @@ export default function BottomSheetaddProduct({
       }).unwrap();
 
       setErr('Thêm thành công sản phẩm');
-      await reload();
+      reload();
       await ToastRef.current.toast();
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
@@ -120,7 +120,7 @@ export default function BottomSheetaddProduct({
           <DoubleButton
             loading={isLoading}
             conFirm={OnCreat}
-            cancel={() => refRBSheet.current.close()}
+            cancel={async () => await refRBSheet.current.close()}
           />
         </View>
       </ScrollView>

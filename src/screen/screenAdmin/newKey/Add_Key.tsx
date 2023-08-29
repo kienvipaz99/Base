@@ -35,7 +35,7 @@ const Add_Key = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [discount, setDiscount] = useState<number>(0);
-  const [nameProduct, setNameProduct] = useState('');
+  const [nameProduct, setNameProduct] = useState<string>();
   const [product_id, setProduct_id] = useState<number>();
   const [total, setTotal] = useState<number>(0);
   const [plan_id, setPlan_id] = useState<number>();

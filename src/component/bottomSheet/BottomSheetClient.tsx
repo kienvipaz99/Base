@@ -116,7 +116,7 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
           <DoubleButton
             conFirm={Summit}
             loading={isLoading}
-            cancel={() => refRBSheet.current.close()}
+            cancel={async () => await refRBSheet.current.close()}
           />
         </View>
         <ToastCustom ref={ToastRef} val={err} />

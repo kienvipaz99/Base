@@ -72,7 +72,9 @@ export default function BottomSheetUploadImage({
       }}>
       <View>
         <Text style={styles.title}>Chọn ảnh</Text>
-        <Text style={styles.title1} onPress={() => refRBSheet.current.close()}>
+        <Text
+          style={styles.title1}
+          onPress={async () => await refRBSheet.current.close()}>
           Huỷ
         </Text>
       </View>

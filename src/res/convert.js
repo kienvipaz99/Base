@@ -55,10 +55,24 @@ export function getCurrentDate() {
 }
 export function chuyenChuoi(str) {
   // Chuyển toàn bộ ký tự thành chữ thường
-  const chuoiThap = str.toLowerCase();
+  if (str) {
+    const chuoiThap = str.toLowerCase();
 
-  // Thay thế dấu cách bằng dấu gạch ngang
-  const chuoiDaChuyen = chuoiThap.replace(/\s+/g, '-');
+    // Thay thế dấu cách bằng dấu gạch ngang
+    const chuoiDaChuyen = chuoiThap.replace(/\s+/g, '-');
 
-  return chuoiDaChuyen;
+    return chuoiDaChuyen;
+  } else {
+    return '';
+  }
+}
+export function ngaythang(date) {
+  const utcTimestamp = new Date(date);
+
+  const year = utcTimestamp.getUTCFullYear();
+  const month = (utcTimestamp.getUTCMonth() + 1).toString().padStart(2, '0'); // Tháng trong JavaScript bắt đầu từ 0
+  const day = utcTimestamp.getUTCDate().toString().padStart(2, '0');
+
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
 }

@@ -102,7 +102,7 @@ interface TypeDataListKey {
         code: string;
         branch: string;
       };
-      files: [];
+      files: Images[];
       total: number;
       code: string;
       status: string;
@@ -119,4 +119,8 @@ interface TypeDataListKey {
       updated_at: string;
     },
   ];
+}
+interface Images {
+  path: string;
+  full_url: string;
 }

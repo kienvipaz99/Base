@@ -20,6 +20,8 @@ const ErrorSub = {
   'The slug has already been taken.': 'Tên đã tồn tại',
   'The prefix key has already been taken.': 'Khoá đã tồn tại',
   'The prefix key field is required.': 'Mã sản phẩm là bắt buộc',
+  'The tag has already been taken.': 'Tên đã được sử dụng',
+  'The invoice period must be at least 1.': 'Thời hạn ít nhất là 30',
 };
 export function ErrorSubs(val) {
   return ErrorSub[val] || '';

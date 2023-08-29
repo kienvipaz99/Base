@@ -129,7 +129,7 @@ export default function BottomSheetBank({
             conFirm={() => {
               AddBank();
             }}
-            cancel={() => refRBSheet.current.close()}
+            cancel={async () => await refRBSheet.current.close()}
           />
         </View>
       </ScrollView>

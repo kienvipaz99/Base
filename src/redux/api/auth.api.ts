@@ -54,10 +54,10 @@ export const authApi = createApi({
     }),
     getDataKey: build.query<
       ListApiResponse<TypeDataListKey>,
-      {per_page: number}
+      {per_page: number; params: string}
     >({
-      query: ({per_page}) => ({
-        url: `api/v1/plansubscriptions?include=plan,product,subscriber,invoices,invoices.user,invoices.bank,invoices.files&per_page=${per_page}`,
+      query: ({per_page, params}) => ({
+        url: `api/v1/plansubscriptions?include=plan,product,subscriber,invoices,invoices.user,invoices.bank,invoices.files&filter[active]=1&per_page=${per_page}${params}`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -123,7 +123,29 @@ export const authApi = createApi({
     }),
     getProduct: build.query<ListApiResponse<Product>, string>({
       query: () => ({
-        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=5&years=2023&per_page=100`,
+        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=5&years=2023&per_page=1000`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    getProducts: build.query<ListApiResponse<Product>, {perPage: number}>({
+      query: ({perPage}) => ({
+        url: `api/v1/products?per_page=${perPage}`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -193,6 +215,34 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
+    creatPlans: build.mutation<Plans, CreatPlans>({
+      query(data) {
+        return {
+          url: 'api/v1/plans',
+          method: 'POST',
+          data,
+        };
+      },
+    }),
+    changePlans: build.mutation<Plans, ChangePlans>({
+      query({id, data}) {
+        return {
+          url: `api/v1/plans/${id}`,
+          method: 'PATCH',
+          data,
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes, id: 'LIST'}],
+    }),
+    deletePlans: build.mutation<{}, {id?: number}>({
+      query({id}) {
+        return {
+          url: `api/v1/plans/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: result => [{type: tagTypes}],
+    }),
     getLogs: build.query<ListApiResponse<Logs>, {per_page: number}>({
       query: ({per_page}) => ({
         url: `api/v1/changelogs?per_page=${per_page}`,
@@ -259,30 +309,31 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
-    getActivities: build.query<ListApiResponse<Activities>, {per_page: number}>(
-      {
-        query: ({per_page}) => ({
-          url: `api/v1/activities?per_page=${per_page}`,
-          method: 'GET',
-        }),
-        providesTags(result) {
-          if (result?.data) {
-            const data = result.data;
-            return [
-              ...data.map(({id}) => ({
-                type: tagTypes,
-                id,
-              })),
-              {
-                type: tagTypes,
-                id: 'LIST',
-              },
-            ];
-          }
-          return [{type: tagTypes, id: 'LIST'}];
-        },
+    getActivities: build.query<
+      ListApiResponse<Activities>,
+      {per_page: number; params?: string}
+    >({
+      query: ({per_page, params}) => ({
+        url: `api/v1/activities?include=subject,causer&per_page=${per_page}${params}`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
       },
-    ),
+    }),
     getDashboardChart: build.query<dasBoadChart, {month: string; year: string}>(
       {
         query: ({month, year}) => ({
@@ -496,6 +547,9 @@ export const {
   useGetProductQuery,
   useDeleteProductMutation,
   useGetPlansQuery,
+  useChangePlansMutation,
+  useDeletePlansMutation,
+  useCreatPlansMutation,
   useGetLogsQuery,
   useGetTeamRevenueQuery,
   useGetDashboardRevenueQuery,
@@ -517,4 +571,5 @@ export const {
   useCreatProductMutation,
   useEditProductMutation,
   useCreatLogMutation,
+  useGetProductsQuery,
 } = authApi;

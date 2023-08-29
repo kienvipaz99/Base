@@ -6,36 +6,49 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  FlatList,
+  Animated,
 } from 'react-native';
 import {colors} from '../../../res/colors';
 import sizes from '../../../res/sizes';
 import stylesCustom from '../../../res/stylesCustom';
 import fonts from '../../../res/fonts';
 import {Image} from 'react-native';
-import images from '../../../res/images';
+import {ExpandingDot} from 'react-native-animated-pagination-dots';
 
 interface Props {
   isShow?: boolean;
   toggleDate?: () => void;
   title?: string;
-  image: string[];
+  image: Images[];
 }
 const ViewImage = (props: Props) => {
+  const scrollX = React.useRef(new Animated.Value(0))?.current;
   const renderContent = () => {
     return (
       <View style={styles.content}>
-        <View style={{flexDirection: 'row'}}>
-          {props.image?.map((item: any, index: number) => {
-            return (
-              <Image
-                key={index}
-                source={{uri: item?.full_url}}
-                resizeMode="cover"
-                style={styles.img}
-              />
-            );
-          })}
-        </View>
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          data={props.image}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({item}: {item: Images}) => (
+            <Image
+              source={{uri: item?.full_url}}
+              resizeMode="cover"
+              style={styles.img}
+            />
+          )}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {
+              useNativeDriver: false,
+            },
+          )}
+          pagingEnabled
+          horizontal
+          decelerationRate={'normal'}
+          scrollEventThrottle={16}
+        />
       </View>
     );
   };

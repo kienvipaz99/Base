@@ -15,9 +15,9 @@ export default function SelectProduct({
   search,
   show,
 }: {
-  data: string[] | undefined;
-  setSelect: (val: Plans) => void;
-  title: string;
+  data?: string[] | undefined;
+  setSelect: (val?: Plans) => void;
+  title?: string;
   search?: boolean;
   show?: boolean;
 }) {

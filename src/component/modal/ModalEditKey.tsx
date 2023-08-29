@@ -28,7 +28,7 @@ interface Props {
   ids: number | undefined;
   his: string;
   note: string;
-  imageKey: string[];
+  imageKey: Images[];
   refetch: () => void;
 }
 const ModalEditKey = (props: Props) => {

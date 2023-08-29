@@ -6,7 +6,6 @@ import stylesCustom from '../../../../res/stylesCustom';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../../../../res/colors';
 import sizes from '../../../../res/sizes';
-import {dataService} from '../../../../res/feckData/dataService';
 import RenderItemManageServiec from './RenderItemManageService';
 import BottomSheetaddService from '../../../../component/bottomSheet/BottomSheetaddService';
 import {useGetPlansQuery} from '../../../../redux/api/auth.api';
@@ -47,13 +46,14 @@ const ManageService = ({
         </View>
         <FlatList
           data={data?.data}
-          keyExtractor={(item: Plans) => item.id.toString()}
+          keyExtractor={(item: Plans) => item?.id.toString()}
           renderItem={({item}) => <RenderItemManageServiec item={item} />}
           contentContainerStyle={styles.fl}
           onRefresh={refetch}
           scrollEventThrottle={16}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.7}
+          style={{marginTop: 20}}
           refreshing={isFetching}
         />
       </View>

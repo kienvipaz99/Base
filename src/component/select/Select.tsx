@@ -5,7 +5,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import sizes from '../../res/sizes';
 import {colors} from '../../res/colors';
@@ -23,9 +23,10 @@ export default function Select({
   disabled,
   styleItem,
   defaultValueByIndex,
+  holder,
 }: {
-  data?: Team[] | Branches[];
-  select?: string;
+  data?: Team[] | Branches[] | KeyInvoid[];
+  select?: string | number;
   setSelect: (val: SelectCustom) => void;
   onPressIcon?: () => void;
   defaultButtonText?: string;
@@ -33,6 +34,7 @@ export default function Select({
   disabled?: boolean;
   styleItem?: StyleProp<ViewStyle>;
   defaultValueByIndex?: number;
+  holder?: string;
 }) {
   return (
     <>
@@ -43,7 +45,7 @@ export default function Select({
         }}
         buttonStyle={[styles.view, styleItem]}
         buttonTextAfterSelection={item => {
-          return item?.name;
+          return select ? item?.name : holder;
         }}
         defaultValueByIndex={defaultValueByIndex}
         defaultValue={select}
@@ -63,6 +65,7 @@ export default function Select({
                 name={icons ? icons : ''}
                 size={25}
                 color={colors.text}
+                style={{zIndex: 1000}}
               />
             )}
 

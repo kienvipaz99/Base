@@ -24,22 +24,55 @@ interface Banking {
 
 interface Plans {
   id: number;
-  tag: string;
-  name: string;
-  description: string;
-  is_active: boolean;
-  price: number;
-  signup_fee: number;
-  currency: string;
-  trial_period: number;
-  trial_interval: string;
-  trial_mode: string;
-  grace_period: number;
-  grace_interval: string;
-  invoice_period: number;
-  invoice_interval: string;
-  tier: number;
-  product: Product;
+  tag?: string;
+  name?: string;
+  description?: string;
+  is_active?: boolean;
+  price?: number;
+  signup_fee?: number;
+  currency?: string;
+  trial_period?: number;
+  trial_interval?: string;
+  trial_mode?: string;
+  grace_period?: number;
+  grace_interval?: string;
+  invoice_period?: number;
+  invoice_interval?: string;
+  tier?: number;
+  product?: Product;
+}
+interface CreatPlans {
+  tag?: string;
+  name?: string;
+  description?: string;
+  price?: number;
+  signup_fee?: number;
+  trial_interval?: string;
+  trial_mode?: string;
+  invoice_period?: number;
+  invoice_interval?: string;
+  product_id?: number;
+  currency?: string;
+  is_active?: boolean;
+  trial_period?: number;
+}
+interface ChangePlans {
+  id?: number;
+  data?: {
+    tag?: string;
+    name?: string;
+    description?: string;
+    price?: number;
+    signup_fee?: number;
+    trial_interval?: string;
+    trial_mode?: string;
+    invoice_period?: number;
+    invoice_interval?: string;
+    product_id?: number;
+    currency?: string;
+    is_active?: boolean;
+    trial_period: number;
+  };
 }
 interface Logs {
   id: number;
@@ -80,7 +113,7 @@ interface Activities {
   event: string;
   created_at: string;
   subject_type: string;
-  causer: string;
+  causer: User;
   changes: {
     attributes: {
       id: number;
@@ -104,13 +137,8 @@ interface Activities {
       creator_id: number;
     };
   };
-  description: 'Thêm mới: Quản lý User - bởi Hệ thống. Giá trị mới: 1653, Hung, Trinh Quang, hungtqemail114@gmail.com, , $2y$10$kayMUrBdijpx5O2GBFNPjOwbxmfip4kr8.MM11LQ.kBGOPAne8LYW, , , 2023-08-10T08:30:01.000000Z, 2023-08-10T08:30:01.000000Z, GUEST, 01238404567, , , , , , , ';
-  list_subject: {
-    'App\\Models\\User': 'Quản lý User';
-    'App\\Models\\Invoice': 'Hóa đơn';
-    'App\\Models\\File': 'File';
-    'App\\Models\\PlanSubscription': 'Key bản quyền';
-  };
+  description: string;
+  list_subject: {};
 }
 interface dasBoadChart {
   data: {
@@ -303,6 +331,7 @@ interface SelectCustom {
   id: number;
   name: string;
   teams: Team[];
+  params: string;
 }
 interface CreatTeam {
   name: string;
@@ -348,4 +377,9 @@ interface CreatLog {
   product_id?: number;
   version?: string;
   detail?: string;
+}
+interface KeyInvoid {
+  id: number;
+  name: string;
+  params: string;
 }

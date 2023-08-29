@@ -17,8 +17,6 @@ import BottomSheetEditProduct from '../../../../component/bottomSheet/BottomShee
 import {maxlengText} from '../../../../res/convert';
 import {useDeleteProductMutation} from '../../../../redux/api/auth.api';
 import ToastCustom from '../../../../component/toastCustom/ToastCustom';
-import ModalAddLog from '../../../../component/modal/ModalAddLog';
-
 const RenderManageProduct = ({item}: {item: Product}) => {
   const ToastRef = useRef<any>(null);
 
