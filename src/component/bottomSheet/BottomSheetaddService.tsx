@@ -30,7 +30,7 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
   const [errproduct_id, setErrProductId] = useState<string>();
 
   const {data} = useGetProductsQuery({
-    perPage: 1000,
+    per_page: 1000,
   });
   const [trial_period, settrial_period] = useState<string>();
   const [toast, setToast] = useState('');

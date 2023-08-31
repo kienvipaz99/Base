@@ -1,11 +1,24 @@
 interface KPIEMPloyee {
   id: number;
   name: string;
-  team: string;
-  kpi: number;
-  doanhso: number;
-  daduyet: number;
-  thangtruoc: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  user_type: string;
+  phone: string;
+  point: string;
+  team_id: number;
+  branch_id: number;
+  creator_id: number;
+  status: boolean;
+  referral: string;
+  code: string;
+  created_at: string;
+  updated_at: string;
+  revenue: number;
+  revenue_approve: number;
+  revenue_last_month: number;
+  team: Team;
 }
 interface itemHome {
   id: number;

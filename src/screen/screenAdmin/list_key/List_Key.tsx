@@ -13,6 +13,7 @@ import {
 import Loading from '../../../component/loading/Loading';
 import ToastCustom from '../../../component/toastCustom/ToastCustom';
 import BottomSheetFillterkey from '../../../component/bottomSheet/BottomSheetFillterkey';
+import Nodata from '../../../component/nofinddata/Nodata';
 
 export default function List_Key() {
   const [perpage, setPerPage] = useState(10);
@@ -67,27 +68,31 @@ export default function List_Key() {
           Báo cáo danh sách ({data?.payload?.pagination?.total})
         </Text>
 
-        <FlatList
-          data={data?.data}
-          renderItem={({item}) => (
-            <RenderListKey
-              item={item}
-              onChange={OnClick}
-              deletes={DeleteInvoid}
-              refetch={refetch}
-            />
-          )}
-          contentContainerStyle={{paddingBottom: 50}}
-          onRefresh={async () => {
-            setFetching(true);
-            await refetch();
-            setFetching(false);
-          }}
-          scrollEventThrottle={16}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.7}
-          refreshing={fetching}
-        />
+        {data?.data?.length !== 0 ? (
+          <FlatList
+            data={data?.data}
+            renderItem={({item}) => (
+              <RenderListKey
+                item={item}
+                onChange={OnClick}
+                deletes={DeleteInvoid}
+                refetch={refetch}
+              />
+            )}
+            contentContainerStyle={{paddingBottom: 50}}
+            onRefresh={async () => {
+              setFetching(true);
+              await refetch();
+              setFetching(false);
+            }}
+            scrollEventThrottle={16}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.7}
+            refreshing={fetching}
+          />
+        ) : (
+          <Nodata />
+        )}
       </View>
       {isLoading && <Loading />}
       {loadingDelete && <Loading />}

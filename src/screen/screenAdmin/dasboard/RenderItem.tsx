@@ -6,6 +6,7 @@ import {colors} from '../../../res/colors';
 import stylesCustom from '../../../res/stylesCustom';
 import sizes from '../../../res/sizes';
 import fonts from '../../../res/fonts';
+import {money} from '../../../res/convert';
 
 export default function RenderItemSale({
   item,
@@ -23,23 +24,23 @@ export default function RenderItemSale({
             <Image source={images.kien} style={styles.img} />
           </View>
           <View>
-            <Text style={styles.txtName}>{item.name}</Text>
-            <Text style={styles.txt1}>Team {item.team}</Text>
-            <Text style={[styles.txtName, {color: '#DB0505'}]}>
-              KPI: {item.kpi}
-            </Text>
+            <Text style={styles.txtName}>{item?.name}</Text>
+            <Text style={styles.txt1}>Team {item?.team?.name}</Text>
+            <Text style={[styles.txtName, {color: '#DB0505'}]}>KPI: 0</Text>
             <Text style={[styles.txtName, {color: colors.green}]}>
-              Doanh số: {item.doanhso}
+              Doanh số: {money(item?.revenue)}
             </Text>
             <Text style={[styles.txtName, {color: colors.orange}]}>
-              Đã duyệt: {item.daduyet}
+              Đã duyệt: {money(item?.revenue_approve)}
             </Text>
           </View>
         </View>
         <View>
           <Image source={images.cup1} />
           <Image
-            source={item.doanhso < item.thangtruoc ? images.down : images.up}
+            source={
+              item?.revenue < item.revenue_last_month ? images.down : images.up
+            }
             style={{marginTop: 15}}
           />
         </View>

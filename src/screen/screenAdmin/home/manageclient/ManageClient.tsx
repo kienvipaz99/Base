@@ -8,9 +8,14 @@ import {colors} from '../../../../res/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RenderItemManage from './RenderItemManage';
 import BottomSheetClient from '../../../../component/bottomSheet/BottomSheetClient';
-import {useGetUserQuery} from '../../../../redux/api/auth.api';
+import {
+  useGetUserQuery,
+  useGetdataClientQuery,
+} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
 import BottomSheetEditClient from '../../../../component/bottomSheet/BottomSheetEditClient';
+import BottomSheetFilterClient from '../../../../component/bottomSheet/BottomSheetFilterClient';
+import Nodata from '../../../../component/nofinddata/Nodata';
 export default function ManageClient({
   navigation,
 }: {
@@ -18,14 +23,18 @@ export default function ManageClient({
 }) {
   const refRBSheet = useRef<any>();
   const refBootomSheet = useRef<any>(null);
-  const {data, isLoading} = useGetUserQuery({
-    option: 'filter[customer]=CUSTOMER',
-  });
+  const refFillter = useRef<any>(null);
+
   const [datas, setDatas] = useState<itemManage>();
+  const [params, setParams] = useState('');
+  const {data, isLoading, isFetching} = useGetdataClientQuery({
+    option: `&filter[customer]=CUSTOMER${params}`,
+  });
   const EditUser = (val: itemManage) => {
     refBootomSheet.current.open();
     setDatas(val);
   };
+
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -33,6 +42,7 @@ export default function ManageClient({
         back
         onBackPress={() => navigation.goBack()}
         sharp
+        OnPressSharp={async () => await refFillter.current.open()}
       />
       <View style={stylesCustom.view1}>
         <View style={styles.view}>
@@ -44,17 +54,26 @@ export default function ManageClient({
             onPress={() => refRBSheet.current.open()}
           />
         </View>
-        <FlatList
-          data={data?.data}
-          renderItem={({item}) => (
-            <RenderItemManage item={item} onSelect={EditUser} />
-          )}
-          contentContainerStyle={styles.fl}
-        />
+        {data?.data?.length !== 0 ? (
+          <FlatList
+            data={data?.data}
+            renderItem={({item}) => (
+              <RenderItemManage item={item} onSelect={EditUser} />
+            )}
+            contentContainerStyle={styles.fl}
+          />
+        ) : (
+          <Nodata />
+        )}
       </View>
       <BottomSheetClient refRBSheet={refRBSheet} />
       <BottomSheetEditClient refRBSheet={refBootomSheet} item={datas} />
       {isLoading && <Loading />}
+      <BottomSheetFilterClient
+        refRBSheet={refFillter}
+        params={val => setParams(val)}
+        isLoading={isFetching}
+      />
     </View>
   );
 }

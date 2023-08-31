@@ -7,6 +7,7 @@ import RenderItemLog from './RenderItemLog';
 import {useGetActivitiesQuery} from '../../../redux/api/auth.api';
 import Loading from '../../../component/loading/Loading';
 import BottomSheetFillter from '../../../component/bottomSheet/BottomSheetFillter';
+import Nodata from '../../../component/nofinddata/Nodata';
 
 const NotifiLog = () => {
   const refBootomSheet = useRef<any>(null);
@@ -34,22 +35,26 @@ const NotifiLog = () => {
           Thông báo ({data?.payload?.pagination?.total || 0})
         </Text>
 
-        <FlatList
-          data={data?.data}
-          renderItem={({item}: {item: Activities}) => (
-            <RenderItemLog item={item} />
-          )}
-          keyExtractor={item => `${item?.id}`}
-          contentContainerStyle={{paddingBottom: 50}}
-          removeClippedSubviews
-          maxToRenderPerBatch={10}
-          style={{marginTop: 20}}
-          onRefresh={refetch}
-          scrollEventThrottle={16}
-          refreshing={isFetching}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.7}
-        />
+        {data?.data?.length !== 0 ? (
+          <FlatList
+            data={data?.data}
+            renderItem={({item}: {item: Activities}) => (
+              <RenderItemLog item={item} />
+            )}
+            keyExtractor={item => `${item?.id}`}
+            contentContainerStyle={{paddingBottom: 50}}
+            removeClippedSubviews
+            maxToRenderPerBatch={10}
+            style={{marginTop: 20}}
+            onRefresh={refetch}
+            scrollEventThrottle={16}
+            refreshing={isFetching}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.7}
+          />
+        ) : (
+          <Nodata />
+        )}
       </View>
       <BottomSheetFillter
         refRBSheet={refBootomSheet}

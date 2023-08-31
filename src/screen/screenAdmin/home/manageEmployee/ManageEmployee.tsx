@@ -10,6 +10,8 @@ import RenderItemManageEmployee from './RenderItemManageEmployee';
 import {useGetEmployeeQuery} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
 import BottomSheetCreatEmployee from '../../../../component/bottomSheet/BottomSheetCreatEmployee';
+import BottomSheetFillterEmployee from '../../../../component/bottomSheet/BottomSheetFillterEmployee';
+import Nodata from '../../../../component/nofinddata/Nodata';
 
 export default function ManageEmployee({
   navigation,
@@ -21,10 +23,14 @@ export default function ManageEmployee({
     setPerPage(perpage + 20);
     refetch();
   };
+  const refFillter = useRef<any>(null);
+  const [params, setParams] = useState('');
   const refRBSheet = useRef<any>(null);
   const {data, isLoading, refetch, isFetching} = useGetEmployeeQuery({
     per_page: perpage,
+    option: params,
   });
+
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -32,6 +38,7 @@ export default function ManageEmployee({
         back
         onBackPress={() => navigation.goBack()}
         sharp
+        OnPressSharp={async () => await refFillter?.current?.open()}
       />
 
       <View style={stylesCustom.view1}>
@@ -44,19 +51,28 @@ export default function ManageEmployee({
             onPress={() => refRBSheet.current.open()}
           />
         </View>
-        <FlatList
-          data={data?.data}
-          renderItem={({item}) => <RenderItemManageEmployee item={item} />}
-          contentContainerStyle={styles.fl}
-          style={{marginTop: 15}}
-          onRefresh={refetch}
-          scrollEventThrottle={16}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.7}
-          refreshing={isFetching}
-        />
+        {data?.data?.length !== 0 ? (
+          <FlatList
+            data={data?.data}
+            renderItem={({item}) => <RenderItemManageEmployee item={item} />}
+            contentContainerStyle={styles.fl}
+            style={{marginTop: 15}}
+            onRefresh={refetch}
+            scrollEventThrottle={16}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.7}
+            refreshing={isFetching}
+          />
+        ) : (
+          <Nodata />
+        )}
       </View>
       <BottomSheetCreatEmployee refRBSheet={refRBSheet} refetchs={refetch} />
+      <BottomSheetFillterEmployee
+        refRBSheet={refFillter}
+        params={val => setParams(val)}
+        isLoading={isFetching}
+      />
       {isLoading && <Loading />}
     </View>
   );

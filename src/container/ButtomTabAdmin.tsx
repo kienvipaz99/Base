@@ -36,7 +36,7 @@ export default function ButtomTabAdmin() {
       }}>
       <Tabs.Navigator
         backBehavior="none"
-        initialRouteName={'SplashScreen'}
+        initialRouteName={'Dasboad'}
         screenOptions={{
           headerShown: false,
           tabBarActiveBackgroundColor: colors.gray1,

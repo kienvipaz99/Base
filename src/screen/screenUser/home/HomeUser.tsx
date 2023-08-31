@@ -9,12 +9,35 @@ import fonts from '../../../res/fonts';
 import StatisticalChart from './StatisticalChart';
 import BTNLogin from '../../../component/btn/BTNLogin';
 import {NavigationProp} from '@react-navigation/native';
+import {authApi, useLogoutMutation} from '../../../redux/api/auth.api';
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../redux/store/store';
+import {setDataUser} from '../../../redux/state/login.slice';
 
 export default function HomeUser({
   navigation,
 }: {
   navigation: NavigationProp<Record<string, any>>;
 }) {
+  const dispatch = useDispatch();
+  const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
+  const remember = useAppSelect(data => data?.getLogin?.getdataUser);
+  const [logoutMutation] = useLogoutMutation();
+  const handleLogout = async () => {
+    try {
+      const result = await logoutMutation('');
+      if (result) {
+        dispatch(authApi.util.resetApiState());
+        dispatch(
+          setDataUser({
+            username: remember?.username,
+            password: '',
+          }),
+        );
+        navigation.navigate('Login');
+      }
+    } catch (error) {}
+  };
   const RenderFooter = () => (
     <>
       <View style={[stylesCustom.row1, styles.view1]}>
@@ -43,7 +66,7 @@ export default function HomeUser({
       <BTNLogin
         title="Đăng xuất"
         styleProps={{marginTop: 25}}
-        onPress={() => navigation.navigate('Login')}
+        onPress={handleLogout}
       />
     </>
   );

@@ -8,7 +8,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import stylesCustom from '../../res/stylesCustom';
 import {Text} from 'react-native-paper';
-import {useGetUserQuery} from '../../redux/api/auth.api';
+import {useGetUserQuery, useGetdataClientQuery} from '../../redux/api/auth.api';
 export default function SelectUser({
   select,
   setSelect,
@@ -18,8 +18,8 @@ export default function SelectUser({
   setSelect: (val: GetUser) => void;
   onPressIcon?: () => void;
 }) {
-  const {data: user} = useGetUserQuery({
-    option: 'filter[customer]=CUSTOMER',
+  const {data: user} = useGetdataClientQuery({
+    option: '&filter[customer]=CUSTOMER',
   });
   return (
     <SelectDropdown

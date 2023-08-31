@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import HeaderCustom from '../../../../component/header/HeaderCustom';
 import {NavigationProp} from '@react-navigation/native';
 import stylesCustom from '../../../../res/stylesCustom';
@@ -8,8 +8,13 @@ import {colors} from '../../../../res/colors';
 import sizes from '../../../../res/sizes';
 import RenderManageProduct from './RenderManageProduct';
 import BottomSheetaddProduct from '../../../../component/bottomSheet/BottomSheetaddProduct';
-import {useGetProductQuery} from '../../../../redux/api/auth.api';
+import {
+  useGetProductQuery,
+  useGetProductsQuery,
+} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
+import BottomSheetFillterProduct from '../../../../component/bottomSheet/BottomSheetFillterProduct';
+import Nodata from '../../../../component/nofinddata/Nodata';
 
 const MageProduct = ({
   navigation,
@@ -17,7 +22,14 @@ const MageProduct = ({
   navigation: NavigationProp<Record<string, any>>;
 }) => {
   const refRBSheet = useRef<any>(null);
-  const {data, isLoading, refetch, isFetching} = useGetProductQuery('');
+  const refRBSheetFilter = useRef<any>(null);
+
+  const [params, setParams] = useState('');
+  const {data, isLoading, refetch, isFetching} = useGetProductsQuery({
+    per_page: 1000,
+    option: params,
+  });
+
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -25,6 +37,7 @@ const MageProduct = ({
         back
         sharp
         onBackPress={() => navigation.goBack()}
+        OnPressSharp={async () => await refRBSheetFilter.current.open()}
       />
       <View style={stylesCustom.view1}>
         <View style={styles.view}>
@@ -36,18 +49,27 @@ const MageProduct = ({
             onPress={() => refRBSheet.current.open()}
           />
         </View>
-        <FlatList
-          data={data?.data}
-          renderItem={({item}) => <RenderManageProduct item={item} />}
-          contentContainerStyle={styles.fl}
-          onRefresh={refetch}
-          scrollEventThrottle={16}
-          refreshing={isFetching}
-          style={{marginTop: 20}}
-        />
+        {data?.data?.length !== 0 ? (
+          <FlatList
+            data={data?.data}
+            renderItem={({item}) => <RenderManageProduct item={item} />}
+            contentContainerStyle={styles.fl}
+            onRefresh={refetch}
+            scrollEventThrottle={16}
+            refreshing={isFetching}
+            style={{marginTop: 20}}
+          />
+        ) : (
+          <Nodata />
+        )}
       </View>
       <BottomSheetaddProduct refRBSheet={refRBSheet} reload={refetch} />
       {isLoading && <Loading />}
+      <BottomSheetFillterProduct
+        isLoading={isFetching}
+        params={setParams}
+        refRBSheet={refRBSheetFilter}
+      />
     </View>
   );
 };

@@ -1,15 +1,15 @@
 import type {BaseQueryFn} from '@reduxjs/toolkit/query';
 import axios, {AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 import type {AxiosRequestConfig, AxiosError} from 'axios';
-import {Alert} from 'react-native';
-import {navigate} from '../../../RootNavigation';
+
 import {API} from './BASE_URL/API';
+let axiosAuthInterceptor: any;
+let axiosResponseInterceptor: any;
 export const axiosAuth = (auths: string) => {
   axios.interceptors.request.use(
     function (config: InternalAxiosRequestConfig) {
       config.headers.Accept = 'application/json';
       config.headers.Authorization = `Bearer ${auths}`;
-
       return config;
     },
     function (error: AxiosError) {
@@ -17,18 +17,13 @@ export const axiosAuth = (auths: string) => {
     },
   );
 };
-axios.interceptors.response.use(
+axiosResponseInterceptor = axios.interceptors.response.use(
   function (response: AxiosResponse) {
     return response;
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     if (error.response.status === 401) {
-      Alert.alert(
-        'Bạn đã hết hạn đăng nhập, vui lòng đăng nhập lại để tiếp tục',
-        ' ',
-        [{text: 'Đồng ý', onPress: () => navigate('Login')}],
-      );
     }
     // Do something with response error
     return Promise.reject(error);
@@ -71,3 +66,7 @@ export const axiosBaseQuery =
       };
     }
   };
+export const resetAxiosInterceptors = () => {
+  axios.interceptors.request.eject(axiosAuthInterceptor);
+  axios.interceptors.response.eject(axiosResponseInterceptor);
+};

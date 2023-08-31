@@ -21,8 +21,10 @@ export default function BottomSheetFillter({
   isLoading: boolean;
 }) {
   const {data: Employee} = useGetEmployeeQuery({
-    per_page: 1000,
+    option: ``,
+    per_page: -1,
   });
+  console.log(Employee);
 
   const Invoid = [
     {
@@ -55,6 +57,8 @@ export default function BottomSheetFillter({
       startDate && endDate ? `&filter[created_at]=${startDate};${endDate}` : '';
     params(type + ids + time);
   };
+  console.log(Employee?.data);
+
   return (
     //@ts-ignore
     <RBSheet

@@ -94,13 +94,13 @@ interface RevenueTeam {
 }
 interface DashboardRevenue {
   data: {
-    yearTotalCountryRevenue: number;
-    nowLastMonthTotalCountryRevenue: number;
-    thisMonthTotalCountryRevenue: number;
-    thisMonthTotalCountryRevenueApprove: number;
-    totalKpiYear: number;
-    totalKpiMonth: number;
-    thisDayPreviousMonth: number;
+    yearTotalCountryRevenue?: number;
+    nowLastMonthTotalCountryRevenue?: number;
+    thisMonthTotalCountryRevenue?: number;
+    thisMonthTotalCountryRevenueApprove?: number;
+    totalKpiYear?: number;
+    totalKpiMonth?: number;
+    thisDayPreviousMonth?: number;
     today: {
       todayTotalCountryRevenue: number;
       avgDayTotalKpiMonth: number;
@@ -332,6 +332,7 @@ interface SelectCustom {
   name: string;
   teams: Team[];
   params: string;
+  email?: string;
 }
 interface CreatTeam {
   name: string;

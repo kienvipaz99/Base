@@ -10,6 +10,8 @@ import RenderItemManageServiec from './RenderItemManageService';
 import BottomSheetaddService from '../../../../component/bottomSheet/BottomSheetaddService';
 import {useGetPlansQuery} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
+import BottomSheetFillterProduct from '../../../../component/bottomSheet/BottomSheetFillterProduct';
+import Nodata from '../../../../component/nofinddata/Nodata';
 
 const ManageService = ({
   navigation,
@@ -17,10 +19,12 @@ const ManageService = ({
   navigation: NavigationProp<Record<string, any>>;
 }) => {
   const refRBSheet = useRef<any>(null);
-  const [perpage, setPerPage] = useState(20);
+  const refRBFind = useRef<any>(null);
 
+  const [perpage, setPerPage] = useState(20);
+  const [params, setParams] = useState('');
   const {data, isLoading, refetch, isFetching} = useGetPlansQuery({
-    option: `?include=product&per_page=${perpage}`,
+    option: `?include=product&per_page=${perpage}${params}`,
   });
   const handleEndReached = () => {
     setPerPage(perpage + 20);
@@ -33,6 +37,7 @@ const ManageService = ({
         back
         sharp
         onBackPress={() => navigation.goBack()}
+        OnPressSharp={async () => refRBFind.current.open()}
       />
       <View style={stylesCustom.view1}>
         <View style={styles.view}>
@@ -44,21 +49,31 @@ const ManageService = ({
             onPress={() => refRBSheet.current.open()}
           />
         </View>
-        <FlatList
-          data={data?.data}
-          keyExtractor={(item: Plans) => item?.id.toString()}
-          renderItem={({item}) => <RenderItemManageServiec item={item} />}
-          contentContainerStyle={styles.fl}
-          onRefresh={refetch}
-          scrollEventThrottle={16}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.7}
-          style={{marginTop: 20}}
-          refreshing={isFetching}
-        />
+
+        {data?.data?.length !== 0 ? (
+          <FlatList
+            data={data?.data}
+            keyExtractor={(item: Plans) => item?.id.toString()}
+            renderItem={({item}) => <RenderItemManageServiec item={item} />}
+            contentContainerStyle={styles.fl}
+            onRefresh={refetch}
+            scrollEventThrottle={16}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.7}
+            style={{marginTop: 20}}
+            refreshing={isFetching}
+          />
+        ) : (
+          <Nodata />
+        )}
       </View>
       <BottomSheetaddService refRBSheet={refRBSheet} />
       {isLoading && <Loading />}
+      <BottomSheetFillterProduct
+        isLoading={isFetching}
+        params={setParams}
+        refRBSheet={refRBFind}
+      />
     </View>
   );
 };

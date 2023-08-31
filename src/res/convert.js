@@ -10,7 +10,11 @@ export function maxlengText(val) {
   }
 }
 export function money(val) {
-  return Number(val).toLocaleString('vi-VN');
+  if (val) {
+    return Number(val).toLocaleString('vi-VN');
+  } else {
+    return 0;
+  }
 }
 export function date(val) {
   if (val) {
@@ -35,6 +39,24 @@ export function formatCurrency(val) {
     );
   } else if (val == 0) {
     return ' ';
+  }
+}
+export function formatCurrencys(val) {
+  let value = Number(val);
+  if (value >= 1000000000) {
+    return (
+      (value / 1000000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'tỷ'
+    );
+  } else if (value >= 1000000) {
+    return (
+      (value / 1000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'tr'
+    );
+  } else if (value >= 1000) {
+    return (
+      (value / 1000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'nghìn'
+    );
+  } else if (val == 0) {
+    return 0 + 'đ';
   }
 }
 export function getCurrentMonthDays() {

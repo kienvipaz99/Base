@@ -1,6 +1,5 @@
 import {
-  FlatList,
-  Image,
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,27 +10,38 @@ import sizes from '../../../res/sizes';
 import stylesCustom from '../../../res/stylesCustom';
 import {colors} from '../../../res/colors';
 import fonts from '../../../res/fonts';
-import {dataEmployeeSaleToday} from '../../../res/feckData/dataEmployeeSaleToday';
-import images from '../../../res/images';
 import RenderItemSale from './RenderItem';
-
-export default function EmployeeSaleToday() {
+import {useGetEmployeeTodayQuery} from '../../../redux/api/auth.api';
+import {money} from '../../../res/convert';
+export default function EmployeeSaleToday({
+  RevenueToday,
+}: {
+  RevenueToday?: number;
+}) {
+  const {data, isLoading} = useGetEmployeeTodayQuery('');
   return (
     <View style={styles.view}>
-      <Text style={styles.txt}>Tổng thu: 20000000</Text>
-      <ScrollView
-        key={'scrollEmployeeSaleToday'}
-        nestedScrollEnabled
-        showsVerticalScrollIndicator={false}
-        style={{marginTop: 20}}>
-        {dataEmployeeSaleToday.map((item, index) => (
-          <RenderItemSale
-            item={item}
-            index={index}
-            key={index.toString() + 1}
-          />
-        ))}
-      </ScrollView>
+      <Text style={styles.txt}>Tổng thu:{money(RevenueToday)} </Text>
+
+      {isLoading ? (
+        <View style={styles.view1}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <ScrollView
+          key={'scrollEmployeeSaleToday'}
+          nestedScrollEnabled
+          showsVerticalScrollIndicator={false}
+          style={{marginTop: 20}}>
+          {data?.data.map((item, index) => (
+            <RenderItemSale
+              item={item}
+              index={index}
+              key={index.toString() + 1}
+            />
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 }
@@ -56,5 +66,15 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontFamily: fonts.Medium,
     fontSize: 16,
+  },
+  view1: {
+    height: 100,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    zIndex: 0,
+    flex: 1,
+    backgroundColor: 'white',
   },
 });

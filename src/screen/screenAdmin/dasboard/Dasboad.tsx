@@ -9,36 +9,60 @@ import CuttomTab from './CuttomTab';
 import LineChart from './LineChart';
 import EmployeeSaleToday from './EmployeeSaleToday';
 import TopSaleMonth from './topSaleMonth/TopSaleMonth';
+import {useGetDashboardRevenueQuery} from '../../../redux/api/auth.api';
+import {formatCurrencys, money} from '../../../res/convert';
+import Loading from '../../../component/loading/Loading';
 const Dasboad = () => {
+  const {data, isLoading} = useGetDashboardRevenueQuery('');
   const RenderFooter = () => (
     <>
       <Text style={styles.txt}>Doanh thu tháng này</Text>
       <View style={{width: sizes.width * 0.9, alignSelf: 'center'}}>
         <View>
-          <Text style={styles.txt1}>20.000.000/100.000.000</Text>
+          <Text style={styles.txt1}>
+            {money(data?.data?.thisMonthTotalCountryRevenue)}/
+            {money(data?.data?.totalKpiMonth)}
+          </Text>
           <ProgressBar
-            progress={0.8}
+            progress={
+              data
+                ? //@ts-ignore
+                  data?.data?.thisMonthTotalCountryRevenue /
+                  //@ts-ignore
+                  data?.data?.totalKpiMonth
+                : 0
+            }
             color={colors.blue}
             style={styles.progress}
           />
         </View>
         <View style={stylesCustom.row}>
           <Text style={styles.txt2}>Tỷ lệ doanh thu:</Text>
-          <Text style={styles.txt2}>20%</Text>
+          <Text style={styles.txt2}>
+            {
+              //@ts-ignore
+              (data?.data?.thisMonthTotalCountryRevenue /
+                //@ts-ignore
+                data?.data?.totalKpiMonth) *
+                100
+            }
+            %
+          </Text>
         </View>
       </View>
-      <Text style={styles.txt}>Doanh thu hôm nay</Text>
-      <Text style={[styles.txt3, styles.txtmoney]}>10.000.000</Text>
+
       <Text style={styles.txt}>Doanh thu tháng 8</Text>
       <CuttomTab />
       <Text style={styles.txt}>Biểu đồ doanh thu</Text>
       <LineChart />
       <Text style={styles.txt}>Doanh số nhân viên hôm nay</Text>
-      <EmployeeSaleToday />
+      <EmployeeSaleToday
+        RevenueToday={data?.data?.today?.todayTotalCountryRevenue}
+      />
       <View style={stylesCustom.row}>
         <Text style={styles.txt}>Top doanh thu tháng</Text>
         <Text style={[styles.txt, {color: colors.green, marginRight: 10}]}>
-          Tổng 300 (tr)
+          Tổng ({formatCurrencys(data?.data?.thisMonthTotalCountryRevenue)})
         </Text>
       </View>
       <TopSaleMonth />
@@ -58,6 +82,7 @@ const Dasboad = () => {
           ListFooterComponentStyle={{paddingBottom: 40}}
         />
       </View>
+      {isLoading && <Loading />}
     </View>
   );
 };

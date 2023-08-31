@@ -1,18 +1,16 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from './axiosClient';
-import {API} from './BASE_URL/API';
 import {ListApiResponse} from '../type/Common';
-import {AxiosHeaders} from 'axios';
 const tagTypes = 'Auth' as const;
 export const authApi = createApi({
   reducerPath: 'authApi',
   tagTypes: [tagTypes],
-  baseQuery: axiosBaseQuery({baseUrl: API}),
+  baseQuery: axiosBaseQuery(),
   endpoints: build => ({
-    logout: build.mutation<{}, {}>({
+    logout: build.mutation<{}, string>({
       query() {
         return {
-          url: 'auth/logout',
+          url: 'api/v1/auth/logout',
           method: 'POST',
         };
       },
@@ -143,9 +141,12 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
-    getProducts: build.query<ListApiResponse<Product>, {perPage: number}>({
-      query: ({perPage}) => ({
-        url: `api/v1/products?per_page=${perPage}`,
+    getProducts: build.query<
+      ListApiResponse<Product>,
+      {per_page: number; option?: string}
+    >({
+      query: ({per_page, option}) => ({
+        url: `api/v1/products?append=revenue,revenue_approve,ranges&per_page=${per_page}&month=5&years=2023${option}`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -378,7 +379,7 @@ export const authApi = createApi({
     }),
     getUser: build.query<ListApiResponse<GetUser>, {option: string}>({
       query: option => ({
-        url: `api/v1/users?per_page=-1&${option}`,
+        url: `api/v1/users?month=5&years=2023&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue&filter[is_sales]=1&include=team`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -398,9 +399,56 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
-    getEmployee: build.query<ListApiResponse<GetUser>, {per_page: number}>({
-      query: ({per_page}) => ({
-        url: `api/v1/users?per_page=${per_page}&filter[member]=MEMBER&include=roles,team&append=revenue_last_month,revenue_approve,revenue`,
+    getEmployee: build.query<
+      ListApiResponse<GetUser>,
+      {per_page: number; option?: string}
+    >({
+      query: ({per_page, option}) => ({
+        url: `api/v1/users?per_page=${per_page}&filter[member]=MEMBER&include=roles,team&append=revenue_last_month,revenue_approve,revenue${option}`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    getdataClient: build.query<ListApiResponse<GetUser>, {option: string}>({
+      query: ({option}) => ({
+        url: `api/v1/users?per_page=-1${option}`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
+    getEmployeeToday: build.query<ListApiResponse<GetUser>, {}>({
+      query: () => ({
+        url: `api/v1/users?filter[member]=MEMBER&month=today&years=2023&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue,ranges&filter[is_sales]=1&include=team`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -572,4 +620,6 @@ export const {
   useEditProductMutation,
   useCreatLogMutation,
   useGetProductsQuery,
+  useGetEmployeeTodayQuery,
+  useGetdataClientQuery,
 } = authApi;

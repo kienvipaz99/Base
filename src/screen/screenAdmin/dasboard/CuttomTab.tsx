@@ -226,7 +226,9 @@ export default function CuttomTab() {
             />
             <View style={{marginTop: 15}}>
               <Text style={styles.txt}>
-                Hoàn thành: {((totalRevenue / totalRevenue) * 100).toFixed(2)}%
+                Hoàn thành:{' '}
+                {((totalRevenue / total?.data?.totalKpiMonth) * 100).toFixed(2)}
+                %
               </Text>
               <Text style={styles.txt}>
                 Thực hiện: {formatCurrency(totalRevenue)} /{' '}
