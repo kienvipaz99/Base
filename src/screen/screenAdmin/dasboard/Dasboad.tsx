@@ -10,7 +10,7 @@ import LineChart from './LineChart';
 import EmployeeSaleToday from './EmployeeSaleToday';
 import TopSaleMonth from './topSaleMonth/TopSaleMonth';
 import {useGetDashboardRevenueQuery} from '../../../redux/api/auth.api';
-import {formatCurrencys, money} from '../../../res/convert';
+import {formatCurrencys, money, thang} from '../../../res/convert';
 import Loading from '../../../component/loading/Loading';
 const Dasboad = () => {
   const {data, isLoading} = useGetDashboardRevenueQuery('');
@@ -51,7 +51,7 @@ const Dasboad = () => {
         </View>
       </View>
 
-      <Text style={styles.txt}>Doanh thu tháng 8</Text>
+      <Text style={styles.txt}>Doanh thu tháng {thang()}</Text>
       <CuttomTab />
       <Text style={styles.txt}>Biểu đồ doanh thu</Text>
       <LineChart />

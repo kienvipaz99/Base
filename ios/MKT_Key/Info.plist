@@ -35,19 +35,12 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) yêu cầu truy thư viện ảnh để tải lên hoá đơn của bạn</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) yêu cầu truy cập máy ảnh để tải lên hoá đơn của bạn</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	
-	<array>
-		<string>armv7</string>
-	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) yêu cầu truy thư viện ảnh để tải lên hoá đơn của bạn</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -75,6 +68,12 @@
 		<string>GoogleSans-Medium.ttf</string>
 		<string>GoogleSans-MediumItalic.ttf</string>
 		<string>GoogleSans-Regular.ttf</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

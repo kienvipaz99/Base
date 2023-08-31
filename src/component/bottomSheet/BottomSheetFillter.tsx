@@ -24,7 +24,6 @@ export default function BottomSheetFillter({
     option: ``,
     per_page: -1,
   });
-  console.log(Employee);
 
   const Invoid = [
     {

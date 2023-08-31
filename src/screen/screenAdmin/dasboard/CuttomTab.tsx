@@ -18,7 +18,7 @@ import {
   useGetDashboardRevenueQuery,
   useGetTeamRevenueQuery,
 } from '../../../redux/api/auth.api';
-import {formatCurrency} from '../../../res/convert';
+import {formatCurrency, nam, thang} from '../../../res/convert';
 export default function CuttomTab() {
   const [activeTab, setActiveTab] = useState(0);
   const data1 = [
@@ -49,8 +49,9 @@ export default function CuttomTab() {
       color: 'red',
     },
   ];
+
   const {data, isLoading} = useGetTeamRevenueQuery({
-    option: `?append=revenue,revenue_approve,ranges&month=5&years=2023`,
+    option: `?append=revenue,revenue_approve,ranges&month=${thang()}&years=${nam()}`,
   });
   const {data: total} = useGetDashboardRevenueQuery('') as any;
 
@@ -74,11 +75,12 @@ export default function CuttomTab() {
     return {
       ...item,
       x: item?.id,
-      y: item?.revenue,
-      label: formatCurrency(item?.revenue),
+      y: item?.revenue !== null ? item?.revenue : 0,
+      label: item?.revenue !== null ? formatCurrency(item?.revenue) : 0,
       color: colorList[index % colorList.length],
     };
   });
+  const allZero = modifiedData?.every(item => item.y === 0);
 
   const RenderItem = ({item}: any) => {
     return (
@@ -145,7 +147,7 @@ export default function CuttomTab() {
               <Circle
                 // @ts-ignore
                 cx={(sizes.width * 0.8) / 2}
-                cy={255 / 2}
+                cy={260 / 2}
                 r={35}
                 fill="#ECEFF1"
               />
@@ -160,8 +162,14 @@ export default function CuttomTab() {
                 height={260}
                 width={sizes.width * 0.8}
                 labelPosition={'centroid'}
-                colorScale={colorList}
-                data={activeTab === 0 ? modifiedData : data1}
+                colorScale={allZero ? ['#ccc'] : colorList}
+                data={
+                  activeTab === 0
+                    ? allZero
+                      ? [{x: 0, y: 1}]
+                      : modifiedData
+                    : data1
+                }
                 padAngle={2}
                 events={[
                   {
@@ -175,7 +183,12 @@ export default function CuttomTab() {
                             mutation: (data: any, {text}: {text: string}) => {
                               setClick(!click);
                               return !click
-                                ? {text: data?.slice?.data?.label}
+                                ? {
+                                    text:
+                                      data?.slice?.data?.label !== 0
+                                        ? data?.slice?.data?.label
+                                        : '',
+                                  }
                                 : {
                                     text:
                                       (
@@ -207,10 +220,12 @@ export default function CuttomTab() {
                   fontFamily: fonts.Regula,
                   fill: '#2FB77A',
                 }}
-                text={`${formatCurrency(totalRevenue)}\n Triệu`}
+                text={`${
+                  totalRevenue !== 0 ? formatCurrency(totalRevenue) : 0
+                }\n Triệu`}
                 verticalAnchor={'middle'}
                 x={(sizes.width * 0.8) / 2}
-                y={260 / 2}
+                y={264 / 2}
               />
             </Svg>
             <FlatList
@@ -231,8 +246,11 @@ export default function CuttomTab() {
                 %
               </Text>
               <Text style={styles.txt}>
-                Thực hiện: {formatCurrency(totalRevenue)} /{' '}
-                {formatCurrency(total?.data?.totalKpiMonth)} (Tr){' '}
+                Thực hiện: {totalRevenue ? formatCurrency(totalRevenue) : 0} /{' '}
+                {total?.data?.totalKpiMonth
+                  ? formatCurrency(total?.data?.totalKpiMonth)
+                  : 0}{' '}
+                (Tr){' '}
               </Text>
               <Text style={styles.txt}>
                 Thiếu:{' '}

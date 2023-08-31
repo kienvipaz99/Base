@@ -1,6 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from './axiosClient';
 import {ListApiResponse} from '../type/Common';
+import {nam, thang} from '../../res/convert';
 const tagTypes = 'Auth' as const;
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -121,12 +122,14 @@ export const authApi = createApi({
     }),
     getProduct: build.query<ListApiResponse<Product>, string>({
       query: () => ({
-        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=5&years=2023&per_page=1000`,
+        url: `api/v1/products?append=revenue,revenue_approve,ranges&month=${thang()}&years=${nam()}&per_page=1000`,
         method: 'GET',
       }),
       providesTags(result) {
         if (result?.data) {
           const data = result.data;
+          console.log(thang());
+
           return [
             ...data.map(({id}) => ({
               type: tagTypes,
@@ -146,7 +149,7 @@ export const authApi = createApi({
       {per_page: number; option?: string}
     >({
       query: ({per_page, option}) => ({
-        url: `api/v1/products?append=revenue,revenue_approve,ranges&per_page=${per_page}&month=5&years=2023${option}`,
+        url: `api/v1/products?append=revenue,revenue_approve,ranges&per_page=${per_page}&month=${thang()}&years=${nam()}${option}`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -379,7 +382,7 @@ export const authApi = createApi({
     }),
     getUser: build.query<ListApiResponse<GetUser>, {option: string}>({
       query: option => ({
-        url: `api/v1/users?month=5&years=2023&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue&filter[is_sales]=1&include=team`,
+        url: `api/v1/users?month=${thang()}&years=${nam()}&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue&filter[is_sales]=1&include=team`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -448,7 +451,7 @@ export const authApi = createApi({
     }),
     getEmployeeToday: build.query<ListApiResponse<GetUser>, {}>({
       query: () => ({
-        url: `api/v1/users?filter[member]=MEMBER&month=today&years=2023&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue,ranges&filter[is_sales]=1&include=team`,
+        url: `api/v1/users?filter[member]=MEMBER&month=today&years=${nam()}&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue,ranges&filter[is_sales]=1&include=team`,
         method: 'GET',
       }),
       providesTags(result) {

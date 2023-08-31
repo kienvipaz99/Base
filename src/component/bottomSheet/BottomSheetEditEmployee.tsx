@@ -63,7 +63,6 @@ export default function BottomSheetEditEmployee({
           user_type: 'MEMBER',
         },
       }).unwrap();
-      console.log(datas);
     } catch (error: any) {
       console.log(error.data.payload.errors);
     }

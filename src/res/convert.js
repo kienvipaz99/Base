@@ -38,7 +38,7 @@ export function formatCurrency(val) {
       (value / 1000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'nghìn'
     );
   } else if (val == 0) {
-    return ' ';
+    return '';
   }
 }
 export function formatCurrencys(val) {
@@ -97,4 +97,16 @@ export function ngaythang(date) {
 
   const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
+}
+export function thang() {
+  const ngayHienTai = new Date();
+  const thangHienTai = ngayHienTai.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+
+  return thangHienTai;
+}
+export function nam() {
+  const ngayHienTai = new Date();
+  const namHienTai = ngayHienTai.getFullYear();
+
+  return namHienTai;
 }
