@@ -12,7 +12,10 @@ import {NavigationProp} from '@react-navigation/native';
 import {authApi, useLogoutMutation} from '../../../redux/api/auth.api';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store/store';
+
 import {setDataUser} from '../../../redux/state/login.slice';
+import Loading from '../../../component/loading/Loading';
+import {Profile} from '../../../redux/type/Auth';
 
 export default function HomeUser({
   navigation,
@@ -22,12 +25,12 @@ export default function HomeUser({
   const dispatch = useDispatch();
   const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
   const remember = useAppSelect(data => data?.getLogin?.getdataUser);
-  const [logoutMutation] = useLogoutMutation();
+  const user = useAppSelect(data => data?.getProfile?.getProfile) as Profile;
+  const [logoutMutation, {isLoading}] = useLogoutMutation();
   const handleLogout = async () => {
     try {
       const result = await logoutMutation('');
       if (result) {
-        dispatch(authApi.util.resetApiState());
         dispatch(
           setDataUser({
             username: remember?.username,
@@ -38,13 +41,15 @@ export default function HomeUser({
       }
     } catch (error) {}
   };
+  console.log(user);
+
   const RenderFooter = () => (
     <>
       <View style={[stylesCustom.row1, styles.view1]}>
         <Image source={images.kien} style={styles.img} />
         <View style={styles.view}>
-          <Text style={styles.txt}>Nguyễn Văn Kiên</Text>
-          <Text style={styles.txt1}>Email: kienvipaz99@gmail.com</Text>
+          <Text style={styles.txt}>{user?.data?.name}</Text>
+          <Text style={styles.txt1}>Email:{user?.data?.email}</Text>
         </View>
       </View>
       <View style={styles.view4}>
@@ -81,6 +86,7 @@ export default function HomeUser({
           ListFooterComponentStyle={{paddingBottom: 40}}
         />
       </View>
+      {isLoading && <Loading />}
     </View>
   );
 }

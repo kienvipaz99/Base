@@ -8,6 +8,11 @@ import {DataManage} from '../../../res/data/DataManage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import fonts from '../../../res/fonts';
 import {NavigationProp} from '@react-navigation/native';
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../redux/store/store';
+import {authApi, useLogoutMutation} from '../../../redux/api/auth.api';
+import {setDataUser} from '../../../redux/state/login.slice';
+import Loading from '../../../component/loading/Loading';
 
 const Home = ({
   navigation,
@@ -15,6 +20,24 @@ const Home = ({
   navigation: NavigationProp<Record<string, any>>;
 }) => {
   const [select, setSlect] = useState<number>();
+  const dispatch = useDispatch();
+  const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
+  const remember = useAppSelect(data => data?.getLogin?.getdataUser);
+  const [logoutMutation, {isLoading}] = useLogoutMutation();
+  const handleLogout = async () => {
+    try {
+      const result = await logoutMutation('');
+      if (result) {
+        dispatch(
+          setDataUser({
+            username: remember?.username,
+            password: '',
+          }),
+        );
+        navigation.navigate('Login');
+      }
+    } catch (error) {}
+  };
   const RenderItem = ({item}: {item: itemHome}) => {
     return (
       <Pressable
@@ -24,7 +47,11 @@ const Home = ({
         ]}
         onPress={() => {
           setSlect(item.id);
-          navigation.navigate(item.navigation);
+          if (item?.navigation === 'Login') {
+            handleLogout();
+          } else {
+            navigation.navigate(item.navigation);
+          }
         }}>
         <Icon
           name={item.icon}
@@ -57,6 +84,7 @@ const Home = ({
           columnWrapperStyle={styles.view1}
         />
       </View>
+      {isLoading && <Loading />}
     </View>
   );
 };

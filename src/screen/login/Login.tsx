@@ -18,9 +18,6 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store/store';
 import {setDataUser} from '../../redux/state/login.slice';
 import {setProfile} from '../../redux/state/profile.slice';
-import axios from 'axios';
-import {API} from '../../redux/api/BASE_URL/API';
-
 export default function Login({
   navigation,
 }: {
@@ -46,7 +43,6 @@ export default function Login({
           password: passWord,
         }),
       );
-      console.log(a);
 
       axiosAuth(a.apiToken);
       const veRify = await verifyToken({
@@ -62,9 +58,7 @@ export default function Login({
       } else {
         navigation.navigate('ButtomTabUser');
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useFocusEffect(

@@ -31,10 +31,27 @@ export default function LineChart() {
   let numberdayMonth = getCurrentMonthDays();
   const sevenDaysArray = [];
 
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(today);
-    day.setDate(today.getDate() - i);
-    sevenDaysArray.push(Number(day.getDate()));
+  if (today.getDate() < 7) {
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(firstDayOfMonth);
+
+      day.setDate(firstDayOfMonth.getDate() + i);
+      console.log(day, 'a');
+
+      sevenDaysArray.push(Number(day.getDate()));
+    }
+  } else {
+    // Nếu ngày hôm nay lớn hơn hoặc bằng 7, thì lấy 7 ngày gần nhất
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(today);
+
+      day.setDate(today.getDate() - i);
+      console.log(day, 'a');
+
+      sevenDaysArray.push(Number(day.getDate()));
+    }
   }
   let numberDay = sevenDaysArray.reverse();
   const currentData = data?.data?.current || YChart;
