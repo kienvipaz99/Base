@@ -9,7 +9,11 @@ import fonts from '../../../res/fonts';
 import StatisticalChart from './StatisticalChart';
 import BTNLogin from '../../../component/btn/BTNLogin';
 import {NavigationProp} from '@react-navigation/native';
-import {authApi, useLogoutMutation} from '../../../redux/api/auth.api';
+import {
+  authApi,
+  useGetDataUserQuery,
+  useLogoutMutation,
+} from '../../../redux/api/auth.api';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store/store';
 
@@ -41,7 +45,9 @@ export default function HomeUser({
       }
     } catch (error) {}
   };
-  console.log(user);
+  // const {data} = useGetDataUserQuery({
+  //   option: '',
+  // });
 
   const RenderFooter = () => (
     <>

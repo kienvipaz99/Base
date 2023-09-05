@@ -128,7 +128,6 @@ export const authApi = createApi({
       providesTags(result) {
         if (result?.data) {
           const data = result.data;
-          console.log(thang());
 
           return [
             ...data.map(({id}) => ({
@@ -382,7 +381,7 @@ export const authApi = createApi({
     }),
     getUser: build.query<ListApiResponse<GetUser>, {option: string}>({
       query: option => ({
-        url: `api/v1/users?month=${thang()}&years=${nam()}&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue&filter[is_sales]=1&include=team`,
+        url: `api/v1/users?month=${thang()}&years=${nam()}&per_page=-1&append=revenue_last_month,revenue_approve,revenue&include=team&filter[member]=MEMBER`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -427,6 +426,28 @@ export const authApi = createApi({
         return [{type: tagTypes, id: 'LIST'}];
       },
     }),
+    getDataUser: build.query<ListApiResponse<GetUser>, {option?: string}>({
+      query: ({option}) => ({
+        url: `api/v1/users${option}`,
+        method: 'GET',
+      }),
+      providesTags(result) {
+        if (result?.data) {
+          const data = result.data;
+          return [
+            ...data.map(({id}) => ({
+              type: tagTypes,
+              id,
+            })),
+            {
+              type: tagTypes,
+              id: 'LIST',
+            },
+          ];
+        }
+        return [{type: tagTypes, id: 'LIST'}];
+      },
+    }),
     getdataClient: build.query<ListApiResponse<GetUser>, {option: string}>({
       query: ({option}) => ({
         url: `api/v1/users?per_page=-1${option}`,
@@ -451,7 +472,7 @@ export const authApi = createApi({
     }),
     getEmployeeToday: build.query<ListApiResponse<GetUser>, {}>({
       query: () => ({
-        url: `api/v1/users?filter[member]=MEMBER&month=today&years=${nam()}&per_page=-1&filter[role]=SALES&append=revenue_last_month,revenue_approve,revenue,ranges&filter[is_sales]=1&include=team`,
+        url: `api/v1/users?include=roles,team&years=${nam()}&per_page=-1&filter[member]=MEMBER&month=today&append=revenue_last_month,revenue_approve,revenue,ranges`,
         method: 'GET',
       }),
       providesTags(result) {
@@ -625,4 +646,5 @@ export const {
   useGetProductsQuery,
   useGetEmployeeTodayQuery,
   useGetdataClientQuery,
+  useGetDataUserQuery,
 } = authApi;

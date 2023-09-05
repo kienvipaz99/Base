@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 150,
   },
-  title: {...stylesCustom.txtTitle1, color: colors.blue},
+  title: {...stylesCustom.txtTitle1, color: colors.blue, textAlign: 'center'},
   view: {
     height: 45,
     width: sizes.width * 0.8,

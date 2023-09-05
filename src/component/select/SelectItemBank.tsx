@@ -12,11 +12,13 @@ export default function SelectItemBank({
   select,
   setSelect,
   onPressIcon,
+  showIcon,
 }: {
   data: Banking[] | undefined;
   select?: string;
   setSelect: (val: Banking) => void;
   onPressIcon?: () => void;
+  showIcon: boolean;
 }) {
   return (
     <>
@@ -40,12 +42,14 @@ export default function SelectItemBank({
           dropdownStyle={{borderRadius: 10}}
           renderDropdownIcon={() => (
             <View style={stylesCustom.row1}>
-              <Ionicons
-                onPress={onPressIcon}
-                name={'logo-usd'}
-                size={25}
-                color={colors.text}
-              />
+              {showIcon && (
+                <Ionicons
+                  onPress={onPressIcon}
+                  name={'logo-usd'}
+                  size={25}
+                  color={colors.text}
+                />
+              )}
               <Entypo name="chevron-down" color={colors.text} size={25} />
             </View>
           )}

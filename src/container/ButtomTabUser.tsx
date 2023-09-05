@@ -8,9 +8,10 @@ import images from '../res/images';
 import {BottomFabBar} from '../common/rn-wave-bottom-bar-custom/src';
 import NotifiLog from '../screen/screenAdmin/notification/NotifiLog';
 import sizes from '../res/sizes';
-import DasboadUser from '../screen/screenUser/dasboadUser/DasboadUser';
 import HomeUser from '../screen/screenUser/home/HomeUser';
 import Rank from '../screen/screenUser/bxh/Rank';
+import Add_KeyUser from '../screen/screenUser/addkeyUser/Add_KeyUser';
+import LogUser from '../screen/screenUser/logUser/LogUser';
 
 export default function ButtomTabUser() {
   const Tabs = createBottomTabNavigator();
@@ -59,16 +60,16 @@ export default function ButtomTabUser() {
           }}
         />
         <Tabs.Screen
-          name={'Add_Key'}
-          component={Add_Key}
+          name={'Add_KeyUser'}
+          component={Add_KeyUser}
           options={{
             tabBarIcon: tabBarIcon(images.iconadd, images.iconadd),
             tabBarLabel: 'Cấp key',
           }}
         />
         <Tabs.Screen
-          name={'NotifiLog'}
-          component={NotifiLog}
+          name={'LogUser'}
+          component={LogUser}
           options={{
             tabBarIcon: tabBarIcon(images.iconnotifi, images.iconnotifi),
             tabBarLabel: 'Thông báo',

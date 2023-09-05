@@ -56,7 +56,6 @@ export default function BottomSheetFillter({
       startDate && endDate ? `&filter[created_at]=${startDate};${endDate}` : '';
     params(type + ids + time);
   };
-  console.log(Employee?.data);
 
   return (
     //@ts-ignore

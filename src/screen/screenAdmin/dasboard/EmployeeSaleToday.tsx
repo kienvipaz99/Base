@@ -24,9 +24,7 @@ export default function EmployeeSaleToday({
       <Text style={styles.txt}>Tổng thu:{money(RevenueToday)} </Text>
 
       {isLoading ? (
-        <View style={styles.view1}>
-          <ActivityIndicator size="large" />
-        </View>
+        <ActivityIndicator size="large" />
       ) : (
         <ScrollView
           key={'scrollEmployeeSaleToday'}

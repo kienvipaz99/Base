@@ -10,7 +10,6 @@ import BottomSheetBank from '../../../component/bottomSheet/BottomSheetBank';
 import {
   useCreatInvoicesMutation,
   useGetBankQuery,
-  useGetDataKeyQuery,
   useGetPlansQuery,
   useGetProductQuery,
 } from '../../../redux/api/auth.api';
@@ -24,7 +23,7 @@ import {Profile} from '../../../redux/type/Auth';
 import Loading from '../../../component/loading/Loading';
 import ToastCustom from '../../../component/toastCustom/ToastCustom';
 
-const Add_Key = () => {
+const Add_KeyUser = () => {
   const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
   const profile = useAppSelect(data => data?.getProfile?.getProfile) as Profile;
   const ToastRef = useRef<any>(null);
@@ -80,6 +79,9 @@ const Add_Key = () => {
       }
     } catch (error: any) {
       let err = error;
+      console.log(err);
+
+      console.log(err.data.payload.errors);
 
       setToast('Tạo key thất bại');
       await ToastRef.current.toast();
@@ -160,7 +162,7 @@ const Add_Key = () => {
               value={String(money(total))}
             />
             <SelectItemBank
-              showIcon
+              showIcon={false}
               data={dataBank?.data}
               setSelect={val => setbank_id(val.id)}
               onPressIcon={() => refRBSheetBank.current.open()}
@@ -196,7 +198,7 @@ const Add_Key = () => {
   );
 };
 
-export default Add_Key;
+export default Add_KeyUser;
 
 const styles = StyleSheet.create({
   view: {

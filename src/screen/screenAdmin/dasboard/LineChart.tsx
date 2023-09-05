@@ -38,7 +38,6 @@ export default function LineChart() {
       const day = new Date(firstDayOfMonth);
 
       day.setDate(firstDayOfMonth.getDate() + i);
-      console.log(day, 'a');
 
       sevenDaysArray.push(Number(day.getDate()));
     }
@@ -48,7 +47,6 @@ export default function LineChart() {
       const day = new Date(today);
 
       day.setDate(today.getDate() - i);
-      console.log(day, 'a');
 
       sevenDaysArray.push(Number(day.getDate()));
     }

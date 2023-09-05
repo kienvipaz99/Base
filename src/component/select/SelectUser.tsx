@@ -18,9 +18,10 @@ export default function SelectUser({
   setSelect: (val: GetUser) => void;
   onPressIcon?: () => void;
 }) {
-  const {data: user} = useGetdataClientQuery({
+  const {data: user, refetch} = useGetdataClientQuery({
     option: '&filter[customer]=CUSTOMER',
   });
+
   return (
     <SelectDropdown
       data={user?.data || []}
@@ -31,6 +32,7 @@ export default function SelectUser({
       buttonTextAfterSelection={item => {
         return `${item?.name} (${item.email})`;
       }}
+      onFocus={refetch}
       defaultValue={select}
       defaultButtonText="Chọn khách hàng"
       buttonTextStyle={styles.txt}

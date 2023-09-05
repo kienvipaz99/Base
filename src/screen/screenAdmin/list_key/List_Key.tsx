@@ -14,8 +14,9 @@ import Loading from '../../../component/loading/Loading';
 import ToastCustom from '../../../component/toastCustom/ToastCustom';
 import BottomSheetFillterkey from '../../../component/bottomSheet/BottomSheetFillterkey';
 import Nodata from '../../../component/nofinddata/Nodata';
-
+import ModalConfirm from '../../../component/modal/ModalConfirm';
 export default function List_Key() {
+  const [err, setErr] = useState('');
   const [perpage, setPerPage] = useState(10);
   const handleEndReached = () => {
     setPerPage(perpage + 10);
@@ -29,17 +30,25 @@ export default function List_Key() {
   });
   const RefToast = useRef<any>(null);
   const [fetching, setFetching] = useState(false);
+  const [show, setShow] = useState(false);
+
   const [onChangeStatus, {isLoading: onLoadStatus}] = useChangeInvoidMutation();
   const [deleteItem, {isLoading: loadingDelete}] = useDeleteInvoidMutation();
-  const DeleteInvoid = async (id: number) => {
+  const [id, setID] = useState<number>();
+  const DeleteInvoid = async () => {
     try {
       const aa = await deleteItem({
         id: id,
       }).unwrap();
       if (aa) {
+        setErr('Xoá thành công');
         await RefToast.current.toast();
       }
-    } catch (error) {}
+    } catch (error) {
+      setErr('Xoá thất bại');
+      await RefToast.current.toast();
+    }
+    setShow(false);
   };
   const OnClick = async ({id, status}: {id: number; status: string}) => {
     try {
@@ -75,7 +84,10 @@ export default function List_Key() {
               <RenderListKey
                 item={item}
                 onChange={OnClick}
-                deletes={DeleteInvoid}
+                deletes={val => {
+                  setID(val);
+                  setShow(true);
+                }}
                 refetch={refetch}
               />
             )}
@@ -95,14 +107,20 @@ export default function List_Key() {
         )}
       </View>
       {isLoading && <Loading />}
-      {loadingDelete && <Loading />}
 
       {(onLoadStatus || isFetching) && <Loading />}
-      <ToastCustom val="Xoá thành công " ref={RefToast} />
+      <ToastCustom val={err} ref={RefToast} />
       <BottomSheetFillterkey
         refRBSheet={refBootomSheet}
         params={val => setParams(val)}
         isLoading={isFetching}
+      />
+      <ModalConfirm
+        confirm={DeleteInvoid}
+        toggleDate={() => setShow(false)}
+        isShow={show}
+        isLoading={loadingDelete}
+        title="Bạn có chắc muốn xoá key bản quyền"
       />
     </View>
   );

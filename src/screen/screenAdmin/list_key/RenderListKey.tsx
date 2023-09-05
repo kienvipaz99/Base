@@ -32,8 +32,10 @@ export default function RenderListKey({
         <View style={styles.view1}>
           <Image source={images.kien} style={styles.img} />
           <View style={{marginLeft: 8}}>
-            <Text style={styles.name}>{item?.subscriber?.name}</Text>
-            <Text style={styles.txt}>Email: {item?.subscriber?.email}</Text>
+            <Text style={styles.name}>{item?.invoices[0]?.user?.name}</Text>
+            <Text style={styles.txt}>
+              Email: {item?.invoices[0]?.user?.email}
+            </Text>
           </View>
         </View>
         <Pressable
@@ -55,12 +57,8 @@ export default function RenderListKey({
       </View>
       <View style={stylesCustom.row}>
         <View style={{width: sizes.width * 0.65}}>
-          <Text style={styles.txt}>
-            Họ tên KH:{item?.invoices[0]?.user?.name}
-          </Text>
-          <Text style={styles.txt}>
-            Email: {item?.invoices[0]?.user?.email}
-          </Text>
+          <Text style={styles.txt}>Họ tên KH:{item?.subscriber?.name}</Text>
+          <Text style={styles.txt}>Email: {item?.subscriber?.email}</Text>
           <Text style={styles.txt}>
             Sđt:{' '}
             {item?.invoices[0]?.user?.phone
