@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import stylesCustom from '../../../res/stylesCustom';
 import HeaderCustom from '../../../component/header/HeaderCustom';
 import {colors} from '../../../res/colors';
@@ -112,7 +112,7 @@ export default function List_Key() {
       </View>
       {isLoading && <Loading />}
 
-      {(onLoadStatus || isFetching) && <Loading />}
+      {onLoadStatus && <Loading />}
       <ToastCustom val={err} ref={RefToast} />
       <BottomSheetFillterkey
         refRBSheet={refBootomSheet}

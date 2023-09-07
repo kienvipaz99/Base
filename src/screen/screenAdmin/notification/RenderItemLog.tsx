@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, LayoutAnimation, Pressable} from 'react-native';
+import {StyleSheet, Text, LayoutAnimation, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import sizes from '../../../res/sizes';
 import {colors} from '../../../res/colors';

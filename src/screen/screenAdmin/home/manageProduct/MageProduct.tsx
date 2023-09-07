@@ -8,10 +8,7 @@ import {colors} from '../../../../res/colors';
 import sizes from '../../../../res/sizes';
 import RenderManageProduct from './RenderManageProduct';
 import BottomSheetaddProduct from '../../../../component/bottomSheet/BottomSheetaddProduct';
-import {
-  useGetProductQuery,
-  useGetProductsQuery,
-} from '../../../../redux/api/auth.api';
+import {useGetProductsQuery} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
 import BottomSheetFillterProduct from '../../../../component/bottomSheet/BottomSheetFillterProduct';
 import Nodata from '../../../../component/nofinddata/Nodata';

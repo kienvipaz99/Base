@@ -20,7 +20,7 @@ const Dasboad = () => {
       <View style={{width: sizes.width * 0.9, alignSelf: 'center'}}>
         <View>
           <Text style={styles.txt1}>
-            {money(data?.data?.thisMonthTotalCountryRevenue)}/
+            {money(data?.data?.thisMonthTotalCountryRevenueApprove)}/
             {money(data?.data?.totalKpiMonth)}
           </Text>
           <ProgressBar

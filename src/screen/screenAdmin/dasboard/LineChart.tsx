@@ -42,7 +42,6 @@ export default function LineChart() {
       sevenDaysArray.push(Number(day.getDate()));
     }
   } else {
-    // Nếu ngày hôm nay lớn hơn hoặc bằng 7, thì lấy 7 ngày gần nhất
     for (let i = 0; i < 7; i++) {
       const day = new Date(today);
 
@@ -52,7 +51,8 @@ export default function LineChart() {
     }
   }
   let numberDay = sevenDaysArray.reverse();
-  const currentData = data?.data?.current || YChart;
+  const currentData = data?.data?.paided || YChart;
+
   const modifiedData = currentData?.map((item: number, index: number) => {
     const cutValue = item / 1000000;
     return {

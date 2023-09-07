@@ -79,7 +79,9 @@ export default function RenderListKey({
                 textAlign: 'center',
               },
             ]}>
-            Còn lại: {item?.remaing_day}
+            {item?.remaing_day > 10000
+              ? 'Vĩnh viễn'
+              : 'Còn lại: ' + item?.remaing_day}
           </Text>
           <Pressable
             onPress={() => {

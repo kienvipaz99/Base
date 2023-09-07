@@ -1,4 +1,4 @@
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import stylesCustom from '../../../../res/stylesCustom';
 import HeaderCustom from '../../../../component/header/HeaderCustom';
@@ -8,10 +8,7 @@ import {colors} from '../../../../res/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RenderItemManage from './RenderItemManage';
 import BottomSheetClient from '../../../../component/bottomSheet/BottomSheetClient';
-import {
-  useGetUserQuery,
-  useGetdataClientQuery,
-} from '../../../../redux/api/auth.api';
+import {useGetdataClientQuery} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
 import BottomSheetEditClient from '../../../../component/bottomSheet/BottomSheetEditClient';
 import BottomSheetFilterClient from '../../../../component/bottomSheet/BottomSheetFilterClient';

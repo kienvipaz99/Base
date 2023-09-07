@@ -16,7 +16,6 @@ const NotifiLog = () => {
     setPerPage(perpage + 10);
     refetch();
   };
-
   const [params, setParams] = useState('');
   const {data, isLoading, refetch, isFetching} = useGetActivitiesQuery({
     per_page: perpage,

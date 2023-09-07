@@ -3,10 +3,8 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from '../res/colors';
 import List_Key from '../screen/screenAdmin/list_key/List_Key';
-import Add_Key from '../screen/screenAdmin/newKey/Add_Key';
 import images from '../res/images';
 import {BottomFabBar} from '../common/rn-wave-bottom-bar-custom/src';
-import NotifiLog from '../screen/screenAdmin/notification/NotifiLog';
 import sizes from '../res/sizes';
 import HomeUser from '../screen/screenUser/home/HomeUser';
 import Rank from '../screen/screenUser/bxh/Rank';
@@ -17,7 +15,7 @@ export default function ButtomTabUser() {
   const Tabs = createBottomTabNavigator();
   const tabBarIcon =
     (active: ImageURISource, inactive: ImageURISource) =>
-    ({focused, color, size}: {focused: boolean; color: string; size: number}) =>
+    ({focused}: {focused: boolean; color: string; size: number}) =>
       (
         <Image
           style={{

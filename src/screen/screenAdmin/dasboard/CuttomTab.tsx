@@ -14,40 +14,13 @@ import {Circle, VictoryLabel, VictoryPie} from 'victory-native';
 import fonts from '../../../res/fonts';
 import {Svg} from 'react-native-svg';
 import {
+  useGetBranchesQuery,
   useGetDashboardRevenueQuery,
   useGetTeamRevenueQuery,
 } from '../../../redux/api/auth.api';
 import {formatCurrency, nam, thang} from '../../../res/convert';
 export default function CuttomTab() {
   const [activeTab, setActiveTab] = useState(0);
-  const data1 = [
-    {
-      x: 1,
-      y: 30,
-      label: '30%',
-      thunhap: '500 Tr',
-      team: 'Hà Nội',
-      color: 'blue',
-    },
-    {
-      x: 2,
-
-      y: 20,
-      label: '40%',
-      thunhap: '700 Tr',
-      team: 'Sài Gòn',
-      color: 'green',
-    },
-    {
-      x: 3,
-
-      y: 100,
-      label: '30%',
-      thunhap: '800 Tr',
-      team: 'Đà Nẵng',
-      color: 'red',
-    },
-  ];
 
   const {data, isLoading} = useGetTeamRevenueQuery({
     option: `?append=revenue,revenue_approve,ranges&month=${thang()}&years=${nam()}`,
@@ -65,22 +38,42 @@ export default function CuttomTab() {
     '#00DD00',
     '#001100',
     'black',
+    'yellow',
   ];
   const totalRevenue: any = data?.data.reduce(
-    (sum, item: RevenueTeam) => sum + item?.revenue,
+    (sum, item: RevenueTeam) => sum + item?.revenue_approve,
     0,
   );
-  const modifiedData = data?.data.map((item: RevenueTeam, index) => {
+  const {data: dataBranches} = useGetBranchesQuery({
+    option: `?append=revenue,revenue_approve,revenue_today,ranges`,
+  });
+  const dataBran = dataBranches?.data.map((item: RevenueTeam, index) => {
     return {
       ...item,
       x: item?.id,
-      y: item?.revenue !== null ? item?.revenue : 0,
-      label: item?.revenue !== null ? formatCurrency(item?.revenue) : 0,
+      y: item?.revenue_approve !== null ? item?.revenue_approve : 0,
+      label:
+        item?.revenue_approve !== null
+          ? formatCurrency(item?.revenue_approve)
+          : 0,
+      color: colorList[index % colorList.length],
+    };
+  });
+  const modifiedData = data?.data.map((item: Branches, index) => {
+    return {
+      ...item,
+      x: item?.id,
+      y: item?.revenue_approve !== null ? item?.revenue_approve : 0,
+      label:
+        item?.revenue_approve !== null
+          ? formatCurrency(item?.revenue_approve)
+          : 0,
       color: colorList[index % colorList.length],
     };
   });
   const allZero = modifiedData?.every(item => item.y === 0);
   const dataFilter = modifiedData?.filter(item => item?.y !== 0);
+  const dataFilterBrans = dataBran?.filter(item => item?.y !== 0);
 
   const RenderItem = ({item}: any) => {
     return (
@@ -168,7 +161,7 @@ export default function CuttomTab() {
                     ? allZero
                       ? [{x: 0, y: 1}]
                       : dataFilter
-                    : data1
+                    : dataFilterBrans
                 }
                 padAngle={2}
                 events={[
@@ -230,14 +223,11 @@ export default function CuttomTab() {
             </Svg>
             <FlatList
               scrollEnabled={true}
-              data={modifiedData}
+              //@ts-ignore
+              data={activeTab === 0 ? modifiedData : dataBran}
               renderItem={RenderItem}
               numColumns={2}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                width: sizes.width * 0.8,
-                alignSelf: 'center',
-              }}
+              columnWrapperStyle={styles.columWrap}
             />
             <View style={{marginTop: 15}}>
               <Text style={styles.txt}>
@@ -299,5 +289,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Medium,
     fontSize: 17,
     color: colors.text,
+  },
+  columWrap: {
+    justifyContent: 'space-between',
+    width: sizes.width * 0.8,
+    alignSelf: 'center',
   },
 });

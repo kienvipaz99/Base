@@ -5,7 +5,6 @@ import {
   Modal,
   StyleSheet,
   TouchableWithoutFeedback,
-  TouchableOpacity,
   FlatList,
   Animated,
 } from 'react-native';
@@ -14,7 +13,6 @@ import sizes from '../../../res/sizes';
 import stylesCustom from '../../../res/stylesCustom';
 import fonts from '../../../res/fonts';
 import {Image} from 'react-native';
-import {ExpandingDot} from 'react-native-animated-pagination-dots';
 
 interface Props {
   isShow?: boolean;

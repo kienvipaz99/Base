@@ -58,7 +58,9 @@ export default function Login({
       } else {
         navigation.navigate('ButtomTabUser');
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useFocusEffect(

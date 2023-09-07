@@ -1,4 +1,4 @@
-import {Image, ImageURISource, StyleSheet, Text, View} from 'react-native';
+import {Image, ImageURISource, View} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from '../res/colors';
@@ -9,7 +9,6 @@ import Dasboad from '../screen/screenAdmin/dasboard/Dasboad';
 import images from '../res/images';
 import {BottomFabBar} from '../common/rn-wave-bottom-bar-custom/src';
 import NotifiLog from '../screen/screenAdmin/notification/NotifiLog';
-import fonts from '../res/fonts';
 import sizes from '../res/sizes';
 
 export default function ButtomTabAdmin() {
