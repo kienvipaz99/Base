@@ -66,8 +66,6 @@ const ModalEditKey = (props: Props) => {
         await ToastRef.current.toast();
       }
     } catch (error) {
-      console.log(error);
-
       setErr('Chỉnh thất bại');
       await ToastRef.current.toast();
     }

@@ -6,7 +6,7 @@ import {API} from './BASE_URL/API';
 let axiosAuthInterceptor: any;
 let axiosResponseInterceptor: any;
 export const axiosAuth = (auths: string) => {
-  axios.interceptors.request.use(
+  axiosAuthInterceptor = axios.interceptors.request.use(
     function (config: InternalAxiosRequestConfig) {
       config.headers.Accept = 'application/json';
       config.headers.Authorization = `Bearer ${auths}`;

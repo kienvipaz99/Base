@@ -79,9 +79,6 @@ const Add_KeyUser = () => {
       }
     } catch (error: any) {
       let err = error;
-      console.log(err);
-
-      console.log(err.data.payload.errors);
 
       setToast('Tạo key thất bại');
       await ToastRef.current.toast();

@@ -4,7 +4,6 @@ import {
   Text,
   View,
   FlatList,
-  Alert,
   ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -81,6 +80,7 @@ export default function CuttomTab() {
     };
   });
   const allZero = modifiedData?.every(item => item.y === 0);
+  const dataFilter = modifiedData?.filter(item => item?.y !== 0);
 
   const RenderItem = ({item}: any) => {
     return (
@@ -167,7 +167,7 @@ export default function CuttomTab() {
                   activeTab === 0
                     ? allZero
                       ? [{x: 0, y: 1}]
-                      : modifiedData
+                      : dataFilter
                     : data1
                 }
                 padAngle={2}

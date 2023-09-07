@@ -13,6 +13,7 @@ import {RootState} from '../../../redux/store/store';
 import {authApi, useLogoutMutation} from '../../../redux/api/auth.api';
 import {setDataUser} from '../../../redux/state/login.slice';
 import Loading from '../../../component/loading/Loading';
+import {resetAxiosInterceptors} from '../../../redux/api/axiosClient';
 
 const Home = ({
   navigation,
@@ -28,12 +29,14 @@ const Home = ({
     try {
       const result = await logoutMutation('');
       if (result) {
+        resetAxiosInterceptors();
         dispatch(
           setDataUser({
             username: remember?.username,
             password: '',
           }),
         );
+
         navigation.navigate('Login');
       }
     } catch (error) {}

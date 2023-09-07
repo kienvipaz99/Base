@@ -47,9 +47,7 @@ export default function BottomSheetEditClient({
           user_type: 'CUSTOMER',
         },
       }).unwrap();
-    } catch (error: any) {
-      console.log(error.data.payload.errors);
-    }
+    } catch (error: any) {}
   };
 
   return (

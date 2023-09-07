@@ -11,7 +11,7 @@ const stylesCustom = StyleSheet.create({
   txtLogo: {
     fontSize: sizes.width * 0.07,
     color: colors.blue,
-    fontFamily: fonts.Medium,
+    fontFamily: fonts.bold,
     alignSelf: 'center',
   },
   row: {

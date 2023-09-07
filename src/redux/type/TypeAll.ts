@@ -101,11 +101,11 @@ interface DashboardRevenue {
     totalKpiYear?: number;
     totalKpiMonth?: number;
     thisDayPreviousMonth?: number;
-    today: {
+    today?: {
       todayTotalCountryRevenue: number;
       avgDayTotalKpiMonth: number;
     };
-    yesterdayTotalCountryRevenue: number;
+    yesterdayTotalCountryRevenue?: number;
   };
 }
 interface Activities {

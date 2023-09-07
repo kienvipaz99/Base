@@ -63,9 +63,7 @@ export default function BottomSheetEditEmployee({
           user_type: 'MEMBER',
         },
       }).unwrap();
-    } catch (error: any) {
-      console.log(error.data.payload.errors);
-    }
+    } catch (error: any) {}
   };
   return (
     //@ts-ignore

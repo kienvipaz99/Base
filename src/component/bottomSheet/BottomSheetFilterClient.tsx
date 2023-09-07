@@ -32,6 +32,7 @@ export default function BottomSheetFilterClient({
     const findEmailClient = emailClient ? `&filter[email]=${emailClient}` : '';
     params(findEmails + findEmailClient);
   };
+
   return (
     //@ts-ignore
     <RBSheet

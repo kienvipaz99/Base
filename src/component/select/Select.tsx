@@ -5,7 +5,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import sizes from '../../res/sizes';
 import {colors} from '../../res/colors';
@@ -36,16 +36,22 @@ export default function Select({
   defaultValueByIndex?: number;
   holder?: string;
 }) {
+  const dropdownRef = useRef<any>();
+
+  const clearSelection = () => {
+    dropdownRef.current.reset();
+  };
   return (
     <>
       <SelectDropdown
+        ref={dropdownRef}
         data={data || []}
         onSelect={(selectedItem, index) => {
           setSelect(selectedItem);
         }}
         buttonStyle={[styles.view, styleItem]}
         buttonTextAfterSelection={item => {
-          return select ? item?.name : holder;
+          return item?.name;
         }}
         defaultValueByIndex={defaultValueByIndex}
         defaultValue={select}
@@ -61,7 +67,8 @@ export default function Select({
           <View style={stylesCustom.row1}>
             {icons && (
               <Ionicons
-                onPress={onPressIcon}
+                onPress={clearSelection}
+                onPressOut={onPressIcon}
                 name={icons ? icons : ''}
                 size={25}
                 color={colors.text}

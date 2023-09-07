@@ -24,10 +24,13 @@ export default function List_Key() {
   };
   const refBootomSheet = useRef<any>(null);
   const [params, setParams] = useState('');
-  const {data, refetch, isLoading, isFetching} = useGetDataKeyQuery({
-    per_page: perpage,
-    params: params,
-  });
+  const {data, refetch, isLoading, isFetching} = useGetDataKeyQuery(
+    {
+      per_page: perpage,
+      params: params,
+    },
+    {},
+  );
   const RefToast = useRef<any>(null);
   const [fetching, setFetching] = useState(false);
   const [show, setShow] = useState(false);
@@ -65,6 +68,7 @@ export default function List_Key() {
       }
     } catch (error) {}
   };
+
   return (
     <View style={styles.container}>
       <HeaderCustom
@@ -114,6 +118,7 @@ export default function List_Key() {
         refRBSheet={refBootomSheet}
         params={val => setParams(val)}
         isLoading={isFetching}
+        refetch={refetch}
       />
       <ModalConfirm
         confirm={DeleteInvoid}

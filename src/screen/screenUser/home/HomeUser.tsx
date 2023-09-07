@@ -12,6 +12,7 @@ import {NavigationProp} from '@react-navigation/native';
 import {
   authApi,
   useGetDataUserQuery,
+  useGetdataClientQuery,
   useLogoutMutation,
 } from '../../../redux/api/auth.api';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
@@ -20,6 +21,8 @@ import {RootState} from '../../../redux/store/store';
 import {setDataUser} from '../../../redux/state/login.slice';
 import Loading from '../../../component/loading/Loading';
 import {Profile} from '../../../redux/type/Auth';
+import {money} from '../../../res/convert';
+import {resetAxiosInterceptors} from '../../../redux/api/axiosClient';
 
 export default function HomeUser({
   navigation,
@@ -31,10 +34,19 @@ export default function HomeUser({
   const remember = useAppSelect(data => data?.getLogin?.getdataUser);
   const user = useAppSelect(data => data?.getProfile?.getProfile) as Profile;
   const [logoutMutation, {isLoading}] = useLogoutMutation();
+  const {data, isLoading: loadingData} = useGetdataClientQuery({
+    option: `&filter[member]=MEMBER&append=revenue_last_month,revenue_approve,revenue,ranges`,
+  });
+  const itemCoId: any = data?.data.find(
+    (item: GetUser) => item?.id === user?.data?.id,
+  );
+
   const handleLogout = async () => {
     try {
       const result = await logoutMutation('');
       if (result) {
+        dispatch(authApi.util.resetApiState());
+        resetAxiosInterceptors();
         dispatch(
           setDataUser({
             username: remember?.username,
@@ -45,9 +57,6 @@ export default function HomeUser({
       }
     } catch (error) {}
   };
-  // const {data} = useGetDataUserQuery({
-  //   option: '',
-  // });
 
   const RenderFooter = () => (
     <>
@@ -61,13 +70,13 @@ export default function HomeUser({
       <View style={styles.view4}>
         <View style={styles.view3}>
           <Text style={styles.txt2}>Doanh thu tháng này</Text>
-          <Text style={styles.txt3}>30.000.000</Text>
+          <Text style={styles.txt3}>{money(itemCoId?.revenue)}</Text>
           <Text style={styles.txt2}>KPI: 50.000.000</Text>
         </View>
 
         <View style={styles.view3}>
           <Text style={styles.txt2}>Doanh thu tháng trước</Text>
-          <Text style={styles.txt3}>36.000.000</Text>
+          <Text style={styles.txt3}>{money(itemCoId?.revenue_last_month)}</Text>
           <Text style={styles.txt2}>KPI: 50.000.000</Text>
         </View>
       </View>
@@ -92,7 +101,7 @@ export default function HomeUser({
           ListFooterComponentStyle={{paddingBottom: 40}}
         />
       </View>
-      {isLoading && <Loading />}
+      {(isLoading || loadingData) && <Loading />}
     </View>
   );
 }

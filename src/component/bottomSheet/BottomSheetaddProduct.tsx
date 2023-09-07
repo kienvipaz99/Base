@@ -47,7 +47,6 @@ export default function BottomSheetaddProduct({
       await ToastRef.current.toast();
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
-      console.log(err);
       setErrPrefix_key(ErrorSubs(err?.prefix_key));
       setErrName(ErrorSubs(err?.name));
       if (err?.slug == 'The slug has already been taken.') {

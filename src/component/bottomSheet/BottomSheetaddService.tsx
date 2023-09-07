@@ -88,7 +88,6 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
       setToast('Thêm thất bại!');
       await ToastRef.current.toast();
       let err = error?.data?.payload?.errors;
-      console.log(err);
 
       setErrInvoicePeriod(ErrorSubs(err?.invoice_period));
       setErrName(ErrorSubs(err?.tag));

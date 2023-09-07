@@ -7,11 +7,16 @@ import stylesCustom from '../../../../res/stylesCustom';
 import {colors} from '../../../../res/colors';
 import sizes from '../../../../res/sizes';
 import RenderItemManageEmployee from './RenderItemManageEmployee';
-import {useGetEmployeeQuery} from '../../../../redux/api/auth.api';
+import {
+  useDeleteUserMutation,
+  useGetEmployeeQuery,
+} from '../../../../redux/api/auth.api';
 import Loading from '../../../../component/loading/Loading';
 import BottomSheetCreatEmployee from '../../../../component/bottomSheet/BottomSheetCreatEmployee';
 import BottomSheetFillterEmployee from '../../../../component/bottomSheet/BottomSheetFillterEmployee';
 import Nodata from '../../../../component/nofinddata/Nodata';
+import ModalConfirm from '../../../../component/modal/ModalConfirm';
+import ToastCustom from '../../../../component/toastCustom/ToastCustom';
 
 export default function ManageEmployee({
   navigation,
@@ -30,6 +35,25 @@ export default function ManageEmployee({
     per_page: perpage,
     option: params,
   });
+  const [show, setShow] = useState(false);
+  const [id, setId] = useState<number>();
+  const [err, setErr] = useState('');
+  const [deleteUser, {isLoading: loadingDelete}] = useDeleteUserMutation();
+  const ToastRef = useRef<any>(null);
+  const onDelete = async () => {
+    try {
+      const aa = await deleteUser({
+        id: id,
+      }).unwrap();
+      setErr('Xoá thành công ');
+      await ToastRef.current.toast();
+      setShow(false);
+    } catch (error) {
+      setErr('Xoá thất bại');
+      await ToastRef.current.toast();
+      setShow(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -54,7 +78,15 @@ export default function ManageEmployee({
         {data?.data?.length !== 0 ? (
           <FlatList
             data={data?.data}
-            renderItem={({item}) => <RenderItemManageEmployee item={item} />}
+            renderItem={({item}) => (
+              <RenderItemManageEmployee
+                item={item}
+                onPressDelete={id => {
+                  setId(id);
+                  setShow(true);
+                }}
+              />
+            )}
             contentContainerStyle={styles.fl}
             style={{marginTop: 15}}
             onRefresh={refetch}
@@ -73,6 +105,15 @@ export default function ManageEmployee({
         params={val => setParams(val)}
         isLoading={isFetching}
       />
+      <ToastCustom ref={ToastRef} val={err} />
+      <ModalConfirm
+        confirm={onDelete}
+        isShow={show}
+        toggleDate={() => setShow(false)}
+        title="Bạn có muốn xoá nhân viên"
+        isLoading={loadingDelete}
+      />
+
       {isLoading && <Loading />}
     </View>
   );

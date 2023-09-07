@@ -13,7 +13,7 @@ import {useGetDashboardRevenueQuery} from '../../../redux/api/auth.api';
 import {formatCurrencys, money, thang} from '../../../res/convert';
 import Loading from '../../../component/loading/Loading';
 const Dasboad = () => {
-  const {data, isLoading} = useGetDashboardRevenueQuery('');
+  const {data, isLoading} = useGetDashboardRevenueQuery('') as any;
   const RenderFooter = () => (
     <>
       <Text style={styles.txt}>Doanh thu tháng này</Text>
@@ -26,9 +26,7 @@ const Dasboad = () => {
           <ProgressBar
             progress={
               data
-                ? //@ts-ignore
-                  data?.data?.thisMonthTotalCountryRevenue /
-                  //@ts-ignore
+                ? data?.data?.thisMonthTotalCountryRevenue /
                   data?.data?.totalKpiMonth
                 : 0
             }
@@ -39,13 +37,11 @@ const Dasboad = () => {
         <View style={stylesCustom.row}>
           <Text style={styles.txt2}>Tỷ lệ doanh thu:</Text>
           <Text style={styles.txt2}>
-            {
-              //@ts-ignore
+            {(
               (data?.data?.thisMonthTotalCountryRevenue /
-                //@ts-ignore
                 data?.data?.totalKpiMonth) *
-                100
-            }
+              100
+            ).toFixed(2)}
             %
           </Text>
         </View>

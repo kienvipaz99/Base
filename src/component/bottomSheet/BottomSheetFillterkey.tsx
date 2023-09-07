@@ -15,15 +15,17 @@ export default function BottomSheetFillterkey({
   refRBSheet,
   params,
   isLoading,
+  refetch,
 }: {
   refRBSheet: any;
   params: (val: string) => void;
   isLoading: boolean;
+  refetch: () => void;
 }) {
   const {data: Product} = useGetProductQuery('');
 
   const [product, setProduct] = useState<string>();
-  const [productid, setProductId] = useState<number>();
+  const [productid, setProductId] = useState<number | string>();
   const [stattus, setStattus] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [plansId, setPlanId] = useState<number | string>();
@@ -76,9 +78,9 @@ export default function BottomSheetFillterkey({
             }}
             data={Product?.data}
             defaultButtonText="Chọn sản phẩm"
-            icons={product ? 'close-circle' : ''}
+            icons={productid ? 'close-circle' : ''}
             onPressIcon={() => {
-              setProduct('');
+              setProductId('');
             }}
             holder="Chọn sản phẩm"
             select={product}
@@ -113,7 +115,10 @@ export default function BottomSheetFillterkey({
           />
           <DoubleButton
             loading={isLoading}
-            conFirm={Confirm}
+            conFirm={() => {
+              Confirm();
+              refetch();
+            }}
             cancel={async () => await refRBSheet.current.close()}
           />
         </View>

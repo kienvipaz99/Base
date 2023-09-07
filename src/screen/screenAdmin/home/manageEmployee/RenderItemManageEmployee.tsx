@@ -5,34 +5,16 @@ import fonts from '../../../../res/fonts';
 import sizes from '../../../../res/sizes';
 import stylesCustom from '../../../../res/stylesCustom';
 import images from '../../../../res/images';
-
-import ModalConfirm from '../../../../component/modal/ModalConfirm';
 import BottomSheetEditEmployee from '../../../../component/bottomSheet/BottomSheetEditEmployee';
-import {useDeleteUserMutation} from '../../../../redux/api/auth.api';
-import ToastCustom from '../../../../component/toastCustom/ToastCustom';
-
-const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
+const RenderItemManageEmployee = ({
+  item,
+  onPressDelete,
+}: {
+  item: itemManageEmployee;
+  onPressDelete: (id: number) => void;
+}) => {
   const refBootomSheet = useRef<any>(null);
-  const [err, setErr] = useState('');
   const [data, setData] = useState<itemManageEmployee>();
-
-  const [show, setShow] = useState(false);
-  const [id, setId] = useState<number>();
-  const [deleteUser, {isLoading}] = useDeleteUserMutation();
-  const ToastRef = useRef<any>(null);
-
-  const onDelete = async () => {
-    try {
-      const aa = await deleteUser({
-        id: id,
-      }).unwrap();
-      setErr('Xoá thành công ');
-      await ToastRef.current.toast();
-    } catch (error) {
-      setErr('Xoá thất bại');
-      await ToastRef.current.toast();
-    }
-  };
   return (
     <View style={styles.view}>
       <View style={stylesCustom.row}>
@@ -62,22 +44,13 @@ const RenderItemManageEmployee = ({item}: {item: itemManageEmployee}) => {
           </Pressable>
           <Pressable
             onPress={() => {
-              setShow(true);
-              setId(item?.id);
+              onPressDelete(item?.id);
             }}>
             <Image source={images.bin} />
           </Pressable>
         </View>
       </View>
       <BottomSheetEditEmployee refRBSheet={refBootomSheet} data={data} />
-      <ModalConfirm
-        confirm={onDelete}
-        isShow={show}
-        toggleDate={() => setShow(false)}
-        title="Bạn có muốn xoá nhân viên"
-        isLoading={isLoading}
-      />
-      <ToastCustom ref={ToastRef} val={err} />
     </View>
   );
 };

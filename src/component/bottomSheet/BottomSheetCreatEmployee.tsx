@@ -15,6 +15,8 @@ import Select from '../select/Select';
 import ToastCustom from '../toastCustom/ToastCustom';
 import ModalAddBarnches from '../modal/ModalAddBarnches';
 import ModalAddTeam from '../modal/ModalAddTeam';
+import ErrorText from '../err/ErrorCall';
+import {ErrorSubs} from '../../res/ErrorSub';
 export default function BottomSheetCreatEmployee({
   refRBSheet,
   refetchs,
@@ -40,7 +42,12 @@ export default function BottomSheetCreatEmployee({
   const ToastRef = useRef<any>(null);
   const [showBarnch, setShowBarnch] = useState(false);
   const [showTeam, setShowTeam] = useState(false);
-
+  const [errForm, setErrorForm] = useState({
+    email: '',
+    first_name: '',
+    last_name: '',
+    password: '',
+  });
   const Summit = async () => {
     try {
       const dataUser = await createUser({
@@ -57,16 +64,28 @@ export default function BottomSheetCreatEmployee({
       }).unwrap();
       if (dataUser) {
         refetchs();
-
+        setErrorForm({
+          email: '',
+          first_name: '',
+          last_name: '',
+          password: '',
+        });
         setErr('Thêm thành công ');
         await ToastRef.current.toast();
       }
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
-      console.log(err);
+      setErrorForm({
+        email: ErrorSubs(err?.email),
+        first_name: ErrorSubs(err?.first_name),
+        last_name: ErrorSubs(err?.last_name),
+        password: ErrorSubs(err?.password),
+      });
 
-      setErr('Thêm thất bại');
-      await ToastRef.current.toast();
+      if (error) {
+        setErr('Thêm thất bại');
+        await ToastRef.current.toast();
+      }
     }
   };
   return (
@@ -122,16 +141,19 @@ export default function BottomSheetCreatEmployee({
             value={first_name}
             setValue={setFirst_name}
           />
+          {errForm?.first_name && <ErrorText err={errForm?.first_name} />}
           <TextInputCustom
             placeholder="Tên"
             value={last_name}
             setValue={setLast_name}
           />
+
           <TextInputCustom
             placeholder="Email"
             value={email}
             setValue={setEmail}
           />
+          {errForm?.email && <ErrorText err={errForm?.email} />}
           <TextInputCustom
             placeholder="Số điện thoại"
             value={phone}
@@ -142,6 +164,7 @@ export default function BottomSheetCreatEmployee({
             value={password}
             setValue={setPassword}
           />
+          {errForm?.password && <ErrorText err={errForm?.password} />}
 
           <DoubleButton
             loading={isLoading}

@@ -16,7 +16,6 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [password_confirmation, setPassword_confirmation] = useState('');
   const [errlast_name, setErrLast_name] = useState('');
   const [errfirst_name, setErrFirst_name] = useState('');
   const [erremail, setErrEmail] = useState('');
@@ -36,7 +35,7 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
         email: email,
         phone: phone,
         password: password,
-        password_confirmation: password_confirmation,
+        password_confirmation: password,
         user_type: 'CUSTOMER',
       }).unwrap();
       if (dataUser) {
@@ -46,7 +45,6 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
       }
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
-      console.log(error);
       setErrFirst_name(err?.first_name);
       setErrLast_name(err?.last_name);
       setErrEmail(err?.email);
@@ -108,11 +106,6 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
           />
           {errpassword && <ErrorText err={ErrorSubs(errpassword)} />}
 
-          <TextInputCustom
-            placeholder="Xác nhận mật khẩu"
-            value={password_confirmation}
-            setValue={setPassword_confirmation}
-          />
           <DoubleButton
             conFirm={Summit}
             loading={isLoading}

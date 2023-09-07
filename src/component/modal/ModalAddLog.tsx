@@ -45,8 +45,6 @@ const ModalAddLog = (props: Props) => {
         props.toggleDate();
       }
     } catch (error) {
-      console.log(error);
-
       setErr('Thêm thất bại');
       await ToastRef.current.toast();
     }
