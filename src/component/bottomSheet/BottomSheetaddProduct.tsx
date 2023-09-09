@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import stylesCustom from '../../res/stylesCustom';
@@ -27,9 +27,11 @@ export default function BottomSheetaddProduct({
   const [url, setUrl] = useState('');
   const [version, setVersion] = useState('');
   const [err, setErr] = useState('');
-  const [errName, setErrName] = useState('');
-  const [errprefix_key, setErrPrefix_key] = useState('');
 
+  const [formErr, setFormErr] = useState({
+    name: '',
+    prefix_key: '',
+  });
   const OnCreat = async () => {
     try {
       await CreatProduct({
@@ -44,14 +46,17 @@ export default function BottomSheetaddProduct({
 
       setErr('Thêm thành công sản phẩm');
       reload();
+      setFormErr({
+        name: '',
+        prefix_key: '',
+      });
       await ToastRef.current.toast();
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
-      setErrPrefix_key(ErrorSubs(err?.prefix_key));
-      setErrName(ErrorSubs(err?.name));
-      if (err?.slug == 'The slug has already been taken.') {
-        setErrName(ErrorSubs(err?.slug));
-      }
+      setFormErr({
+        name: ErrorSubs(err?.name || err?.slug),
+        prefix_key: ErrorSubs(err?.prefix_key),
+      });
     }
   };
 
@@ -91,13 +96,13 @@ export default function BottomSheetaddProduct({
             value={prefix_key}
             setValue={setPrefix_key}
           />
-          {errprefix_key && <ErrorText err={errprefix_key} />}
+          {formErr.prefix_key && <ErrorText err={formErr.prefix_key} />}
           <TextInputCustom
             placeholder="Tên SP"
             value={name}
             setValue={setName}
           />
-          {errName && <ErrorText err={errName} />}
+          {formErr.name && <ErrorText err={formErr.name} />}
           <TextInputCustom
             placeholder="Nhập phiên bản"
             value={version}

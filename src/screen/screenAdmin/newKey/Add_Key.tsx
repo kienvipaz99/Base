@@ -22,6 +22,7 @@ import {RootState} from '../../../redux/store/store';
 import {Profile} from '../../../redux/type/Auth';
 import Loading from '../../../component/loading/Loading';
 import ToastCustom from '../../../component/toastCustom/ToastCustom';
+import {validateInputFields} from '../../../res/validate';
 const Add_Key = () => {
   const useAppSelect: TypedUseSelectorHook<RootState> = useSelector;
   const profile = useAppSelect(data => data?.getProfile?.getProfile) as Profile;
@@ -83,6 +84,10 @@ const Add_Key = () => {
       await ToastRef.current.toast();
     }
   };
+  const errors = validateInputFields({
+    name: '',
+  });
+  console.log(errors);
   return (
     <View style={styles.view}>
       <HeaderCustom title="Thêm mới key" />

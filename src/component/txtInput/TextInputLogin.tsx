@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     borderColor: colors.gray2,
     alignSelf: 'center',
     padding: 10,
+    marginTop: 20,
   },
   txtInput1: {
     height: 50,

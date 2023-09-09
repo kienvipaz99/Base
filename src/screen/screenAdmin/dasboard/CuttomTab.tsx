@@ -126,12 +126,7 @@ export default function CuttomTab() {
       </View>
       <View style={styles.view1}>
         {isLoading ? (
-          <View
-            style={{
-              height: 350,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+          <View style={styles.view2}>
             <ActivityIndicator size={'large'} />
           </View>
         ) : (
@@ -294,5 +289,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: sizes.width * 0.8,
     alignSelf: 'center',
+  },
+  view2: {
+    height: 350,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

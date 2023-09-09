@@ -6,7 +6,7 @@ import {colors} from '../../res/colors';
 import TextInputCustom from '../txtInput/TextInputCustom';
 import sizes from '../../res/sizes';
 import DoubleButton from '../btn/DoubleButton';
-import SelectCustom from '../select/SelectCustom';
+
 import {
   useCreatPlansMutation,
   useGetProductsQuery,
@@ -16,19 +16,21 @@ import SelectProduct from '../select/SelectProduct';
 import ToastCustom from '../toastCustom/ToastCustom';
 import {ErrorSubs} from '../../res/ErrorSub';
 import ErrorText from '../err/ErrorCall';
-import {isRequired} from '../../res/validate';
+import {validateService} from '../../res/validate';
 export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
   const [name, setName] = useState<string>();
   const [errname, setErrName] = useState<string>();
-
   const [description, setDesCription] = useState<string>();
   const [invoice_period, setInvoicePeriod] = useState<string>();
   const [errinvoice_period, setErrInvoicePeriod] = useState<string>();
   const [price, setPrice] = useState<string>();
-  const [errprice, setErrPrice] = useState<string>();
   const [product_id, setProductId] = useState<number>();
-  const [errproduct_id, setErrProductId] = useState<string>();
-
+  const [formErr, setFormErr] = useState({
+    price: '',
+    name: '',
+    invoice_period: '',
+    product_id: '',
+  });
   const {data} = useGetProductsQuery({
     per_page: 1000,
   });
@@ -55,40 +57,33 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
           trial_period: Number(trial_period),
         }).unwrap();
         if (datas) {
-          setErrPrice('');
-          setErrProductId('');
-          setErrInvoicePeriod('');
-          setErrName('');
+          setFormErr({
+            invoice_period: '',
+            name: '',
+            price: '',
+            product_id: '',
+          });
         }
         setToast('Thêm thành công dịch vụ!');
         await ToastRef.current.toast();
       } else {
-        if (price === undefined) {
-          setErrPrice('Bạn chưa nhập giá');
-        } else {
-          setErrPrice('');
-        }
-        if (product_id === undefined) {
-          setErrProductId('Chưa chọn sản phẩm');
-        } else {
-          setErrProductId('');
-        }
-        if (invoice_period === undefined) {
-          setErrInvoicePeriod('Thời hạn ít nhất là 30');
-        } else {
-          setErrInvoicePeriod('');
-        }
-        if (name === undefined) {
-          setErrName('Tên là bắt buộc');
-        } else {
-          setErrName('');
-        }
+        const err = validateService({
+          invoice_period: Number(invoice_period),
+          name: name,
+          price: Number(price),
+          product_id: product_id,
+        });
+        setFormErr({
+          invoice_period: err?.invoice_period,
+          name: err?.name,
+          price: err.price,
+          product_id: err?.product_id,
+        });
       }
     } catch (error: any) {
       setToast('Thêm thất bại!');
       await ToastRef.current.toast();
       let err = error?.data?.payload?.errors;
-
       setErrInvoicePeriod(ErrorSubs(err?.invoice_period));
       setErrName(ErrorSubs(err?.tag));
     }
@@ -128,6 +123,8 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
             value={name}
             setValue={setName}
           />
+          {formErr.name && <ErrorText err={formErr.name} />}
+
           {errname && <ErrorText err={errname} />}
           <TextInputCustom
             placeholder="Thời hạn (ngày)"
@@ -136,6 +133,7 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
             setValue={setInvoicePeriod}
           />
           {errinvoice_period && <ErrorText err={errinvoice_period} />}
+          {formErr.invoice_period && <ErrorText err={formErr.invoice_period} />}
 
           <TextInputCustom
             placeholder="Giá"
@@ -143,7 +141,7 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
             value={price}
             setValue={setPrice}
           />
-          {errprice && <ErrorText err={errprice} />}
+          {formErr.price && <ErrorText err={formErr.price} />}
 
           <TextInputCustom
             placeholder="Dùng thử (ngày)"
@@ -156,7 +154,7 @@ export default function BottomSheetaddService({refRBSheet}: {refRBSheet: any}) {
             title="Chọn sản phẩm"
             data={data?.data}
           />
-          {errproduct_id && <ErrorText err={errproduct_id} />}
+          {formErr.product_id && <ErrorText err={formErr.product_id} />}
           <TextInputCustom
             placeholder="Mô tả"
             value={description}

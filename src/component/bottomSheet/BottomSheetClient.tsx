@@ -16,10 +16,13 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [errlast_name, setErrLast_name] = useState('');
-  const [errfirst_name, setErrFirst_name] = useState('');
-  const [erremail, setErrEmail] = useState('');
-  const [errpassword, setErrPassword] = useState('');
+  const [formDataErr, setFormDataErr] = useState({
+    last_name: '',
+    first_name: '',
+    email: '',
+    password: '',
+  });
+
   const [createUser, {isLoading}] = useCreatUserMutation();
   const {refetch} = useGetUserQuery({
     option: 'filter[customer]=CUSTOMER',
@@ -43,12 +46,22 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
         setErr('Thêm thành công ');
         await ToastRef.current.toast();
       }
+      setFormDataErr({
+        email: '',
+        first_name: '',
+        last_name: '',
+        password: '',
+      });
     } catch (error: any) {
       let err = error?.data?.payload?.errors;
-      setErrFirst_name(err?.first_name);
-      setErrLast_name(err?.last_name);
-      setErrEmail(err?.email);
-      setErrPassword(err?.password);
+      console.log(err);
+      setFormDataErr({
+        email: ErrorSubs(err?.email),
+        first_name: ErrorSubs(err?.first_name),
+        last_name: ErrorSubs(err?.last_name),
+        password: ErrorSubs(err?.password),
+      });
+
       setErr('Thêm thất bại');
       await ToastRef.current.toast();
     }
@@ -79,20 +92,20 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
             value={last_name}
             setValue={setLast_name}
           />
-          {errlast_name && <ErrorText err={ErrorSubs(errlast_name)} />}
+          {formDataErr.last_name && <ErrorText err={formDataErr.last_name} />}
           <TextInputCustom
             placeholder="Tên khách hàng"
             value={first_name}
             setValue={setFirst_name}
           />
-          {errfirst_name && <ErrorText err={ErrorSubs(errfirst_name)} />}
+          {formDataErr.first_name && <ErrorText err={formDataErr.first_name} />}
 
           <TextInputCustom
             placeholder="Email khách hàng"
             value={email}
             setValue={setEmail}
           />
-          {erremail && <ErrorText err={ErrorSubs(erremail)} />}
+          {formDataErr.email && <ErrorText err={formDataErr.email} />}
 
           <TextInputCustom
             placeholder="Số điện thoại"
@@ -104,7 +117,7 @@ export default function BottomSheetClient({refRBSheet}: {refRBSheet: any}) {
             value={password}
             setValue={setPassword}
           />
-          {errpassword && <ErrorText err={ErrorSubs(errpassword)} />}
+          {formDataErr.password && <ErrorText err={formDataErr.password} />}
 
           <DoubleButton
             conFirm={Summit}
