@@ -27,15 +27,17 @@ export function formatCurrency(val) {
   let value = Number(val);
   if (value >= 1000000000) {
     return (
-      (value / 1000000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'tỷ'
+      (value / 1000000000).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+      '\ntỷ'
     );
   } else if (value >= 1000000) {
     return (
-      (value / 1000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'tr'
+      (value / 1000000).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+      '\ntriệu'
     );
   } else if (value >= 1000) {
     return (
-      (value / 1000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'nghìn'
+      (value / 1000).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') + '\nk'
     );
   } else if (val == 0) {
     return '';
@@ -45,20 +47,21 @@ export function formatCurrencys(val) {
   let value = Number(val);
   if (value >= 1000000000) {
     return (
-      (value / 1000000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'tỷ'
+      (value / 1000000000).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+      ' tỷ'
     );
   } else if (value >= 1000000) {
     return (
-      (value / 1000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'tr'
+      (value / 1000000).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+      ' triệu'
     );
   } else if (value >= 1000) {
-    return (
-      (value / 1000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'nghìn'
-    );
+    return (value / 1000).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' k';
   } else if (val == 0) {
     return 0 + 'đ';
   }
 }
+
 export function getCurrentMonthDays() {
   // Lấy ngày hiện tại
   const today = new Date();

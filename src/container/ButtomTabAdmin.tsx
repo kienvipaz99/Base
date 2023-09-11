@@ -1,4 +1,10 @@
-import {Image, ImageURISource, View} from 'react-native';
+import {
+  Image,
+  ImageURISource,
+  SafeAreaView,
+  StatusBar,
+  View,
+} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from '../res/colors';
@@ -28,60 +34,54 @@ export default function ButtomTabAdmin() {
         />
       );
   return (
-    <View
-      style={{
-        height: sizes.height,
-        width: sizes.width,
-      }}>
-      <Tabs.Navigator
-        backBehavior="none"
-        initialRouteName={'Dasboad'}
-        screenOptions={{
-          headerShown: false,
-          tabBarActiveBackgroundColor: colors.gray1,
+    <Tabs.Navigator
+      backBehavior="none"
+      initialRouteName={'Dasboad'}
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveBackgroundColor: colors.gray1,
+      }}
+      tabBar={props => <BottomFabBar {...props} mode="default" />}>
+      <Tabs.Screen
+        name={'Home'}
+        component={Home}
+        options={{
+          tabBarIcon: tabBarIcon(images.iconHome, images.iconHome),
+          tabBarLabel: 'Trang chủ',
         }}
-        tabBar={props => <BottomFabBar {...props} mode="default" />}>
-        <Tabs.Screen
-          name={'Home'}
-          component={Home}
-          options={{
-            tabBarIcon: tabBarIcon(images.iconHome, images.iconHome),
-            tabBarLabel: 'Trang chủ',
-          }}
-        />
-        <Tabs.Screen
-          name={'List_Key'}
-          component={List_Key}
-          options={{
-            tabBarIcon: tabBarIcon(images.iconListkey, images.iconListkey),
-            tabBarLabel: 'Danh sách',
-          }}
-        />
-        <Tabs.Screen
-          name={'Add_Key'}
-          component={Add_Key}
-          options={{
-            tabBarIcon: tabBarIcon(images.iconadd, images.iconadd),
-            tabBarLabel: 'Cấp key',
-          }}
-        />
-        <Tabs.Screen
-          name={'NotifiLog'}
-          component={NotifiLog}
-          options={{
-            tabBarIcon: tabBarIcon(images.iconnotifi, images.iconnotifi),
-            tabBarLabel: 'Thông báo',
-          }}
-        />
-        <Tabs.Screen
-          name={'Dasboad'}
-          component={Dasboad}
-          options={{
-            tabBarIcon: tabBarIcon(images.icondasboad, images.icondasboad),
-            tabBarLabel: 'Tổng quan',
-          }}
-        />
-      </Tabs.Navigator>
-    </View>
+      />
+      <Tabs.Screen
+        name={'List_Key'}
+        component={List_Key}
+        options={{
+          tabBarIcon: tabBarIcon(images.iconListkey, images.iconListkey),
+          tabBarLabel: 'Danh sách',
+        }}
+      />
+      <Tabs.Screen
+        name={'Add_Key'}
+        component={Add_Key}
+        options={{
+          tabBarIcon: tabBarIcon(images.iconadd, images.iconadd),
+          tabBarLabel: 'Cấp key',
+        }}
+      />
+      <Tabs.Screen
+        name={'NotifiLog'}
+        component={NotifiLog}
+        options={{
+          tabBarIcon: tabBarIcon(images.iconnotifi, images.iconnotifi),
+          tabBarLabel: 'Thông báo',
+        }}
+      />
+      <Tabs.Screen
+        name={'Dasboad'}
+        component={Dasboad}
+        options={{
+          tabBarIcon: tabBarIcon(images.icondasboad, images.icondasboad),
+          tabBarLabel: 'Tổng quan',
+        }}
+      />
+    </Tabs.Navigator>
   );
 }

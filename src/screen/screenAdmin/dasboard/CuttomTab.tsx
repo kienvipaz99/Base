@@ -210,7 +210,7 @@ export default function CuttomTab() {
                 }}
                 text={`${
                   totalRevenue !== 0 ? formatCurrency(totalRevenue) : 0
-                }\n Triệu`}
+                }`}
                 verticalAnchor={'middle'}
                 x={(sizes.width * 0.8) / 2}
                 y={264 / 2}
@@ -234,8 +234,7 @@ export default function CuttomTab() {
                 Thực hiện: {totalRevenue ? formatCurrency(totalRevenue) : 0} /{' '}
                 {total?.data?.totalKpiMonth
                   ? formatCurrency(total?.data?.totalKpiMonth)
-                  : 0}{' '}
-                (Tr){' '}
+                  : 0 + 'tr'}{' '}
               </Text>
               <Text style={styles.txt}>
                 Thiếu:{' '}
