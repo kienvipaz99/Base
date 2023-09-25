@@ -84,10 +84,7 @@ const Add_Key = () => {
       await ToastRef.current.toast();
     }
   };
-  const errors = validateInputFields({
-    name: '',
-  });
-  console.log(errors);
+
   return (
     <View style={styles.view}>
       <HeaderCustom title="Thêm mới key" />
